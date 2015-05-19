@@ -126,7 +126,7 @@ void systemInit()
 
   // Set LED pin as output and turn LED off
   gpioSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
-  gpioSetValue(CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
+  gpioSetValue(CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
 
   // Initialise the ST7565 128x64 pixel display
   #ifdef CFG_ST7565

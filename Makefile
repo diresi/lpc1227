@@ -5,7 +5,7 @@
 # The target, flash and ram of the LPC1xxx microprocessor.
 # Use for the target the value: LPC11xx, LPC13xx or LPC17xx
 TARGET = LPC11xx
-FLASH = 32K
+FLASH = 128K
 SRAM = 8K
 
 # For USB support the LPC1xxx reserves 384 bytes from the sram,
@@ -21,7 +21,7 @@ OBJS = main.o
 
 # Set DEBUGBUILD to 'TRUE' for full debugging (larger, slower binaries), 
 # or to 'FALSE' for release builds (smallest, fastest binaries)
-DEBUGBUILD = FALSE
+DEBUGBUILD = TRUE
 
 ##########################################################################
 # IDE Flags (Keeps various IDEs happy)
@@ -57,19 +57,19 @@ OBJS += eeprom.o mcp24aa.o
 VPATH += drivers/sensors/lm75b
 OBJS += lm75b.o
 
-# Bitmap LCD support (ST7565, SSD1306)
-VPATH += drivers/displays
-VPATH += drivers/displays/bitmap/ST7565
-VPATH += drivers/displays/bitmap/ssd1306
-OBJS += smallfonts.o ST7565.o ssd1306.o
+## Bitmap LCD support (ST7565, SSD1306)
+#VPATH += drivers/displays
+#VPATH += drivers/displays/bitmap/ST7565
+#VPATH += drivers/displays/bitmap/ssd1306
+#OBJS += smallfonts.o ST7565.o ssd1306.o
 
 # ChaN FatFS and SD card support
 VPATH += drivers/fatfs
 OBJS += ff.o mmc.o
 
-# Motors
-VPATH += drivers/motor/stepper
-OBJS += stepper.o
+## Motors
+#VPATH += drivers/motor/stepper
+#OBJS += stepper.o
 
 # RSA Encryption/Descryption
 VPATH += drivers/rsa
@@ -172,3 +172,8 @@ firmware: $(OBJS) $(SYS_OBJS)
   
 clean:
 	rm -f $(OBJS) $(LD_TEMP) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex
+
+info: firmware
+	arm-none-eabi-readelf -Ws firmware.elf > firmware.sym
+	#arm-none-eabi-nm -g firmware.elf > firmware.nm
+	#arm-none-eabi-objdump -h firmware.elf

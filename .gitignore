@@ -1,0 +1,8 @@
+*.swp
+*.o
+*.bin
+*.elf
+*.hex
+lpc1xxx/memory.ld
+firmware.sym
+firmware.nm

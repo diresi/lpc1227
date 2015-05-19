@@ -51,6 +51,11 @@
 /**************************************************************************/
 int main(void)
 {
+  // GPIO register definitions in lpc111x.h do _not_ match LPC1227
+  // *(GPIO1DIR = 0x50010020) = 0x10; // set PIO1_5 as output
+  // *(GPIO1SET = 0x5001000c) = 0x10; // clear LED
+  // *(GPIO1CLR = 0x50010010) = 0x10; // set LED
+
   // Configure cpu and mandatory peripherals
   systemInit();
 

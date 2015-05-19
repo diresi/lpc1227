@@ -204,7 +204,6 @@
     #ifdef CFG_BRD_LPC1114_REFDESIGN
       #define CFG_VREG_VCC_MAIN         (3300)    // 3.3V * 1000
       #define CFG_VREG_ALT_PRESENT      (0)
-      #define CFG_VREG_ALT_PRESENT      (0)
       #define CFG_VREG_ALT_VCC          (3300)
       #define CFG_VREG_ALT_PORT         (2)
       #define CFG_VREG_ALT_PIN          (10)
@@ -382,7 +381,7 @@
 
     -----------------------------------------------------------------------*/
     #ifdef CFG_BRD_LPC1114_REFDESIGN
-      #define CFG_LED_PORT                (3)
+      #define CFG_LED_PORT                (1)
       #define CFG_LED_PIN                 (5)
       #define CFG_LED_ON                  (0)
       #define CFG_LED_OFF                 (1)
