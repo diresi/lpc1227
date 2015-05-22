@@ -1,11 +1,11 @@
 /*******************************************************************
     Copyright (C) 2009 FreakLabs
     All rights reserved.
-    
+
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
     are met:
- 
+
     1. Redistributions of source code must retain the above copyright
        notice, this list of conditions and the following disclaimer.
     2. Redistributions in binary form must reproduce the above copyright
@@ -14,7 +14,7 @@
     3. Neither the name of the the copyright holder nor the names of its contributors
        may be used to endorse or promote products derived from this software
        without specific prior written permission.
-    
+
     THIS SOFTWARE IS PROVIDED BY THE THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND
     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
     IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,7 +26,7 @@
     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
     SUCH DAMAGE.
- 
+
     Originally written by Christopher Wang aka Akiba.
     Please post support questions to the FreakLabs forum.
 
@@ -66,9 +66,9 @@ chb_pcb_t *chb_get_pcb()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Requires the dest addr, location to store data, and len of payload.
-    Returns the length of the hdr. 
+    Returns the length of the hdr.
 */
 /**************************************************************************/
 static U8 chb_gen_hdr(U8 *hdr, U16 addr, U8 len)
@@ -93,7 +93,7 @@ static U8 chb_gen_hdr(U8 *hdr, U16 addr, U8 len)
     hdr_ptr += sizeof(U16);
     *(U16 *)hdr_ptr = pcb.src_addr;
     hdr_ptr += sizeof(U16);
-    
+
     // return the len of the header
     return hdr_ptr - hdr;
 }
@@ -107,7 +107,7 @@ U8 chb_write(U16 addr, U8 *data, U8 len)
 {
     // U8 status, frm_len, hdr_len, hdr[CHB_HDR_SZ + 1];
     U8 status, frm_len, hdr[CHB_HDR_SZ + 1];
-    
+
     while (len > 0)
     {
         // calculate which frame len to use. if greater than max payload, split
@@ -120,7 +120,7 @@ U8 chb_write(U16 addr, U8 *data, U8 len)
 
         // send data to chip
         status = chb_tx(hdr, data, frm_len);
-    
+
         if (status != CHB_SUCCESS)
         {
             switch (status)
@@ -155,7 +155,7 @@ U8 chb_write(U16 addr, U8 *data, U8 len)
 /*!
     Read data from the buffer. Need to pass in a buffer of at leasts max frame
     size and two 16-bit containers for the src and dest addresses.
- 
+
     The read function will automatically populate the addresses and the data with
     the frm payload. It will then return the len of the payload.
 */
@@ -166,7 +166,7 @@ U8 chb_read(chb_rx_data_t *rx)
 
     data_ptr = rx->data;
 
-    // first byte is always len. check it to make sure 
+    // first byte is always len. check it to make sure
     // we have a valid len byte.
     if ((len = chb_buf_read()) > CHB_MAX_FRAME_LENGTH)
     {
@@ -195,7 +195,7 @@ U8 chb_read(chb_rx_data_t *rx)
     data_ptr += sizeof(U16);
     rx->src_addr = *(U16 *)data_ptr;
     data_ptr += sizeof(U16);
-    
+
     // if the data in the rx buf is 0, then clear the rx_flag. otherwise, keep it raised
     if (!chb_buf_get_len())
     {
@@ -207,13 +207,13 @@ U8 chb_read(chb_rx_data_t *rx)
     // to the front of the buffer. We want to capture the full frame so just keep the frame intact and return the length.
     return len;
 #else
-    // duplicate frame check (dupe check). we want to remove frames that have been already been received since they 
-    // are just retries. 
+    // duplicate frame check (dupe check). we want to remove frames that have been already been received since they
+    // are just retries.
     // note: this dupe check only removes duplicate frames from the previous transfer. if another frame from a different
     // node comes in between the dupes, then the dupe will show up as a received frame.
     if ((seq == prev_seq) && (rx->src_addr == prev_src_addr))
     {
-        // this is a duplicate frame from a retry. the remote node thinks we didn't receive 
+        // this is a duplicate frame from a retry. the remote node thinks we didn't receive
         // it properly. discard.
         return 0;
     }

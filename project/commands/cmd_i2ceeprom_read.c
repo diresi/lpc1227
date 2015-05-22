@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_i2ceeprom_read.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -46,7 +46,7 @@
   #include "drivers/eeprom/eeprom.h"
 
 /**************************************************************************/
-/*! 
+/*!
     Reads a single byte at the supplied EEPROM address
 */
 /**************************************************************************/
@@ -58,7 +58,7 @@ void cmd_i2ceeprom_read(uint8_t argc, char **argv)
   // Try to convert supplied address to an integer
   int32_t addr32;
   getNumber (argv[0], &addr32);
-  
+
   // Check for invalid values (getNumber may complain about this as well)
   if (addr32 < 0 || eepromCheckAddress(addr32))
   {

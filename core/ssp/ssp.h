@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     ssp.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -59,7 +59,7 @@
 #define ssp1Deselect()          do {gpioSetValue(SSP1_CSPORT, SSP1_CSPIN, 1);} while (0)
 
 /**************************************************************************/
-/*! 
+/*!
     Indicates whether the clock should be high or low between frames.
 */
 /**************************************************************************/
@@ -67,11 +67,11 @@ typedef enum sspClockPolarity_e
 {
   sspClockPolarity_Low = 0,
   sspClockPolarity_High
-} 
+}
 sspClockPolarity_t;
 
 /**************************************************************************/
-/*! 
+/*!
     Indicates whether the bits start at the rising or falling edge of
     the clock transition.
 */
@@ -80,7 +80,7 @@ typedef enum sspClockPhase_e
 {
   sspClockPhase_RisingEdge = 0,
   sspClockPhase_FallingEdge
-} 
+}
 sspClockPhase_t;
 
 extern void SSP0_IRQHandler (void);

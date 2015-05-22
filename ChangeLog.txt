@@ -38,14 +38,14 @@ v0.70 - 8 August 2011
   sleep.  The latest version of the UM removed these.
   The deep sleep command now has the following signature:
   void pmuDeepSleep(uint32_t wakeupSeconds)
-- Updated clock values in cpu.c for PLL to match FCCO 
+- Updated clock values in cpu.c for PLL to match FCCO
   range of 156-320MHz
 - Changed SCB_PLLCTRL_MULT_* to SCB_PLLCTRL_MSEL_* in
   lpc111x.h to match usermanual
 - Changed SCB_PLLCTRL_DIV_* SCB_PLLCTRL_PSEL_* in
   lpc111x.h to match usermanual
 - Fixed IOCON_SWDIO_PIO1_3_FUNC_CT32B1_MAT2 in lpc134x.h
-- Fixed a nasty bug with 'gpioInterruptEvent' in the 
+- Fixed a nasty bug with 'gpioInterruptEvent' in the
   gpioSetInterrupt function (core/gpio/gpio.c)
 - Added cmd_reset to the CLI
 - Added __reset() macro to lpc111x.h (see note below)
@@ -55,7 +55,7 @@ v0.70 - 8 August 2011
 - Increased MAX_STRING_SIZE from 100 to 255 in stdio.c
 - Added driver for the TSL2561 digital light sensor
 - Added an example of reading the LP75B temperature sensor
-  once every 5 seconds, transmitting the temperature 
+  once every 5 seconds, transmitting the temperature
   wirelessly, and then going into deep sleep mode until the
   next reading.  See "tools/examples/chibi/transmit_temp".
 
@@ -109,7 +109,7 @@ v0.60 - 31 Jan 2011
   text in various commands (saves ~0.3kb)
 - Added the battery/supply voltage to the 'sysinfo' command (only applies to
   LPC1114 wireless board)
-- Made a number of changes for deep-sleep mode to reduce power consumption 
+- Made a number of changes for deep-sleep mode to reduce power consumption
   (pmu.c updated, including a bug fix that prevented the code from exiting
   deep sleep twice from SW).
 - Added basic driver for SSD1306-based 128x64 OLED displays (courtesy Adafruit
@@ -127,7 +127,7 @@ v0.60 - 31 Jan 2011
   Chibi to act as an 802.15.4 packet sniffer, etc.).  To enable promiscuous
   mode, set CFG_CHIBI_PROMISCUOUS to 1 and change the buffer size to 1024 to
   handle a larger amount of incoming traffic.  The following code will send
-  all incoming bytes to UART for processing on the PC using WSBridge 
+  all incoming bytes to UART for processing on the PC using WSBridge
   (available in the '/tools' folder or from www.freaklabs.org):
 
     #include "drivers/chibi/chb.h"
@@ -139,16 +139,16 @@ v0.60 - 31 Jan 2011
     chb_pcb_t *pcb = chb_get_pcb();
     while(1)
     {
-      // Check for incoming messages 
-      while (pcb->data_rcv) 
-      { 
+      // Check for incoming messages
+      while (pcb->data_rcv)
+      {
         // get the length of the data
         rx_data.len = chb_read(&rx_data);
         // make sure the length is nonzero
         if (rx_data.len)
         {
-          // Enable LED to indicate message reception 
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+          // Enable LED to indicate message reception
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
 
           // Send raw data to UART for processing on
           // the PC (requires WSBridge - www.freaklabs.org)
@@ -160,7 +160,7 @@ v0.60 - 31 Jan 2011
           }
 
           // Disable LED
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
         }
       }
     }
@@ -195,7 +195,7 @@ v0.30 - 7 October 2010
 - Created seperate .c files for every command for the command-line interface to make it easier
   to maintain and share code between projects.  All commands listed in cmd_tbl.h are now stored
   in their own files in /project/commands (ex.: "/project/commands/cmd_hello.c", etc.)
-- Add a CLI command to show the contents of any directory from the SD card 
+- Add a CLI command to show the contents of any directory from the SD card
   (/project/commmands/cmd_sd_dir.c)
 - Added a CLI command showing how to enter deep-sleep and exit with a SW wakeup
   (/project/commands/cmd_deepsleep.c)

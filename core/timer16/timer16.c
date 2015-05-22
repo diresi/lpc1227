@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     timer16.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -19,7 +19,7 @@
 
     @section Example
 
-    @code 
+    @code
     #include "/core/cpu/cpu.h"
     #include "/core/timer16/timer16.h"
 
@@ -82,16 +82,16 @@ volatile uint32_t timer16_1_counter = 0;
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Causes a blocking delay for the specified number of
-            clock ticks.  
-            
+            clock ticks.
+
     @note   The exact duration of this delay depends on the speed of the
             system clock, but it will invariably be short because of the
             16-bit limitation.  For example, on a system with a 12MHz
             clock, a 1mS delay would be equal to 12,000 ticks.  Thus, the
             maximum delay measured in mS with a 12MHz clock is ~5.46mS.
-            
+
     @param[in]  timerNum
                 The 16-bit timer to user (0..1)
     @param[in]  delayInTicks
@@ -177,10 +177,10 @@ void timer16DelayTicks(uint8_t timerNum, uint16_t delayInTicks)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Causes a blocking delay for the specified number of
                 microseconds
-            
+
     @warning    The maximum delay in uS will depend on the clock speed,
                 but running at 12MHz the maximum delay (MR = 0xFFFF)
                 would be 5461uS (0xFFFF / 12 = 5461.25), or 5.46
@@ -270,12 +270,12 @@ void timer16DelayUS(uint8_t timerNum, uint16_t delayInUS)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Interrupt handler for 16-bit timer 0
 */
 /**************************************************************************/
 void TIMER16_0_IRQHandler(void)
-{  
+{
   /* Clear the interrupt flag */
   TMR_TMR16B0IR = TMR_TMR16B0IR_MR0;
 
@@ -286,12 +286,12 @@ void TIMER16_0_IRQHandler(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Interrupt handler for 16-bit timer 1
 */
 /**************************************************************************/
 void TIMER16_1_IRQHandler(void)
-{  
+{
   /* Clear the interrupt flag */
   TMR_TMR16B1IR = TMR_TMR16B1IR_MR0;
 
@@ -327,7 +327,7 @@ void TIMER16_1_IRQHandler(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Enables the specified timer
 
     @param[in]  timerNum
@@ -350,7 +350,7 @@ void timer16Enable(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Disables the specified timer
 
     @param[in]  timerNum
@@ -373,7 +373,7 @@ void timer16Disable(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Resets the specified timer
 
     @param[in]  timerNum
@@ -402,11 +402,11 @@ void timer16Reset(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises the specified 16-bit timer, sets the timer
             interval, resets the timer, and configures the interrupt
             handler.
-    
+
     Initialises a 16-bit timer with the supplied timer interval (the
     amount of time that passes between each timer 'tick').  Every time that
     this interval elapses, the timer's interrupt will be fired and the
@@ -439,7 +439,7 @@ void timer16Init(uint8_t timerNum, uint16_t timerInterval)
     SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_CT16B0);
 
     /* The physical pins associated with CT16B0 are not enabled by
-       default in order to avoid conflicts with other peripherals.  
+       default in order to avoid conflicts with other peripherals.
        Pin 0.10 (CT16B0_MAT2), for example, can not be used while
        debugging with a hardware debugger.  If you require one or
        more of these pins, simply uncomment the code below                */
@@ -476,7 +476,7 @@ void timer16Init(uint8_t timerNum, uint16_t timerInterval)
     SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_CT16B1);
 
     /* The physical pins associated with CT16B0 are not enabled by
-       default in order to avoid conflicts with other peripherals.  
+       default in order to avoid conflicts with other peripherals.
        Pin 0.10 (CT16B0_MAT2), for example, can not be used while
        debugging with a hardware debugger.  If you require one or
        more of these pins, simply uncomment the code below                */

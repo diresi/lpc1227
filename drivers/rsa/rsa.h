@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     rsa.h
     @author   Kyle Loudon
               modified: microBuilder.eu
@@ -33,7 +33,7 @@ typedef struct rsaPubKey_s
 {
   huge_t e;
   huge_t n;
-} 
+}
 rsaPubKey_t;
 
 /* Define a structure for RSA private keys. */
@@ -41,7 +41,7 @@ typedef struct rsaPriKey_s
 {
   huge_t d;
   huge_t n;
-} 
+}
 rsaPriKey_t;
 
 void rsaTest();

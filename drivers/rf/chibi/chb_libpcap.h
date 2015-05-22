@@ -1,8 +1,8 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     chb_libpcap.h
     @author   K. Townsend (microBuilder.eu)
-    
+
     @section LICENSE
 
     Software License Agreement (BSD License)

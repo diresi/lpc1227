@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     tsl2561.c
     @author   K. Townsend (microBuilder.eu)
 	
@@ -76,7 +76,7 @@ static tsl2561IntegrationTime_t _tsl2561IntegrationTime = TSL2561_INTEGRATIONTIM
 static tsl2561Gain_t _tsl2561Gain = TSL2561_GAIN_0X;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Sends a single command byte over I2C
 */
 /**************************************************************************/
@@ -98,7 +98,7 @@ tsl2561Error_t tsl2561WriteCmd (uint8_t cmd)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Writes an 8 bit values over I2C
 */
 /**************************************************************************/
@@ -121,7 +121,7 @@ tsl2561Error_t tsl2561Write8 (uint8_t reg, uint32_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
@@ -139,7 +139,7 @@ tsl2561Error_t tsl2561Read16(uint8_t reg, uint16_t *value)
   I2CMasterBuffer[0] = TSL2561_ADDRESS;             // I2C device address
   I2CMasterBuffer[1] = reg;                       // Command register
   // Append address w/read bit
-  I2CMasterBuffer[2] = TSL2561_ADDRESS | TSL2561_READBIT;  
+  I2CMasterBuffer[2] = TSL2561_ADDRESS | TSL2561_READBIT;
   i2cEngine();
 
   // Shift values to create properly formed integer (low byte first)
@@ -149,7 +149,7 @@ tsl2561Error_t tsl2561Read16(uint8_t reg, uint16_t *value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Enables the device
 */
 /**************************************************************************/
@@ -162,7 +162,7 @@ tsl2561Error_t tsl2561Enable(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Disables the device (putting it in lower power sleep mode)
 */
 /**************************************************************************/
@@ -175,7 +175,7 @@ tsl2561Error_t tsl2561Disable(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
@@ -186,7 +186,7 @@ tsl2561Error_t tsl2561Init(void)
   {
     return TSL2561_ERROR_I2CINIT;    /* Fatal error */
   }
-  
+
   _tsl2561Initialised = true;
 
   // Set default integration time and gain
@@ -198,7 +198,7 @@ tsl2561Error_t tsl2561Init(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Sets the integration time and gain (controls sensitivity)
 */
 /**************************************************************************/
@@ -210,11 +210,11 @@ tsl2561Error_t tsl2561SetTiming(tsl2561IntegrationTime_t integration, tsl2561Gai
 
   // Enable the device by setting the control bit to 0x03
   error = tsl2561Enable();
-  if (error) return error;  
+  if (error) return error;
 
   // Turn the device off to save power
-  error = tsl2561Write8(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, integration | gain);  
-  if (error) return error;  
+  error = tsl2561Write8(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, integration | gain);
+  if (error) return error;
 
   // Update value placeholders
   _tsl2561IntegrationTime = integration;
@@ -222,13 +222,13 @@ tsl2561Error_t tsl2561SetTiming(tsl2561IntegrationTime_t integration, tsl2561Gai
 
   // Turn the device off to save power
   error = tsl2561Disable();
-  if (error) return error;  
+  if (error) return error;
 
   return error;
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads the luminosity on both channels from the TSL2561
 */
 /**************************************************************************/
@@ -240,7 +240,7 @@ tsl2561Error_t tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir)
 
   // Enable the device by setting the control bit to 0x03
   error = tsl2561Enable();
-  if (error) return error;  
+  if (error) return error;
 
   // Wait x ms for ADC to complete
   switch (_tsl2561IntegrationTime)
@@ -266,14 +266,14 @@ tsl2561Error_t tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir)
 
   // Turn the device off to save power
   error = tsl2561Disable();
-  if (error) return error;  
+  if (error) return error;
 
   return error;
 }
 
 /**************************************************************************/
-/*! 
-    @brief  Calculates LUX from the supplied ch0 (broadband) and ch1 
+/*!
+    @brief  Calculates LUX from the supplied ch0 (broadband) and ch1
             (IR) readings
 */
 /**************************************************************************/

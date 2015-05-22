@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     sysdefs.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010

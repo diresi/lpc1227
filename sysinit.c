@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     sysinit.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -96,7 +96,7 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Configures the core system clock and sets up any mandatory
     peripherals like the systick timer, UART for printf, etc.
 
@@ -133,14 +133,14 @@ void systemInit()
   // Initialise the ST7565 128x64 pixel display
   #ifdef CFG_ST7565
     st7565Init();
-    st7565ClearScreen();    // Clear the screen  
+    st7565ClearScreen();    // Clear the screen
     st7565Backlight(1);     // Enable the backlight
   #endif
 
   // Initialise the SSD1306 OLED display
   #ifdef CFG_SSD1306
     ssd1306Init(SSD1306_SWITCHCAPVCC);
-    ssd1306ClearScreen();   // Clear the screen  
+    ssd1306ClearScreen();   // Clear the screen
   #endif
 
   // Initialise EEPROM
@@ -189,14 +189,14 @@ void systemInit()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends a single byte to a pre-determined peripheral (UART, etc.).
 
     @param[in]  byte
                 Byte value to send
 */
 /**************************************************************************/
-void __putchar(const char c) 
+void __putchar(const char c)
 {
   #ifdef CFG_PRINTF_UART
     // Send output to UART
@@ -205,7 +205,7 @@ void __putchar(const char c)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends a string to a pre-determined end point (UART, etc.).
 
     @param[in]  str

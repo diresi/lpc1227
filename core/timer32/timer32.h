@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     timer32.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -36,7 +36,7 @@
 */
 /**************************************************************************/
 
-#ifndef __TIMER32_H__ 
+#ifndef __TIMER32_H__
 #define __TIMER32_H__
 
 #include "projectconfig.h"

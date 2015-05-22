@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Ports;
 using System.IO.Pipes;
@@ -79,7 +79,7 @@ namespace wsbridge
                 p.Close();
                 Environment.Exit(0);
             }
-            
+
             // wait for wireshark to connect to pipe
             Console.WriteLine("Waiting for connection to wireshark.");
             Console.WriteLine("Open wireshark and connect to interface: Local:\\\\.\\pipe\\wireshark");
@@ -92,9 +92,9 @@ namespace wsbridge
             // add serial data capture
             p.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
             state = FSM.START_CAPTURE;
-            
+
             // keep track of time started. this will be used for timestamps
-            start_time_in_ticks = DateTime.Now.Ticks; 
+            start_time_in_ticks = DateTime.Now.Ticks;
 
             // generate header to identify the packet capture
             write_global_hdr();
@@ -163,11 +163,11 @@ namespace wsbridge
                 bytes_in_buf = calc_bytes_in_buf();
 
                 // compare the frame lengto the number of bytes in the buffer. if the bytes in buffer are
-                // greater than the frame length, then we have more than one frame. loop through until 
+                // greater than the frame length, then we have more than one frame. loop through until
                 // all complete frames have been written to wireshark
                 if (bytes_in_buf > frame_len)
                 {
-                    // more than one frame in buffer. don't indicate we're finished yet in case we have 
+                    // more than one frame in buffer. don't indicate we're finished yet in case we have
                     // other frames we can send out.
                     write_frame(frame_len);
                 }
@@ -179,7 +179,7 @@ namespace wsbridge
                 }
                 else
                 {
-                    // what?! no frames in buffer? we shouldn't reach here. 
+                    // what?! no frames in buffer? we shouldn't reach here.
                     file_write = false;
                 }
             }
@@ -201,7 +201,7 @@ namespace wsbridge
             }
         }
 
-        // this is the global header that starts any packet capture file. this will tell wireshark what 
+        // this is the global header that starts any packet capture file. this will tell wireshark what
         // kind of protocol it is (indicated by the DLT) as well as other information like endianness, etc.
         static void write_global_hdr()
         {
@@ -250,25 +250,25 @@ namespace wsbridge
             }
        }
 
-        // this writes a frame into wireshark. it calculates the timestamp and length and uses that 
+        // this writes a frame into wireshark. it calculates the timestamp and length and uses that
         // for the frame header. it then writes captured bytes into wireshark
         static void write_frame(uint frame_len)
         {
             uint incl_len, orig_len;
             long sec, usec;
 
-            // generating timestamp. its kind of cheesy but there isn't a unix timestamp mechanism in win. 
-            // just counting ticks from when program was started. each tick is 100 nsec. 
+            // generating timestamp. its kind of cheesy but there isn't a unix timestamp mechanism in win.
+            // just counting ticks from when program was started. each tick is 100 nsec.
             long diff_in_ticks = DateTime.Now.Ticks - start_time_in_ticks;  // get difference in ticks
             sec = diff_in_ticks / TimeSpan.TicksPerSecond;                  // get seconds
             diff_in_ticks -= (sec * TimeSpan.TicksPerSecond);               // subtract off seconds from total
             usec = diff_in_ticks / 10;                                      // get usec
 
-            // calculate frame length. we won't be feeding frame checksum (FCS) into wireshark. 
+            // calculate frame length. we won't be feeding frame checksum (FCS) into wireshark.
             incl_len = (uint)frame_len - PACKET_FCS;
             orig_len = frame_len;
 
-            // increment over the length byte. we won't feed that into wireshark either. it doesn't seem to like it. 
+            // increment over the length byte. we won't feed that into wireshark either. it doesn't seem to like it.
             rd_idx = (rd_idx + 1) % BUFSIZE;
 
             // write frame header first

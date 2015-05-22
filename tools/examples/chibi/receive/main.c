@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -43,7 +43,7 @@
 static chb_rx_data_t rx_data;
 
 /**************************************************************************/
-/*! 
+/*!
     Constantly checks for incoming messages, and displays them using
     printf when they arrive.  This program will display messages sent
     to the global broadcast address (0xFFFF) or messages addressed to
@@ -74,11 +74,11 @@ int main(void)
 
   while(1)
   {
-    // Check for incoming messages 
-    while (pcb->data_rcv) 
-    { 
-      // Enable LED to indicate message reception 
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+    // Check for incoming messages
+    while (pcb->data_rcv)
+    {
+      // Enable LED to indicate message reception
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
       // get the length of the data
       rx_data.len = chb_read(&rx_data);
       // make sure the length is nonzero
@@ -87,7 +87,7 @@ int main(void)
         printf("Message received from node %02X: %s, len=%d, rssi=%02X.%s", rx_data.src_addr, rx_data.data, rx_data.len, pcb->ed, CFG_PRINTF_NEWLINE);
       }
       // Disable LED
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
     }
   }
 

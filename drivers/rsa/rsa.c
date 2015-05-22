@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     rsa.c
     @author   Kyle Loudon
               modified: microBuilder.eu
@@ -27,23 +27,23 @@
 
 #include "rsa.h"
 
-static huge_t modexp(huge_t a, huge_t b, huge_t n) 
+static huge_t modexp(huge_t a, huge_t b, huge_t n)
 {
   huge_t y;
   y = 1;
 
   /*  Compute pow(a, b) % n using the binary square and multiply method. */
-  while (b != 0) 
+  while (b != 0)
   {
     /*  For each 1 in b, accumulate y. */
     if (b & 1)
     {
       y = (y * a) % n;
     }
-    
+
     /* Square a for each bit in b. */
     a = (a * a) % n;
-    
+
     /*  Prepare for the next bit in b. */
     b = b >> 1;
   }
@@ -78,20 +78,20 @@ void rsaTest()
   privateKey.d = 53;
   privateKey.n = 209;
   #endif
-  
+
   #if CFG_RSA_BITS == 64
   printf("Starting RSA encryption/decryption test %s", CFG_PRINTF_NEWLINE);
   #endif
   #if CFG_RSA_BITS == 32
-  printf("d=%u, e=%u, n=%u %s", (unsigned int)privateKey.d, (unsigned int)publicKey.e, (unsigned int)publicKey.n, CFG_PRINTF_NEWLINE);  
+  printf("d=%u, e=%u, n=%u %s", (unsigned int)privateKey.d, (unsigned int)publicKey.e, (unsigned int)publicKey.n, CFG_PRINTF_NEWLINE);
   #endif
 
-  for (i = 0; i < 128; i++) 
-  {  
+  for (i = 0; i < 128; i++)
+  {
     rsaOrig = i;
     rsaEncrypt(rsaOrig, &rsaEncrypted, publicKey);
     rsaDecrypt(rsaEncrypted, &rsaDecrypted, privateKey);
-  
+
     if (rsaOrig == rsaDecrypted)
     {
       #if CFG_RSA_BITS == 64
@@ -113,14 +113,14 @@ void rsaTest()
   }
 }
 
-void rsaEncrypt(huge_t plaintext, huge_t *ciphertext, rsaPubKey_t pubkey) 
+void rsaEncrypt(huge_t plaintext, huge_t *ciphertext, rsaPubKey_t pubkey)
 {
   *ciphertext = modexp(plaintext, pubkey.e, pubkey.n);
 
   return;
 }
 
-void rsaDecrypt(huge_t ciphertext, huge_t *plaintext, rsaPriKey_t prikey) 
+void rsaDecrypt(huge_t ciphertext, huge_t *plaintext, rsaPriKey_t prikey)
 {
   *plaintext = modexp(ciphertext, prikey.d, prikey.n);
 

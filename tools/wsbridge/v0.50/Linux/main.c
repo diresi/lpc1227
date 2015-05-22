@@ -33,7 +33,7 @@
 *******************************************************************/
 /*!
     FreakLabs Freakduino/Wireshark Bridge
- 
+
     This program allows data from the Freakduino to be piped into wireshark.
     When the sniffer firmware is loaded into the Freakduino, then the Freakduino
     will be in promiscuous mode and will just dump any frames it sees. This
@@ -41,7 +41,7 @@
     global header is already set up to inform wireshark that the link layer for
     all frames will be in IEEE 802.15.4 format. After that, it is up to the user
     to choose any higher layer protocols to decode above 802.15.4 via the
-    wireshark "enable protocols" menu. 
+    wireshark "enable protocols" menu.
 */
 /**************************************************************************/
 #include <stddef.h>
@@ -92,7 +92,7 @@ static int serial_open(char *portname)
     struct termios term;
 
     FD_com = open(portname, O_RDONLY | O_NOCTTY | O_NDELAY);
-    
+
     if(FD_com == -1) // if open is unsucessful
     {
         printf("serial_open: Unable to open %s.\n", portname);
@@ -123,7 +123,7 @@ static void named_pipe_create(char *name)
 {
     int rv = 0;
     rv = mkfifo(name, 0666);
-    if ((rv == -1) && (errno != EEXIST)) 
+    if ((rv == -1) && (errno != EEXIST))
     {
         perror("Error creating named pipe");
         exit(1);
@@ -131,7 +131,7 @@ static void named_pipe_create(char *name)
 
     FD_pipe = open(name, O_WRONLY);
 
-    if (FD_pipe == -1) 
+    if (FD_pipe == -1)
     {
         perror("Error connecting to named pipe");
         exit(1);
@@ -146,7 +146,7 @@ static void named_pipe_create(char *name)
 size_t data_write(const void *ptr, size_t size)
 {
     ssize_t bytes = 0;
-    if (FD_pipe != -1) 
+    if (FD_pipe != -1)
     {
         bytes = write(FD_pipe, ptr, size);
     }
@@ -155,7 +155,7 @@ size_t data_write(const void *ptr, size_t size)
 /**************************************************************************/
 /*!
     Write the global header to wireshark. This is only done once at the
-    beginning of the capture. 
+    beginning of the capture.
 */
 /**************************************************************************/
 static void write_global_hdr()
@@ -258,7 +258,7 @@ static uint16_t calc_bytes_in_buf()
 static void sig_int(int signo)
 {
     (void) signo;
-    if (FD_pipe != -1) 
+    if (FD_pipe != -1)
     {
         printf("\nClosing pipe.\n");
         close(FD_pipe);
@@ -277,7 +277,7 @@ static void sig_int(int signo)
 
 /**************************************************************************/
 /*!
-    Init the signals we'll be checking for. 
+    Init the signals we'll be checking for.
 */
 /**************************************************************************/
 static void signal_init(void)
@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
     signal_init();
 
     // make sure the COM port is specified
-    if (argc == 2) 
+    if (argc == 2)
     {
         // open the COM port
         if ((FD_com = serial_open(argv[1])) == -1)
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
         printf("Client connected to pipe.\n");
     }
 
-    for (;;) 
+    for (;;)
     {
         uint16_t bytes_in_buf;
         uint8_t frame_len, byte_ctr;
@@ -364,13 +364,13 @@ int main(int argc, char *argv[])
 
                         // write data to circular buffer and increment index
                         circ_buf[wr_idx] = port_buf[i];
-                        
+
                         printf("%02X ", circ_buf[wr_idx]);
 
                         wr_idx = (wr_idx + 1) % BUFSIZE;
 
                         // track number of received bytes. when received bytes
-                        // equals frame length, then restart state machine and 
+                        // equals frame length, then restart state machine and
                         // write bytes to wireshark
                         byte_ctr++;
                         if (byte_ctr == (len - 1))
@@ -384,18 +384,18 @@ int main(int argc, char *argv[])
                 fflush(stdout);
             }
 
-            // at least one frame has been written. loop through circular buffer 
+            // at least one frame has been written. loop through circular buffer
             // and write out all completed frames
             while (file_write)
             {
-                // capture frame length and check buffer to see if one or more frames 
+                // capture frame length and check buffer to see if one or more frames
                 // are available.
                 frame_len = circ_buf[rd_idx];
                 bytes_in_buf = calc_bytes_in_buf();
-            
+
                 if (bytes_in_buf > frame_len)
                 {
-                    // if more than one frame is available, then write one frame to 
+                    // if more than one frame is available, then write one frame to
                     // wireshark and then see if any more are available.
                     write_frame(frame_len);
                 }
@@ -408,7 +408,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    // less than one frame is available. quit the loop and collect more 
+                    // less than one frame is available. quit the loop and collect more
                     // bytes. we normally should not get here.
                     file_write = 0;
                 }

@@ -175,7 +175,7 @@ signed int PutSignedInt(
     if ((absolute / 10) > 0) {
 
         if (value < 0) {
-        
+
             num = PutSignedInt(pStr, fill, width, -(absolute / 10));
         }
         else {
@@ -336,7 +336,7 @@ signed int vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
 
             // Parse width
             while ((*pFormat >= '0') && (*pFormat <= '9')) {
-        
+
                 width = (width*10) + *pFormat-'0';
                 pFormat++;
             }
@@ -346,10 +346,10 @@ signed int vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
 
                 width = length - size;
             }
-        
+
             // Parse type
             switch (*pFormat) {
-            case 'd': 
+            case 'd':
             case 'i': num = PutSignedInt(pStr, fill, width, va_arg(ap, signed int)); break;
             case 'u': num = PutUnsignedInt(pStr, fill, width, va_arg(ap, unsigned int)); break;
             case 'x': num = PutHexa(pStr, fill, width, 0, va_arg(ap, unsigned int)); break;
@@ -424,14 +424,14 @@ signed int vprintf(const char *pFormat, va_list ap)
 {
   char pStr[MAX_STRING_SIZE];
   char pError[] = "stdio.c: increase MAX_STRING_SIZE\r\n";
-  
+
   // Write formatted string in buffer
   if (vsprintf(pStr, pFormat, ap) >= MAX_STRING_SIZE) {
-    
+
     puts(pError);
     while (1); // Increase MAX_STRING_SIZE
   }
-  
+
   // Display string
   return puts(pStr);
 }

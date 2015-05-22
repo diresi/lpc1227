@@ -32,7 +32,7 @@
 
 *******************************************************************/
 /*!
-    \file 
+    \file
     \ingroup
 
 
@@ -68,7 +68,7 @@ U8 chb_xfer_byte(U8 data)
     /* Move on only if NOT busy and TX FIFO not full */
     while ((SSP_SSP0SR & (SSP_SSP0SR_TNF_MASK | SSP_SSP0SR_BSY_MASK)) != SSP_SSP0SR_TNF_NOTFULL);
     SSP_SSP0DR = data;
-  
+
     /* Wait until the busy bit is cleared and receive buffer is not empty */
     while ((SSP_SSP0SR & (SSP_SSP0SR_BSY_MASK | SSP_SSP0SR_RNE_MASK)) != SSP_SSP0SR_RNE_NOTEMPTY);
 

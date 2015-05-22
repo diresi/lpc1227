@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     projectconfig.h
     @author   K. Townsend (microBuilder.eu)
 
@@ -55,7 +55,7 @@
 
 /**************************************************************************
 
-    This table tries to give an indication of which GPIO pins and 
+    This table tries to give an indication of which GPIO pins and
     peripherals are used by the available drivers and SW examples.  Only
     dedicated GPIO pins available on the LPC1114 Reference Board are shown
     below.  Any unused peripheral blocks like I2C, SSP, ADC, etc., can
@@ -269,7 +269,7 @@
 
     CFG_SYSTICK_DELAY_IN_MS   The number of milliseconds between each tick
                               of the systick timer.
-							  
+							
     -----------------------------------------------------------------------*/
     #ifdef CFG_BRD_LPC1114_REFDESIGN
       #define CFG_SYSTICK_DELAY_IN_MS     (1)
@@ -323,8 +323,8 @@
     UART
     -----------------------------------------------------------------------
 
-    CFG_UART_BAUDRATE         The default UART speed.  This value is used 
-                              when initialising UART, and should be a 
+    CFG_UART_BAUDRATE         The default UART speed.  This value is used
+                              when initialising UART, and should be a
                               standard value like 57600, 9600, etc.
     CFG_UART_BUFSIZE          The length in bytes of the UART RX FIFO. This
                               will determine the maximum number of received
@@ -351,7 +351,7 @@
                               a number of samples and return the average
                               value.  This is slower, but can give more
                               accurate results compared to single-reading.
-                              
+
                               To enable averaging, set ADC_AVERAGING_ENABLE
                               to a non-zero value.
     ADC_AVERAGING_SAMPLES     The number of ADC samples to read and
@@ -446,7 +446,7 @@
     PRINTF REDIRECTION
     -----------------------------------------------------------------------
 
-    CFG_PRINTF_UART           Will cause all printf statements to be 
+    CFG_PRINTF_UART           Will cause all printf statements to be
                               redirected to UART
     CFG_PRINTF_NEWLINE        This should be either "\r\n" for Windows or
                               "\n" for *nix
@@ -481,7 +481,7 @@
 
     NOTE:                     The command-line interface will use either
                               USB-CDC or UART depending on whether
-                              CFG_PRINTF_UART or CFG_PRINTF_USBCDC are 
+                              CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
     #ifdef CFG_BRD_LPC1114_REFDESIGN
@@ -534,7 +534,7 @@
     STEPPER MOTOR SETTINGS
     -----------------------------------------------------------------------
 
-    CFG_STEPPER                 If this is defined, a simple bi-polar 
+    CFG_STEPPER                 If this is defined, a simple bi-polar
                                 stepper motor will be included for common
                                 H-bridge chips like the L293D or SN754410N
 
@@ -744,7 +744,7 @@
 /*=========================================================================
   CONFIG FILE VALIDATION
   -------------------------------------------------------------------------
-  Basic error checking to make sure that incompatible defines are not 
+  Basic error checking to make sure that incompatible defines are not
   enabled at the same time, etc.
 
   =========================================================================*/

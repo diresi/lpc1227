@@ -1,8 +1,8 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     mcp4725.c
     @author   K. Townsend (microBuilder.eu)
-    
+
     @brief    Driver for the I2C-based MCP4725 12-Bit DAC.
 
     @section Example
@@ -10,7 +10,7 @@
     @code
     #include "drivers/dac/mcp4725/mcp4725.h"
     ...
-    
+
     mcp4725Init();
 
     // Set the voltage to 50% of vref and don't save the value in EEPROM
@@ -63,7 +63,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 static bool _mcp4725Initialised = false;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises I2C for the MCP4725.
 */
 /**************************************************************************/
@@ -83,7 +83,7 @@ int mcp4725Init()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Sets the output voltage to a fraction of source vref.  (Value
             can be 0..4095)
 
@@ -125,7 +125,7 @@ void mcp4725SetVoltage( uint16_t output, bool writeEEPROM )
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads the current configuration and output settings for the
             DAC.
 

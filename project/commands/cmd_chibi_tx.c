@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_chibi_tx.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -48,9 +48,9 @@
   #include "drivers/rf/chibi/chb_drvr.h"
 
 /**************************************************************************/
-/*! 
+/*!
     Sends text or data via Chibi
-    
+
 */
 /**************************************************************************/
 void cmd_chibi_tx(uint8_t argc, char **argv)
@@ -61,7 +61,7 @@ void cmd_chibi_tx(uint8_t argc, char **argv)
   // Try to convert supplied address to an integer
   int32_t addr32;
   getNumber (argv[0], &addr32);
-  
+
   // Check for invalid values (getNumber may complain about this as well)
   if (addr32 <= 0 || addr32 > 0xFFFF)
   {

@@ -119,7 +119,7 @@ void chb_reset()
         // if you're stuck in this loop, that means that you're not reading
         // the version and part number register correctly. possible that version number
         // changes. if so, update version num in header file
-        if ((chb_reg_read(VERSION_NUM) == CHB_AT86RF212_VER_NUM) && (chb_reg_read(PART_NUM) == CHB_AT86RF212_PART_NUM)) 
+        if ((chb_reg_read(VERSION_NUM) == CHB_AT86RF212_VER_NUM) && (chb_reg_read(PART_NUM) == CHB_AT86RF212_PART_NUM))
         {
             break;
         }
@@ -152,8 +152,8 @@ U8 chb_reg_read(U8 addr)
 }
 
 /**************************************************************************/
-/*! 
- 
+/*!
+
 */
 /**************************************************************************/
 U16 chb_reg_read16(U8 addr)
@@ -175,7 +175,7 @@ U16 chb_reg_read16(U8 addr)
 /**************************************************************************/
 void chb_reg_write(U8 addr, U8 val)
 {
-    // U8 dummy; 
+    // U8 dummy;
 
     /* Add the Register Write command to the address. */
     addr |= 0xC0;
@@ -257,7 +257,7 @@ void chb_frame_write(U8 *hdr, U8 hdr_len, U8 *data, U8 data_len)
 
     // initiate spi transaction
     CHB_ENTER_CRIT();
-    CHB_SPI_ENABLE(); 
+    CHB_SPI_ENABLE();
 
     // send fifo write command
     // dummy = chb_xfer_byte(CHB_SPI_CMD_FW);
@@ -278,7 +278,7 @@ void chb_frame_write(U8 *hdr, U8 hdr_len, U8 *data, U8 data_len)
     }
 
     // terminate spi transaction
-    CHB_SPI_DISABLE(); 
+    CHB_SPI_DISABLE();
     CHB_LEAVE_CRIT();
 }
 
@@ -304,7 +304,7 @@ static void chb_frame_read()
         if (len < (CFG_CHIBI_BUFFERSIZE - chb_buf_get_len()))
         {
             chb_buf_write(len);
-            
+
             for (i=0; i<len; i++)
             {
                 data = chb_xfer_byte(0);
@@ -369,7 +369,7 @@ void chb_sram_read(U8 addr, U8 len, U8 *data)
 */
 /**************************************************************************/
 void chb_sram_write(U8 addr, U8 len, U8 *data)
-{    
+{
     U8 i, dummy;
 
     CHB_ENTER_CRIT();
@@ -431,7 +431,7 @@ void chb_set_mode(U8 mode)
 U8 chb_set_channel(U8 channel)
 {
     U8 state;
-    
+
 #if (CHB_CHINA == 1)
 
     // this if for China only which uses a 780 MHz frequency band
@@ -439,13 +439,13 @@ U8 chb_set_channel(U8 channel)
     {
         chb_reg_read_mod_write(TRX_CTRL2, 0x1c, 0x3f);
     }
-    
+
     if (channel > 3)
     {
         channel = 0;
     }
 
-    channel = (channel << 1) + 11;      
+    channel = (channel << 1) + 11;
 
     chb_reg_read_mod_write(CC_CTRL_1, 0x4, 0x7);                // set 769 MHz base frequency for China
     chb_reg_write(CC_CTRL_0, channel);                          // set the center frequency for the channel
@@ -462,7 +462,7 @@ U8 chb_set_channel(U8 channel)
     //}
     //else if (channel > 10)
     //{
-    //    // if the channel is out of bounds for page 2, then default to channel 1 and 
+    //    // if the channel is out of bounds for page 2, then default to channel 1 and
     //    // assume we're on the US frequency of 915 MHz
     //    channel = 1;
     //    if ((chb_reg_read(TRX_CTRL_2) & 0x3f) != 0x0c)
@@ -478,8 +478,8 @@ U8 chb_set_channel(U8 channel)
     //        chb_reg_read_mod_write(TRX_CTRL_2, 0x0c, 0x3f);
     //    }
     //}
-        
-    chb_reg_read_mod_write(PHY_CC_CCA, channel, 0x1f); 
+
+    chb_reg_read_mod_write(PHY_CC_CCA, channel, 0x1f);
 #endif
 
     // add a delay to allow the PLL to lock if in active mode.
@@ -504,8 +504,8 @@ void chb_set_pwr(U8 val)
 
 /**************************************************************************/
 /*!
-    Set the TX/RX state machine state. Some manual manipulation is required 
-    for certain operations. Check the datasheet for more details on the state 
+    Set the TX/RX state machine state. Some manual manipulation is required
+    for certain operations. Check the datasheet for more details on the state
     machine and manipulations.
 */
 /**************************************************************************/
@@ -573,14 +573,14 @@ U8 chb_set_state(U8 state)
 }
 
 /**************************************************************************/
-/*! 
- 
+/*!
+
 */
 /**************************************************************************/
 void chb_set_ieee_addr(U8 *addr)
 {
-    chb_eeprom_write(CFG_EEPROM_CHIBI_IEEEADDR, addr, 8); 
-    chb_reg_write64(IEEE_ADDR_0, addr); 
+    chb_eeprom_write(CFG_EEPROM_CHIBI_IEEEADDR, addr, 8);
+    chb_reg_write64(IEEE_ADDR_0, addr);
 }
 
 /**************************************************************************/
@@ -618,7 +618,7 @@ U16 chb_get_short_addr()
     int16_t addr;
 
     chb_eeprom_read(CFG_EEPROM_CHIBI_SHORTADDR, (uint8_t*)&addr, 2);
-    return addr;    
+    return addr;
 }
 /**************************************************************************/
 /*!
@@ -662,7 +662,7 @@ U8 chb_tx(U8 *hdr, U8 *data, U8 len)
     // TODO: try and start the frame transmission by writing TX_START command instead of toggling
     // sleep pin...i just feel like it's kind of weird...
 
-    // write frame to buffer. first write header into buffer (add 1 for len byte), then data. 
+    // write frame to buffer. first write header into buffer (add 1 for len byte), then data.
     chb_frame_write(hdr, CHB_HDR_SZ + 1, data, len);
 
     //Do frame transmission
@@ -702,7 +702,7 @@ static void chb_radio_init()
     //chb_reg_read_mod_write(XAH_CTRL_0, CHB_MAX_FRAME_RETRIES << CHB_MAX_FRAME_RETRIES_POS, 0xF << CHB_MAX_FRAME_RETRIES_POS);
     //chb_reg_read_mod_write(XAH_CTRL_0, CHB_MAX_CSMA_RETRIES << CHB_MAX_CSMA_RETIRES_POS, 0x7 << CHB_MAX_CSMA_RETIRES_POS);
     //chb_reg_read_mod_write(CSMA_SEED_1, CHB_CSMA_SEED1 << CHB_CSMA_SEED1_POS, 0x7 << CHB_CSMA_SEED1_POS);
-    //chb_ret_write(CSMA_SEED0, CHB_CSMA_SEED0);     
+    //chb_ret_write(CSMA_SEED0, CHB_CSMA_SEED0);
     //chb_reg_read_mod_write(PHY_CC_CCA, CHB_CCA_MODE << CHB_CCA_MODE_POS,0x3 << CHB_CCA_MODE_POS);
     //chb_reg_write(CCA_THRES, CHB_CCA_ED_THRES);
 
@@ -767,7 +767,7 @@ static void chb_radio_init()
 
     // enable interrupt
     gpioIntEnable (CHB_EINTPORT,
-                   CHB_EINTPIN); 
+                   CHB_EINTPIN);
 
     if (chb_get_state() != RX_STATE)
     {
@@ -851,7 +851,7 @@ void chb_ISR_Handler (void)
     CHB_ENTER_CRIT();
 
     /*Read Interrupt source.*/
-    CHB_SPI_ENABLE();   
+    CHB_SPI_ENABLE();
 
     /*Send Register address and read register content.*/
     // dummy = chb_xfer_byte(IRQ_STATUS | CHB_SPI_CMD_RR);

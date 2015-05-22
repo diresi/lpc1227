@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_sysinfo.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -56,7 +56,7 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     'sysinfo' command handler
 */
 /**************************************************************************/
@@ -76,7 +76,7 @@ void cmd_sysinfo(uint8_t argc, char **argv)
   // Check the battery voltage
   #ifdef CFG_BAT
     uint32_t c;
-    gpioSetDir(CFG_BAT_ENPORT, CFG_BAT_ENPIN, gpioDirection_Output );   
+    gpioSetDir(CFG_BAT_ENPORT, CFG_BAT_ENPIN, gpioDirection_Output );
     gpioSetValue(CFG_BAT_ENPORT, CFG_BAT_ENPIN, 1 );    // Enable the voltage divider
     systickDelay(5);
     c = adcRead(CFG_BAT_ADC);                           // Pre-read ADC to warm it up

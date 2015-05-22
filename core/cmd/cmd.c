@@ -32,7 +32,7 @@
 *******************************************************************/
 
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd.c
     @author   Christopher Wang (Freaklabs)
               Modified by: K. Townsend (microBuilder.eu)
@@ -62,7 +62,7 @@ static uint8_t msg[CFG_INTERFACE_MAXMSGSIZE];
 static uint8_t *msg_ptr;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Polls the relevant incoming message queue to see if anything
             is waiting to be processed.
 */
@@ -79,8 +79,8 @@ void cmdPoll()
 }
 
 /**************************************************************************/
-/*! 
-    @brief  Handles a single incoming character.  If a new line is 
+/*!
+    @brief  Handles a single incoming character.  If a new line is
             detected, the entire command will be passed to the command
             parser.  If a text character is detected, it will be added to
             the message buffer until a new line is detected (up to the
@@ -92,7 +92,7 @@ void cmdPoll()
 /**************************************************************************/
 void cmdRx(uint8_t c)
 {
-  // read out the data in the buffer and echo it back to the host. 
+  // read out the data in the buffer and echo it back to the host.
   switch (c)
   {
     case '\r':
@@ -104,7 +104,7 @@ void cmdRx(uint8_t c)
         cmdParse((char *)msg);
         msg_ptr = msg;
         break;
-    
+
     case '\b':
         printf("%c", c);
         if (msg_ptr == msg)
@@ -126,7 +126,7 @@ void cmdRx(uint8_t c)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Displays the command prompt.  The text that appears is defined
             in projectconfig.h.
 */
@@ -138,7 +138,7 @@ static void cmdMenu()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Parse the command line. This function tokenizes the command
             input, then searches for the command table entry associated
             with the commmand. Once found, it will jump to the
@@ -158,7 +158,7 @@ void cmdParse(char *cmd)
   {
       argv[++i] = strtok(NULL, " ");
   } while ((i < 30) && (argv[i] != NULL));
-  
+
   argc = i;
   for (i=0; i < CMD_COUNT; i++)
   {
@@ -200,7 +200,7 @@ void cmdParse(char *cmd)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises the command line using the appropriate interface
 */
 /**************************************************************************/
@@ -223,7 +223,7 @@ void cmdInit()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     'help' command handler
 */
 /**************************************************************************/
@@ -237,11 +237,11 @@ void cmd_help(uint8_t argc, char **argv)
   // Display full command list
   for (i=0; i < CMD_COUNT; i++)
   {
-    if (!cmd_tbl[i].hidden) 
+    if (!cmd_tbl[i].hidden)
     {
       printf ("%-10s   %s%s", cmd_tbl[i].command, cmd_tbl[i].description, CFG_PRINTF_NEWLINE);
     }
   }
-  
+
   printf("%sCommand parameters can be seen by entering: <command-name> ?%s", CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
 }

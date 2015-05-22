@@ -52,7 +52,7 @@ SECTIONS
   __exidx_end = .;
 
   _etext = .;
-    
+
   .data : AT (__exidx_end)
   {
     _data = .;
@@ -69,7 +69,7 @@ SECTIONS
     *(COMMON)
     _ebss = .;
   } > sram
-  
+
   end = .;
 
   /* For GDB compatibility we decrease the top with 16 bytes */

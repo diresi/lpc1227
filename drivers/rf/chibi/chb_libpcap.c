@@ -1,9 +1,9 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     chb_libpcap.c
     @author   Based on wsbridge by Christopher Wang (Freaklabs)
               Modified by: K. Townsend (microBuilder.eu)
-    
+
     @brief    Writes raw 802.15.4 frames to a binary file using the
               widely-adopted libpcap format (used by Wireshark and other
               protocal analysers).
@@ -27,30 +27,30 @@
       // Configure cpu and mandatory peripherals
       systemInit();
 
-      #if defined CFG_CHIBI && defined CFG_SDCARD && CFG_CHIBI_PROMISCUOUS != 0    
+      #if defined CFG_CHIBI && defined CFG_SDCARD && CFG_CHIBI_PROMISCUOUS != 0
         // Get a reference to the Chibi peripheral control block
         chb_pcb_t *pcb = chb_get_pcb();
 
         // Create a binary file to store captured data
         libpcapInit("/capture.cap");
-        
+
         // Wait for incoming frames and log them to disk in libpcap format.
         while(1)
         {
-          // Check for incoming messages 
-          while (pcb->data_rcv) 
-          { 
+          // Check for incoming messages
+          while (pcb->data_rcv)
+          {
             // get the length of the data
             rx_data.len = chb_read(&rx_data);
             // make sure the length is non-zero
             if (rx_data.len)
             {
-              // Enable LED to indicate message reception 
-              gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+              // Enable LED to indicate message reception
+              gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
               // Write frame content to disk
               libpcapWriteFrame(rx_data.data, rx_data.len);
               // Disable LED
-              gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+              gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
             }
           }
         }
@@ -58,25 +58,25 @@
 
       // Create a binary file to store captured data
       libpcapInit("capture.cap");
-  
+
       // Wait for incoming frames and log them to disk in libpcap format.
       chb_pcb_t *pcb = chb_get_pcb();
       while(1)
       {
-        // Check for incoming messages 
-        while (pcb->data_rcv) 
-        { 
+        // Check for incoming messages
+        while (pcb->data_rcv)
+        {
           // get the length of the data
           rx_data.len = chb_read(&rx_data);
           // make sure the length is non-zero
           if (rx_data.len)
           {
-            // Enable LED to indicate message reception 
-            gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+            // Enable LED to indicate message reception
+            gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
             // Write frame content to disk
             libpcapWriteFrame(rx_data.data, rx_data.len);
             // Disable LED
-            gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+            gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
           }
         }
       }
@@ -134,7 +134,7 @@
   #include "drivers/fatfs/ff.h"
   static FILINFO Finfo;
   static FATFS Fatfs[1];
-  static uint8_t buf[64]; 
+  static uint8_t buf[64];
   static FIL libpcapSDFile;
 #endif
 
@@ -145,7 +145,7 @@ static uint32_t libpcapStartTick;
 static bool libpcapInitialised = FALSE;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes the top-level libpcap header to the file
 */
 /**************************************************************************/
@@ -184,7 +184,7 @@ void libpcapWriteGlobalHeader()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes the libpcap frame header that preceeds each frame
 */
 /**************************************************************************/
@@ -206,7 +206,7 @@ void libpcapWriteFrameHeader(uint32_t sec, uint32_t usec, uint32_t incl_len, uin
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes an entire libpcap frame, including the frame header
 */
 /**************************************************************************/
@@ -228,7 +228,7 @@ libpcap_error_t libpcapWriteFrame(const uint8_t * frame_buffer, uint32_t frame_l
     diff_in_ticks -= (sec * (1000 / CFG_SYSTICK_DELAY_IN_MS));  // subtract off seconds from total
     usec = currentTick * 1000;                                  // get usec
 
-    // ToDo: Update the code above to take into consideration 
+    // ToDo: Update the code above to take into consideration
     // integer overflow!
 
     // Calculate frame length (minus frame checksum [FCS])
@@ -240,7 +240,7 @@ libpcap_error_t libpcapWriteFrame(const uint8_t * frame_buffer, uint32_t frame_l
       libpcapLocalFile = debug_fopen(libpcapFName, "ab");
     #endif
     #if defined CFG_SDCARD && LIBPCAP_FATFSFILE == 1
-      if(f_open(&libpcapSDFile, libpcapFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK) 
+      if(f_open(&libpcapSDFile, libpcapFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK)
       {
         return LIBPCAP_ERROR_FATFS_UNABLETOOPENFILE;
       }
@@ -277,7 +277,7 @@ libpcap_error_t libpcapWriteFrame(const uint8_t * frame_buffer, uint32_t frame_l
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises a new libpcap binary file and writes the header
 */
 /**************************************************************************/
@@ -293,11 +293,11 @@ libpcap_error_t libpcapInit(char *filename)
   #if defined CFG_SDCARD && LIBPCAP_FATFSFILE == 1
     DSTATUS stat;
     stat = disk_initialize(0);
-    if (stat & STA_NOINIT) 
+    if (stat & STA_NOINIT)
     {
       return LIBPCAP_ERROR_FATFS_INITFAILED;
     }
-    if (stat & STA_NODISK) 
+    if (stat & STA_NODISK)
     {
       return LIBPCAP_ERROR_FATFS_NODISK;
     }
@@ -308,19 +308,19 @@ libpcap_error_t libpcapInit(char *filename)
       DWORD p2;
       WORD w1;
       BYTE res, b1;
-      DIR dir; 
+      DIR dir;
       // Try to mount drive
       res = f_mount(0, &Fatfs[0]);
-      if (res != FR_OK) 
+      if (res != FR_OK)
       {
         return LIBPCAP_ERROR_FATFS_FAILEDTOMOUNTDRIVE;
       }
       if (res == FR_OK)
       {
         // Create a file (overwriting any existing file!)
-        if(f_open(&libpcapSDFile, libpcapFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK) 
-        {  
-          return LIBPCAP_ERROR_FATFS_UNABLETOCREATEFILE; 
+        if(f_open(&libpcapSDFile, libpcapFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
+        {
+          return LIBPCAP_ERROR_FATFS_UNABLETOCREATEFILE;
         }
       }
     }

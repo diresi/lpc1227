@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     uart.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -36,7 +36,7 @@
 */
 /**************************************************************************/
 
-#ifndef __UART_H__ 
+#ifndef __UART_H__
 #define __UART_H__
 
 #include "projectconfig.h"

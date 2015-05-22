@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -44,7 +44,7 @@
 #include "core/systick/systick.h"
 
 /**************************************************************************/
-/*! 
+/*!
     Cause the LED to blink once per second using a blocking delay
 */
 /**************************************************************************/
@@ -60,11 +60,11 @@ int main(void)
     // Toggle the LED
     if (gpioGetValue(CFG_LED_PORT, CFG_LED_PIN) == CFG_LED_OFF)
     {
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
     }
     else
     {
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
     }
   }
 

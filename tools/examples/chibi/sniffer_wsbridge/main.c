@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -48,15 +48,15 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Use Chibi as a wireless sniffer and write all captured frames
     to the SD card in libpcap format
-  
+
     projectconfig.h settings:
     --------------------------------------------------
     CFG_CHIBI             -> Enabled
     CFG_CHIBI_PROMISCUOUS -> 1
-    CFG_CHIBI_BUFFERSIZE  -> 1024   
+    CFG_CHIBI_BUFFERSIZE  -> 1024
 */
 /**************************************************************************/
 int main(void)
@@ -81,20 +81,20 @@ int main(void)
   #if defined CFG_CHIBI && CFG_CHIBI_PROMISCUOUS != 0
     // Get a reference to the Chibi peripheral control block
     chb_pcb_t *pcb = chb_get_pcb();
-    
+
     // Wait for incoming frames and transmit the raw data over uart
     while(1)
     {
-      // Check for incoming messages 
-      while (pcb->data_rcv) 
-      { 
+      // Check for incoming messages
+      while (pcb->data_rcv)
+      {
         // get the length of the data
         rx_data.len = chb_read(&rx_data);
         // make sure the length is nonzero
         if (rx_data.len)
         {
-          // Enable LED to indicate message reception 
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+          // Enable LED to indicate message reception
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
 
           // Send raw data to UART for processing on
           // the PC (requires WSBridge - www.freaklabs.org)
@@ -106,7 +106,7 @@ int main(void)
           }
 
           // Disable LED
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
         }
       }
     }

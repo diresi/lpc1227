@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pn532_mifare_ultralight.c
 */
 /**************************************************************************/
@@ -13,10 +13,10 @@
 
         MF0ICU1 Mifare Ultralight Functional Specification:
         http://www.nxp.com/documents/data_sheet/MF0ICU1.pdf
-            
+
 
     Mifare Ultralight cards have a 7-byte UID
-    
+
     EEPROM MEMORY
     =============
     Mifare Ultralight cards have 512 bits (64 bytes) of EEPROM memory,
@@ -56,7 +56,7 @@
 
     Data Pages (Pages 4..15)
     ------------------------
-    Pages 4 to 15 are can be freely read from and written to, 
+    Pages 4 to 15 are can be freely read from and written to,
     provided there is no conflict with the Lock Bytes described above.
 
     After production, the bytes have the following default values:
@@ -90,7 +90,7 @@
 #include "core/systick/systick.h"
 
 /**************************************************************************/
-/*! 
+/*!
     Tries to detect MIFARE targets in passive mode.
 
     @param  pbtCUID     Pointer to the byte array where the card's 7 byte
@@ -100,7 +100,7 @@
     Response for a valid ISO14443A 106KBPS (Mifare Ultralight, etc.)
     should be in the following format.  See UM0701-02 section
     7.3.5 for more information
-    
+
     byte            Description
     -------------   ------------------------------------------
     b0..6           Frame header and preamble
@@ -109,11 +109,11 @@
     b9..10          SENS_RES
     b11             SEL_RES
     b12             NFCID Length
-    b13..NFCIDLen   NFCID                                      
-    
+    b13..NFCIDLen   NFCID
+
     SENS_RES   SEL_RES     Manufacturer/Card Type    NFCID Len
     --------   -------     -----------------------   ---------
-    00 44      00          NXP Mifare Ultralight     7 bytes   
+    00 44      00          NXP Mifare Ultralight     7 bytes
 
     @note   Possible error messages are:
 
@@ -132,10 +132,10 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
 
   /* Try to initialise a single ISO14443A tag at 106KBPS                  */
   /* Note:  To wait for a card with a known UID, append the four byte     */
-  /*        UID to the end of the command.                                */ 
+  /*        UID to the end of the command.                                */
   byte_t abtCommand[] = { PN532_COMMAND_INLISTPASSIVETARGET, 0x01, PN532_MODULATION_ISO14443A_106KBPS};
   error = pn532Write(abtCommand, sizeof(abtCommand));
-  if (error) 
+  if (error)
     return error;
 
   /* Wait until we get a valid response or a timeout                      */
@@ -144,7 +144,7 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
     systickDelay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
-  if (error) 
+  if (error)
     return error;
 
   /* Check SENS_RES to make sure this is a Mifare Ultralight card         */
@@ -154,7 +154,7 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
     /* Card appears to be Mifare Ultralight */
     *szCUIDLen = abtResponse[12];
     uint8_t i;
-    for (i=0; i < *szCUIDLen; i++) 
+    for (i=0; i < *szCUIDLen; i++)
     {
       pbtCUID[i] = abtResponse[13+i];
     }
@@ -181,7 +181,7 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
       PN532_DEBUG("  UID Length : %d%s", abtResponse[12], CFG_PRINTF_NEWLINE);
       PN532_DEBUG("  UID        : ");
       size_t pos;
-      for (pos=0; pos < abtResponse[12]; pos++) 
+      for (pos=0; pos < abtResponse[12]; pos++)
       {
         printf("%02x ", abtResponse[13 + pos]);
       }
@@ -194,7 +194,7 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Tries to read an entire 4-byte page at the specified address.
 
     @param  page        The page number (0..63 in most cases)
@@ -228,7 +228,7 @@ pn532_error_t pn532_mifareultralight_ReadPage (uint8_t page, byte_t * pbtBuffer)
   abtCommand[1] = 1;                            /* Card number */
   abtCommand[2] = PN532_MIFARE_CMD_READ;        /* Mifare Read command = 0x30 */
   abtCommand[3] = page;                         /* Page Number (0..63 in most cases) */
-  
+
   /* Send the commands */
   error = pn532Write(abtCommand, sizeof(abtCommand));
   if (error)
@@ -254,7 +254,7 @@ pn532_error_t pn532_mifareultralight_ReadPage (uint8_t page, byte_t * pbtBuffer)
       PN532_DEBUG("Read failed%s", CFG_PRINTF_NEWLINE);
     #endif
     return error;
-  }  
+  }
 
   /* Make sure we have a valid response (should be 26 bytes long) */
   if (szLen == 26)

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     ST7565.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -69,7 +69,7 @@
 #define ST7565_CMD_SET_DISP_REVERSE       0xA7
 #define ST7565_CMD_SET_ALLPTS_NORMAL      0xA4
 #define ST7565_CMD_SET_ALLPTS_ON          0xA5
-#define ST7565_CMD_SET_BIAS_9             0xA2 
+#define ST7565_CMD_SET_BIAS_9             0xA2
 #define ST7565_CMD_SET_BIAS_7             0xA3
 #define ST7565_CMD_RMW                    0xE0
 #define ST7565_CMD_RMW_CLEAR              0xEE

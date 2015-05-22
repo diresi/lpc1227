@@ -84,7 +84,7 @@
 //#define CHB_DDR_RST         DDRF
 //#define CHB_RADIO_IRQ       INT6_vect
 //#define CHB_RADIO_IRQ_PIN   INT6
-    
+
 #define CHB_ENTER_CRIT()    __disable_irq()
 #define CHB_LEAVE_CRIT()    __enable_irq()
 #define CHB_RST_ENABLE()    do {gpioSetValue(CHB_RSTPORT, CHB_RSTPIN, 0); } while (0)
@@ -191,7 +191,7 @@ enum
 
 // transceiver timing
 enum{
-    TIME_RST_PULSE_WIDTH        = 1, 
+    TIME_RST_PULSE_WIDTH        = 1,
     TIME_P_ON_TO_CLKM_AVAIL     = 380,
     TIME_SLEEP_TO_TRX_OFF       = 240,
     TIME_TRX_OFF_TO_SLEEP       = 35,
@@ -273,7 +273,7 @@ enum
 };
 
 // transceiver interrupt register
-enum 
+enum
 {
     IRQ_PLL_LOCK                = 0,
     IRQ_PLL_UNLOCK              = 1,
@@ -282,8 +282,8 @@ enum
     IRQ_CCA_ED_READY            = 4,
     IRQ_AMI                     = 5,
     IRQ_TRX_UR                  = 6,
-    IRQ_BAT_LOW                 = 7 
-}; 
+    IRQ_BAT_LOW                 = 7
+};
 
 // transceiver modes
 enum
@@ -333,7 +333,7 @@ enum
     #define RX_STATE RX_AACK_ON
 #endif
 
-// init 
+// init
 void chb_drvr_init();
 
 // data access

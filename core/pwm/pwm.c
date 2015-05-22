@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pwm.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -8,7 +8,7 @@
 
     @section Example
 
-    @code 
+    @code
     #include "core/pwm/pwm.h"
     ...
 
@@ -69,8 +69,8 @@ uint32_t pwmDutyCycle = CFG_PWM_DEFAULT_DUTYCYCLE;
 volatile uint32_t pwmMaxPulses = 0;
 
 /**************************************************************************/
-/*! 
-    Initialises 16-bit Timer 1, and configures the MAT0 output (pin 1.9) 
+/*!
+    Initialises 16-bit Timer 1, and configures the MAT0 output (pin 1.9)
     to send the PWM output signal.
 */
 /**************************************************************************/
@@ -81,7 +81,7 @@ void pwmInit(void)
 
   /* Configure PIO1.9 as Timer1_16 MAT0 Output */
   IOCON_PIO1_9 &= ~IOCON_PIO1_9_FUNC_MASK;
-  IOCON_PIO1_9 |= IOCON_PIO1_9_FUNC_CT16B1_MAT0;  
+  IOCON_PIO1_9 |= IOCON_PIO1_9_FUNC_CT16B1_MAT0;
 
   /* Set default pulse width (MR3)*/
   TMR_TMR16B1MR3 = pwmPulseWidth;
@@ -106,7 +106,7 @@ void pwmInit(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Starts the PWM output
 */
 /**************************************************************************/
@@ -120,7 +120,7 @@ void pwmStart(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Stops the PWM output
 */
 /**************************************************************************/
@@ -131,13 +131,13 @@ void pwmStop(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Starts the PWM output, and stops after the specified number of
     pulses.
 
     @param[in]  pulses
                 The number of pulses to generate before disabling the
-                PWM output.  The output is actually disabled in the 
+                PWM output.  The output is actually disabled in the
                 timer ISR.
 
     @warning    The PWM output is actually stopped inside the 16-bit
@@ -156,7 +156,7 @@ void pwmStartFixed(uint32_t pulses)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Sets the signal's duty cycle in percent (1-100).
 
     @param[in]  percentage
@@ -182,7 +182,7 @@ int pwmSetDutyCycle(uint32_t percentage)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Sets the signal's frequency/pulse-width to the specified number
     of ticks.
 
@@ -205,11 +205,11 @@ int pwmSetFrequencyInTicks(uint16_t ticks)
   /* Adjust Duty Cycle (MR0) */
   TMR_TMR16B1MR0 = (pwmPulseWidth * (100 - pwmDutyCycle)) / 100;
 
-  return 0;  
+  return 0;
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Sets the signal's frequency/pulse-width to the specified number
     of microseconds.
 
@@ -246,7 +246,7 @@ int pwmSetFrequencyInMicroseconds(uint16_t us)
   /* Adjust Duty Cycle (MR0) */
   TMR_TMR16B1MR0 = (pwmPulseWidth * (100 - pwmDutyCycle)) / 100;
 
-  return 0;  
+  return 0;
 }
 
 

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     wdt.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -12,7 +12,7 @@
     isn't 'fed' within a pre-determined delay, it will raise an interrupt
     allowing you to decide if you want to reset the device, etc.
 
-    @code 
+    @code
     #include "core/cpu/cpu.h"
     #include "core/wdt/wdt.h"
     ...
@@ -65,7 +65,7 @@
 volatile uint32_t wdt_counter;
 
 /**************************************************************************/
-/*! 
+/*!
     IRQ Handler when the watchdog times out.  Any actions that you wish
     to take when a timeout occurs should be called from here.
 */
@@ -78,7 +78,7 @@ void WDT_IRQHandler(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Setup the clock for the watchdog timer.  The default setting is 250kHz.
 */
 /**************************************************************************/
@@ -86,9 +86,9 @@ static void wdtClockSetup (void)
 {
   /* Watchdog Configuration */
   /* Freq. = 0.5MHz, div = 2: WDT_OSC = 250kHz  */
-  SCB_WDTOSCCTRL = SCB_WDTOSCCTRL_FREQSEL_0_5MHZ | 
+  SCB_WDTOSCCTRL = SCB_WDTOSCCTRL_FREQSEL_0_5MHZ |
                    SCB_WDTOSCCTRL_DIVSEL_DIV2;
-  
+
   /* Set clock source (use WDT oscillator) */
   SCB_WDTCLKSEL = SCB_WDTCLKSEL_SOURCE_WATCHDOGOSC;
   SCB_WDTCLKUEN = SCB_WDTCLKUEN_UPDATE;
@@ -106,7 +106,7 @@ static void wdtClockSetup (void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Initialises the watchdog timer and sets up the interrupt.
 */
 /**************************************************************************/
@@ -132,7 +132,7 @@ void wdtInit (void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Feeds the watchdog to keep it from timing out.  Interrupts will be
     disabled while feeding the watchdog.
 */

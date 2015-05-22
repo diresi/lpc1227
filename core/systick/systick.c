@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     systick.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -13,7 +13,7 @@
 
     @section Example
 
-    @code 
+    @code
     #include "core/cpu/cpu.h"
     #include "core/systick/systick.h"
 
@@ -72,7 +72,7 @@ volatile uint32_t systickTicks = 0;
 volatile uint32_t systickRollovers = 0;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Systick interrupt handler
 */
 /**************************************************************************/
@@ -94,14 +94,14 @@ void SysTick_Handler (void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Initialises the systick timer
 
     @param[in]  delayMs
                 The number of milliseconds between each tick of the systick
                 timer.
-                  
-    @note       The shortest possible delay is 1 millisecond, which will 
+
+    @note       The shortest possible delay is 1 millisecond, which will
                 allow fine grained delays, but will cause more load on the
                 system than a 10mS delay.  The resolution of the systick
                 timer needs to be balanced with the amount of processing
@@ -121,7 +121,7 @@ void systickInit (uint32_t ticks)
 
   // Reset counter
   systickTicks = 0;
-                     
+
   // Set reload register
   SYSTICK_STRELOAD  = (ticks & SYSTICK_STRELOAD_MASK) - 1;
 
@@ -135,7 +135,7 @@ void systickInit (uint32_t ticks)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Causes a blocking delay for 'delayTicks' ticks on the
                 systick timer.  For example: systickDelay(100) would cause
                 a blocking delay for 100 ticks of the systick timer.
@@ -148,7 +148,7 @@ void systickInit (uint32_t ticks)
                 0xFFFFFFFF.
 */
 /**************************************************************************/
-void systickDelay (uint32_t delayTicks) 
+void systickDelay (uint32_t delayTicks)
 {
   uint32_t curTicks;
   curTicks = systickTicks;
@@ -162,7 +162,7 @@ void systickDelay (uint32_t delayTicks)
     while (systickTicks >= curTicks)
     {
       while (systickTicks < (delayTicks - (0xFFFFFFFF - curTicks)));
-    }      
+    }
   }
   else
   {
@@ -171,8 +171,8 @@ void systickDelay (uint32_t delayTicks)
 }
 
 /**************************************************************************/
-/*! 
-    @brief      Returns the current value of the systick timer counter. 
+/*!
+    @brief      Returns the current value of the systick timer counter.
                 This value is incremented by one every time an interrupt
                 fires for the systick timer.
 */
@@ -183,8 +183,8 @@ uint32_t systickGetTicks(void)
 }
 
 /**************************************************************************/
-/*! 
-    @brief      Returns the current value of the systick timer rollover 
+/*!
+    @brief      Returns the current value of the systick timer rollover
                 counter. This value is incremented by one every time the
                 tick counter rolls over from 0xFFFFFFFF to 0.
 */
@@ -195,7 +195,7 @@ uint32_t systickGetRollovers(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Returns the approximate number of seconds that the
                 systick timer has been running.
 */

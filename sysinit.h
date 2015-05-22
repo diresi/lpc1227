@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     sysinit.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -36,7 +36,7 @@
 */
 /**************************************************************************/
 
-#ifndef __SYSINIT_H__ 
+#ifndef __SYSINIT_H__
 #define __SYSINIT_H__
 
 #include "projectconfig.h"

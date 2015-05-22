@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     mcp24aa.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -9,10 +9,10 @@
 
     Driver for Microchip's 24AA32AF serial EEPROM.  This driver assumes
     that the address is set to 1010 000.
-    
+
     @section Example
 
-    @code 
+    @code
     #include "core/cpu/cpu.h"
     #include "drivers/eeprom/mcp24aa/mcp24aa.h"
 
@@ -111,7 +111,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 static bool _mcp24aaInitialised = false;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
@@ -130,7 +130,7 @@ mcp24aaError_e mcp24aaInit()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads the specified number of bytes from the supplied address.
 
     This function will read one or more bytes starting at the supplied
@@ -176,9 +176,9 @@ mcp24aaError_e mcp24aaReadBuffer (uint16_t address, uint8_t *buffer, uint32_t bu
   I2CMasterBuffer[1] = ((address >> 8) & 0xFF);         // Address (high byte)
   I2CMasterBuffer[2] = (address & 0xFF);                // Address (low byte)
   // If you wish to read, you need to append the address w/read bit, though this
-  // needs to be placed one bit higher than the size of I2CWriteLength which 
+  // needs to be placed one bit higher than the size of I2CWriteLength which
   // may be unexpected
-  I2CMasterBuffer[3] = MCP24AA_ADDR | MCP24AA_READBIT;  
+  I2CMasterBuffer[3] = MCP24AA_ADDR | MCP24AA_READBIT;
 
   // Transmit command
   i2cEngine();
@@ -193,7 +193,7 @@ mcp24aaError_e mcp24aaReadBuffer (uint16_t address, uint8_t *buffer, uint32_t bu
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes the supplied bytes at a specified address.
 
     This function will write one or more bytes starting at the supplied
@@ -248,12 +248,12 @@ mcp24aaError_e mcp24aaWriteBuffer (uint16_t address, uint8_t *buffer, uint32_t b
 
   // Wait at least 10ms
   systickDelay(10 / CFG_SYSTICK_DELAY_IN_MS);
-  
+
   return MCP24AA_ERROR_OK;
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads one byte from the supplied address.
 
     This function will read one byte starting at the supplied address.
@@ -293,7 +293,7 @@ mcp24aaError_e mcp24aaReadByte (uint16_t address, uint8_t *buffer)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes one byte to the supplied address.
 
     This function will write one byte at the supplied address.

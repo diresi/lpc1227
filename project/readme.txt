@@ -14,7 +14,7 @@ cmd_tbl.h       Contains the master command list for the
                 enabled in projectconfig.h.  All commands
                 must be present in this list to be properly
                 handled by the CLI.
-                
+
 commands.c/.h   Common helper functions for the command-line
                 interface.
 
@@ -29,5 +29,5 @@ commands        Code to implements specific commands for the
                 a strict requirement and you may wish to store
                 multiple related commands in one .c file, such
                 as 'cmds_graphics.c' etc.
-                
+
 documentation   Project-specific documentation is stored here

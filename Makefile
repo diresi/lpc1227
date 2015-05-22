@@ -12,7 +12,7 @@ SRAM = 8K
 # if you don't want to use the USB features, just use 0 here.
 SRAM_USB = 0
 
-VPATH = 
+VPATH =
 OBJS = main.o
 
 CONTRIB  = contrib
@@ -21,7 +21,7 @@ CONTRIB  = contrib
 # Debug settings
 ##########################################################################
 
-# Set DEBUGBUILD to 'TRUE' for full debugging (larger, slower binaries), 
+# Set DEBUGBUILD to 'TRUE' for full debugging (larger, slower binaries),
 # or to 'FALSE' for release builds (smallest, fastest binaries)
 DEBUGBUILD = TRUE
 
@@ -32,7 +32,7 @@ DEBUGBUILD = TRUE
 OPTDEFINES = -D __NEWLIB__
 
 ##########################################################################
-# Project-specific files 
+# Project-specific files
 ##########################################################################
 
 VPATH += project
@@ -44,7 +44,7 @@ OBJS += cmd_i2ceeprom_read.o cmd_i2ceeprom_write.o cmd_lm75b_gettemp.o
 OBJS += cmd_sysinfo.o cmd_sd_dir.o cmd_reset.o
 
 ##########################################################################
-# Optional driver files 
+# Optional driver files
 ##########################################################################
 
 # Chibi Light-Weight Wireless Stack (AT86RF212)
@@ -91,7 +91,7 @@ VPATH += drivers/sensors/tsl2561
 OBJS += tsl2561.o
 
 ##########################################################################
-# Library files 
+# Library files
 ##########################################################################
 VPATH += core core/adc core/cmd core/cpu core/gpio core/i2c core/pmu
 VPATH += core/ssp core/systick core/timer16 core/timer32 core/uart
@@ -172,7 +172,7 @@ ${OUTFILE}: $(OBJS) $(SYS_OBJS)
 	-@echo ""
 	$(OBJCOPY) $(OCFLAGS) -O binary $(OUTFILE).elf $(OUTFILE).bin
 	$(OBJCOPY) $(OCFLAGS) -O ihex $(OUTFILE).elf $(OUTFILE).hex
-  
+
 clean:
 	rm -f $(OBJS) $(LD_TEMP) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex
 

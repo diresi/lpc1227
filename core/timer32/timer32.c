@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     timer32.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -13,7 +13,7 @@
 
     @section Example
 
-    @code 
+    @code
     #include "/core/cpu/cpu.h"
     #include "/core/timer32/timer32.h"
     ...
@@ -67,11 +67,11 @@ volatile uint32_t timer32_0_counter = 0;
 volatile uint32_t timer32_1_counter = 0;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Causes a blocking delay for the specified number of
                 timer ticks.  The duration of each 'tick' is determined by
                 the 'timerInterval' property supplied to timer32Init.
-            
+
     @param[in]  timerNum
                 The 32-bit timer to user (0..1)
     @param[in]  delay
@@ -91,7 +91,7 @@ void timer32Delay(uint8_t timerNum, uint32_t delay)
       while (timer32_0_counter >= curTicks)
       {
         while (timer32_0_counter < (delay - (0xFFFFFFFF - curTicks)));
-      }      
+      }
     }
     else
     {
@@ -108,7 +108,7 @@ void timer32Delay(uint8_t timerNum, uint32_t delay)
       while (timer32_1_counter >= curTicks)
       {
         while (timer32_1_counter < (delay - (0xFFFFFFFF - curTicks)));
-      }      
+      }
     }
     else
     {
@@ -120,16 +120,16 @@ void timer32Delay(uint8_t timerNum, uint32_t delay)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Interrupt handler for 32-bit timer 0
 */
 /**************************************************************************/
 void TIMER32_0_IRQHandler(void)
-{  
+{
   /* Clear the interrupt flag */
   TMR_TMR32B0IR = TMR_TMR32B0IR_MR0;
 
-  /* If you wish to perform some action after each timer 'tick' (such as 
+  /* If you wish to perform some action after each timer 'tick' (such as
      incrementing a counter variable) you can do so here */
   timer32_0_counter++;
 
@@ -137,16 +137,16 @@ void TIMER32_0_IRQHandler(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
 	@brief Interrupt handler for 32-bit timer 1
 */
 /**************************************************************************/
 void TIMER32_1_IRQHandler(void)
-{  
+{
   /* Clear the interrupt flag */
   TMR_TMR32B1IR = TMR_TMR32B1IR_MR0;
 
-  /* If you wish to perform some action after each timer 'tick' (such as 
+  /* If you wish to perform some action after each timer 'tick' (such as
      incrementing a counter variable) you can do so here */
   timer32_1_counter++;
 
@@ -154,7 +154,7 @@ void TIMER32_1_IRQHandler(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Enables the specified timer
 
     @param[in]  timerNum
@@ -177,7 +177,7 @@ void timer32Enable(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Disables the specified timer
 
     @param[in]  timerNum
@@ -200,7 +200,7 @@ void timer32Disable(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Resets the specified timer
 
     @param[in]  timerNum
@@ -229,10 +229,10 @@ void timer32Reset(uint8_t timerNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises the specified 32-bit timer, and configures the
             timer to raise an interrupt and reset on match on MR0.
-    
+
     @param[in]  timerNum
                 The 32-bit timer to initiliase (0..1)
     @param[in]  timerInterval

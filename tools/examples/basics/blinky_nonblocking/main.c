@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -44,7 +44,7 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Causes the LED to flash every second using a non-blocking delay,
     and constantly checks if any incoming characters have arrived in
     the UART buffer for the CLI
@@ -74,17 +74,17 @@ int main(void)
       // Toggle the LED
       if (gpioGetValue(CFG_LED_PORT, CFG_LED_PIN) == CFG_LED_OFF)
       {
-        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
       }
       else
       {
-        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
       }
     }
 
     // Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h
-    #ifdef CFG_INTERFACE 
-      cmdPoll(); 
+    #ifdef CFG_INTERFACE
+      cmdPoll();
     #endif
   }
 

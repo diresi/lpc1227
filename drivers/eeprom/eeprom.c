@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     eeprom.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -43,7 +43,7 @@
 static uint8_t buf[32];
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Checks whether the supplied address is within the valid range
 
     @param[in]  addr
@@ -59,7 +59,7 @@ bool eepromCheckAddress(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 1 byte from EEPROM
 
     @param[in]  addr
@@ -80,7 +80,7 @@ uint8_t eepromReadU8(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 1 byte from EEPROM
 
     @param[in]  addr
@@ -95,7 +95,7 @@ int8_t eepromReadS8(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(int8_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -104,7 +104,7 @@ int8_t eepromReadS8(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 2 bytes from EEPROM
 
     @param[in]  addr
@@ -119,7 +119,7 @@ uint16_t eepromReadU16(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(uint16_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -128,7 +128,7 @@ uint16_t eepromReadU16(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 2 bytes from EEPROM
 
     @param[in]  addr
@@ -143,7 +143,7 @@ int16_t eepromReadS16(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(int16_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -152,7 +152,7 @@ int16_t eepromReadS16(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 4 bytes from EEPROM
 
     @param[in]  addr
@@ -167,7 +167,7 @@ uint32_t eepromReadU32(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(uint32_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -176,7 +176,7 @@ uint32_t eepromReadU32(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 4 bytes from EEPROM
 
     @param[in]  addr
@@ -191,7 +191,7 @@ int32_t eepromReadS32(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(int32_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -200,7 +200,7 @@ int32_t eepromReadS32(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 8 bytes from EEPROM
 
     @param[in]  addr
@@ -215,7 +215,7 @@ uint64_t eepromReadU64(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(uint64_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -224,7 +224,7 @@ uint64_t eepromReadU64(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads 8 bytes from EEPROM
 
     @param[in]  addr
@@ -239,7 +239,7 @@ int64_t eepromReadS64(uint16_t addr)
 
   mcp24aaError_e error = MCP24AA_ERROR_OK;
   error = mcp24aaReadBuffer(addr, buf, sizeof(int64_t));
-  
+
   // ToDo: Handle any errors
   if (error) { };
 
@@ -248,7 +248,7 @@ int64_t eepromReadS64(uint16_t addr)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Reads a variabls length buffer from EEPROM
 
     @param[in]  addr
@@ -263,7 +263,7 @@ void eepromReadBuffer(uint16_t addr, uint8_t *buffer, uint32_t bufferLength)
 {
   // Instantiate error message placeholder
   mcp24aaError_e error = MCP24AA_ERROR_OK;
-  
+
   // Read the contents of address
   error = mcp24aaReadBuffer(addr, buffer, bufferLength);
 
@@ -272,7 +272,7 @@ void eepromReadBuffer(uint16_t addr, uint8_t *buffer, uint32_t bufferLength)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes 1 byte to EEPROM
 
     @param[in]  addr
@@ -289,7 +289,7 @@ void eepromWriteU8(uint16_t addr, uint8_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes 1 signed byte to EEPROM
 
     @param[in]  addr
@@ -306,7 +306,7 @@ void eepromWriteS8(uint16_t addr, int8_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes an unsigned 16-bit integer to EEPROM
 
     @param[in]  addr
@@ -323,7 +323,7 @@ void eepromWriteU16(uint16_t addr, uint16_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes a signed 16-bit integer to EEPROM
 
     @param[in]  addr
@@ -340,7 +340,7 @@ void eepromWriteS16(uint16_t addr, int16_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes an unsigned 32-bit integer to EEPROM
 
     @param[in]  addr
@@ -357,7 +357,7 @@ void eepromWriteU32(uint16_t addr, uint32_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes a signed 32-bit integer to EEPROM
 
     @param[in]  addr
@@ -374,7 +374,7 @@ void eepromWriteS32(uint16_t addr, int32_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes an unsigned 64-bit integer to EEPROM
 
     @param[in]  addr
@@ -391,7 +391,7 @@ void eepromWriteU64(uint16_t addr, uint64_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Writes a signed 64-bit integer to EEPROM
 
     @param[in]  addr

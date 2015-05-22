@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_chibi_addr.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -47,8 +47,8 @@
   #include "drivers/rf/chibi/chb_drvr.h"
 
 /**************************************************************************/
-/*! 
-    Gets or sets the 16-bit sensor node address.  This value can be 
+/*!
+    Gets or sets the 16-bit sensor node address.  This value can be
     anything between 1-65534 (0x0001-0xFFFE), and in decimal or
     hexadecimal notation.  All hexadecimal values must be preceded by
     '0x' or '0X' to be properly interpreted (ex. 0x009F).
@@ -61,7 +61,7 @@ void cmd_chibi_addr(uint8_t argc, char **argv)
     // Try to convert supplied value to an integer
     int32_t addr;
     getNumber (argv[0], &addr);
-    
+
     // Check for invalid values (getNumber may complain about this as well)
     if (addr <= 0 || addr > 0xFFFF)
     {

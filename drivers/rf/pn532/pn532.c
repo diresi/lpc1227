@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pn532.c
 */
 /**************************************************************************/
@@ -13,7 +13,7 @@
 static pn532_pcb_t pcb;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Prints a hexadecimal value in plain characters
 
     @param  pbtData   Pointer to the byte data
@@ -23,7 +23,7 @@ static pn532_pcb_t pcb;
 void pn532PrintHex(const byte_t * pbtData, const size_t szBytes)
 {
   size_t szPos;
-  for (szPos=0; szPos < szBytes; szPos++) 
+  for (szPos=0; szPos < szBytes; szPos++)
   {
     printf("%02x ", pbtData[szPos]);
   }
@@ -31,7 +31,7 @@ void pn532PrintHex(const byte_t * pbtData, const size_t szBytes)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Prints a hexadecimal value in plain characters, along with
             the char equivalents in the following format
 
@@ -44,12 +44,12 @@ void pn532PrintHex(const byte_t * pbtData, const size_t szBytes)
 void pn532PrintHexChar(const byte_t * pbtData, const size_t szBytes)
 {
   size_t szPos;
-  for (szPos=0; szPos < szBytes; szPos++) 
+  for (szPos=0; szPos < szBytes; szPos++)
   {
     printf("%02x", pbtData[szPos]);
   }
   printf("  ");
-  for (szPos=0; szPos < szBytes; szPos++) 
+  for (szPos=0; szPos < szBytes; szPos++)
   {
     printf("%c", pbtData[szPos] <= 0x1F ? '.' : pbtData[szPos]);
   }
@@ -57,7 +57,7 @@ void pn532PrintHexChar(const byte_t * pbtData, const size_t szBytes)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Gets a reference to the PN532 peripheral control block,
                 which can be used to determine that state of the PN532
                 IC, buffers, etc.
@@ -69,7 +69,7 @@ pn532_pcb_t * pn532GetPCB()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Initialises the appropriate serial bus (UART, etc.),and
                 sets up any buffers or peripherals required by the PN532.
 */
@@ -87,7 +87,7 @@ void pn532Init(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Reads the response buffer from the PN532
 
     @param      pbtResponse
@@ -98,7 +98,7 @@ void pn532Init(void)
 /**************************************************************************/
 pn532_error_t pn532Read(byte_t * pbtResponse, size_t * pszLen)
 {
-  if (!pcb.initialised) pn532Init();  
+  if (!pcb.initialised) pn532Init();
 
   // Try to wake the device up if it's in sleep mode
   if (pcb.state == PN532_STATE_SLEEP)
@@ -123,7 +123,7 @@ pn532_error_t pn532Read(byte_t * pbtResponse, size_t * pszLen)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Sends a byte array of command and parameter data to the
                 PN532, starting with the command byte.  The frame's
                 preamble, checksums, postamble and frame identifier (0xD4)

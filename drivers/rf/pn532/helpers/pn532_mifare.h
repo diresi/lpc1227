@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pn532_mifare.h
 */
 /**************************************************************************/
@@ -11,7 +11,7 @@
 
 // These may need to be enlarged for multi card support
 #define PN532_RESPONSELEN_INLISTPASSIVETARGET (64)
-#define PN532_RESPONSELEN_INDATAEXCHANGE      (64)  
+#define PN532_RESPONSELEN_INDATAEXCHANGE      (64)
 
 typedef enum pn532_mifare_cmd_e
 {
@@ -23,7 +23,7 @@ typedef enum pn532_mifare_cmd_e
   PN532_MIFARE_CMD_DECREMENT  = 0xC0,
   PN532_MIFARE_CMD_INCREMENT  = 0xC1,
   PN532_MIFARE_CMD_STORE      = 0xC2
-} 
+}
 pn532_mifare_cmd_t;
 
 #endif

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     gpio.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -42,8 +42,8 @@
 #include "projectconfig.h"
 
 /**************************************************************************/
-/*! 
-    Indicates whether the interrupt should be configured as edge or 
+/*!
+    Indicates whether the interrupt should be configured as edge or
     level sensitive.
 */
 /**************************************************************************/
@@ -51,11 +51,11 @@ typedef enum gpioInterruptSense_e
 {
   gpioInterruptSense_Edge = 0,
   gpioInterruptSense_Level
-} 
+}
 gpioInterruptSense_t;
 
 /**************************************************************************/
-/*! 
+/*!
     Indicates whether one edge or both edges trigger an interrupt.
     Setting this to Double will cause both edges to trigger an interrupt.
 */
@@ -64,11 +64,11 @@ typedef enum gpioInterruptEdge_e
 {
   gpioInterruptEdge_Single = 0,
   gpioInterruptEdge_Double
-} 
+}
 gpioInterruptEdge_t;
 
 /**************************************************************************/
-/*! 
+/*!
     Indicates whether the interrupt should be triggered in the rising
     or falling edge.  ActiveHigh means that a HIGH level on the pin will
     trigger an interrupt, ActiveLow means that a LOW level on the pin
@@ -79,7 +79,7 @@ typedef enum gpioInterruptEvent_e
 {
   gpioInterruptEvent_ActiveHigh = 0,
   gpioInterruptEvent_ActiveLow
-} 
+}
 gpioInterruptEvent_t;
 
 typedef enum gpioDirection_e

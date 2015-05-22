@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     ssd1306.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -8,8 +8,8 @@
     Driver for 128x64 OLED display based on the SSD1306 controller.
 
     This driver is based on the SSD1306 Library from Limor Fried
-    (Adafruit Industries) at: https://github.com/adafruit/SSD1306  
-    
+    (Adafruit Industries) at: https://github.com/adafruit/SSD1306
+
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -86,7 +86,7 @@ uint8_t _ssd1306buffer[SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8];
 
 #if defined SSD1306_BUS_SPI
 /**************************************************************************/
-/*! 
+/*!
     @brief Simulates an SPI write using GPIO
 
     @param[in]  byte
@@ -101,7 +101,7 @@ void ssd1306SendByte(uint8_t byte)
   gpioSetValue(SSD1306_SCLK_PORT, SSD1306_SCLK_PIN, 1);
 
   // Write from MSB to LSB
-  for (i=7; i>=0; i--) 
+  for (i=7; i>=0; i--)
   {
     // Set clock pin low
     gpioSetValue(SSD1306_SCLK_PORT, SSD1306_SCLK_PIN, 0);
@@ -115,7 +115,7 @@ void ssd1306SendByte(uint8_t byte)
 
 #if defined SSD1306_BUS_I2C
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends a command via I2C
 
     @param[in]  byte
@@ -155,7 +155,7 @@ void ssd1306SendCommand(uint8_t byte)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends data via I2C
 
     @param[in]  byte
@@ -220,7 +220,7 @@ static void ssd1306DrawChar(uint16_t x, uint16_t y, uint8_t c, struct FONT_DEF f
     }
   }
   else
-  {    
+  {
     // Requested character is not available in this font ... send a space instead
     for (col = 0; col < font.u8Width; col++)
     {
@@ -250,7 +250,7 @@ static void ssd1306DrawChar(uint16_t x, uint16_t y, uint8_t c, struct FONT_DEF f
 /**************************************************************************/
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises the SSD1306 LCD display
 */
 /**************************************************************************/
@@ -283,9 +283,9 @@ void ssd1306Init(uint8_t vccstate)
       CMD(0x0);                                   // no offset
       CMD(SSD1306_SETSTARTLINE | 0x0);            // line #0
       CMD(SSD1306_CHARGEPUMP);                    // 0x8D
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x10) }
-      else 
+      else
         { CMD(0x14) }
       CMD(SSD1306_MEMORYMODE);                    // 0x20
       CMD(0x00);                                  // 0x0 act like ks0108
@@ -294,14 +294,14 @@ void ssd1306Init(uint8_t vccstate)
       CMD(SSD1306_SETCOMPINS);                    // 0xDA
       CMD(0x02);
       CMD(SSD1306_SETCONTRAST);                   // 0x81
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x9F) }
-      else 
+      else
         { CMD(0xCF) }
       CMD(SSD1306_SETPRECHARGE);                  // 0xd9
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x22) }
-      else 
+      else
         { CMD(0xF1) }
       CMD(SSD1306_SETVCOMDETECT);                 // 0xDB
       CMD(0x40);
@@ -320,9 +320,9 @@ void ssd1306Init(uint8_t vccstate)
       CMD(0x0);                                   // no offset
       CMD(SSD1306_SETSTARTLINE | 0x0);            // line #0
       CMD(SSD1306_CHARGEPUMP);                    // 0x8D
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x10) }
-      else 
+      else
         { CMD(0x14) }
       CMD(SSD1306_MEMORYMODE);                    // 0x20
       CMD(0x00);                                  // 0x0 act like ks0108
@@ -331,14 +331,14 @@ void ssd1306Init(uint8_t vccstate)
       CMD(SSD1306_SETCOMPINS);                    // 0xDA
       CMD(0x12);
       CMD(SSD1306_SETCONTRAST);                   // 0x81
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x9F) }
-      else 
+      else
         { CMD(0xCF) }
       CMD(SSD1306_SETPRECHARGE);                  // 0xd9
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { CMD(0x22) }
-      else 
+      else
         { CMD(0xF1) }
       CMD(SSD1306_SETVCOMDETECT);                 // 0xDB
       CMD(0x40);
@@ -362,9 +362,9 @@ void ssd1306Init(uint8_t vccstate)
       ssd1306SendCommand(0x0);                               // no offset
       ssd1306SendCommand(SSD1306_SETSTARTLINE | 0x0);        // line #0
       ssd1306SendCommand(SSD1306_CHARGEPUMP);                // 0x8D
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x10); }
-      else 
+      else
         { ssd1306SendCommand(0x14); }
       ssd1306SendCommand(SSD1306_MEMORYMODE);                // 0x20
       ssd1306SendCommand(0x00);                              // 0x0 act like ks0108
@@ -373,14 +373,14 @@ void ssd1306Init(uint8_t vccstate)
       ssd1306SendCommand(SSD1306_SETCOMPINS);                // 0xDA
       ssd1306SendCommand(0x02);
       ssd1306SendCommand(SSD1306_SETCONTRAST);               // 0x81
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x9F); }
-      else 
+      else
         { ssd1306SendCommand(0xCF); }
       ssd1306SendCommand(SSD1306_SETPRECHARGE);              // 0xd9
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x22); }
-      else 
+      else
         { ssd1306SendCommand(0xF1); }
       ssd1306SendCommand(SSD1306_SETVCOMDETECT);             // 0xDB
       ssd1306SendCommand(0x40);
@@ -399,9 +399,9 @@ void ssd1306Init(uint8_t vccstate)
       ssd1306SendCommand(0x0);                               // no offset
       ssd1306SendCommand(SSD1306_SETSTARTLINE | 0x0);        // line #0
       ssd1306SendCommand(SSD1306_CHARGEPUMP);                // 0x8D
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x10); }
-      else 
+      else
         { ssd1306SendCommand(0x14); }
       ssd1306SendCommand(SSD1306_MEMORYMODE);                // 0x20
       ssd1306SendCommand(0x00);                              // 0x0 act like ks0108
@@ -410,14 +410,14 @@ void ssd1306Init(uint8_t vccstate)
       ssd1306SendCommand(SSD1306_SETCOMPINS);                // 0xDA
       ssd1306SendCommand(0x12);
       ssd1306SendCommand(SSD1306_SETCONTRAST);               // 0x81
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x9F); }
-      else 
+      else
         { ssd1306SendCommand(0xCF); }
       ssd1306SendCommand(SSD1306_SETPRECHARGE);              // 0xd9
-      if (vccstate == SSD1306_EXTERNALVCC) 
+      if (vccstate == SSD1306_EXTERNALVCC)
         { ssd1306SendCommand(0x22); }
-      else 
+      else
         { ssd1306SendCommand(0xF1); }
       ssd1306SendCommand(SSD1306_SETVCOMDETECT);             // 0xDB
       ssd1306SendCommand(0x40);
@@ -430,7 +430,7 @@ void ssd1306Init(uint8_t vccstate)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Draws a single pixel in image buffer
 
     @param[in]  x
@@ -439,7 +439,7 @@ void ssd1306Init(uint8_t vccstate)
                 The y position (0..63)
 */
 /**************************************************************************/
-void ssd1306DrawPixel(uint8_t x, uint8_t y) 
+void ssd1306DrawPixel(uint8_t x, uint8_t y)
 {
   if ((x >= SSD1306_LCDWIDTH) || (y >= SSD1306_LCDHEIGHT))
     return;
@@ -448,7 +448,7 @@ void ssd1306DrawPixel(uint8_t x, uint8_t y)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Clears a single pixel in image buffer
 
     @param[in]  x
@@ -457,16 +457,16 @@ void ssd1306DrawPixel(uint8_t x, uint8_t y)
                 The y position (0..63)
 */
 /**************************************************************************/
-void ssd1306ClearPixel(uint8_t x, uint8_t y) 
+void ssd1306ClearPixel(uint8_t x, uint8_t y)
 {
   if ((x >= SSD1306_LCDWIDTH) || (y >= SSD1306_LCDHEIGHT))
     return;
 
-  _ssd1306buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << y%8); 
+  _ssd1306buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << y%8);
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Gets the value (1 or 0) of the specified pixel from the buffer
 
     @param[in]  x
@@ -484,21 +484,21 @@ uint8_t ssd1306GetPixel(uint8_t x, uint8_t y)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Clears the screen
 */
 /**************************************************************************/
-void ssd1306ClearScreen() 
+void ssd1306ClearScreen()
 {
   memset(_ssd1306buffer, 0, 1024);
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Renders the contents of the pixel buffer on the LCD
 */
 /**************************************************************************/
-void ssd1306Refresh(void) 
+void ssd1306Refresh(void)
 {
   #if defined SSD1306_BUS_SPI
     CMD(SSD1306_SETLOWCOLUMN | 0x0);  // low col = 0
@@ -506,7 +506,7 @@ void ssd1306Refresh(void)
     CMD(SSD1306_SETSTARTLINE | 0x0); // line #0
 
     uint16_t i;
-    for (i=0; i<1024; i++) 
+    for (i=0; i<1024; i++)
     {
       DATA(_ssd1306buffer[i]);
     }
@@ -518,7 +518,7 @@ void ssd1306Refresh(void)
     ssd1306SendCommand(SSD1306_SETSTARTLINE | 0x0); // line #0
 
     uint16_t i;
-    for (i=0; i<1024; i++) 
+    for (i=0; i<1024; i++)
     {
       ssd1306SendData(_ssd1306buffer[i]);
     }
@@ -540,11 +540,11 @@ void ssd1306Refresh(void)
 
     @section Example
 
-    @code 
+    @code
 
     #include "drivers/displays/bitmap/ssd1306/ssd1306.h"
     #include "drivers/displays/smallfonts.h"
-    
+
     // Configure the pins and initialise the LCD screen
     ssd1306Init(SSD1306_INTERNALVCC);
 
@@ -579,11 +579,11 @@ void ssd1306DrawString(uint16_t x, uint16_t y, char* text, struct FONT_DEF font)
 
     @section Example
 
-    @code 
+    @code
 
     #include "drivers/displays/bitmap/ssd1306/ssd1306.h"
     #include "drivers/displays/smallfonts.h"
-    
+
     // Configure the pins and initialise the LCD screen
     ssd1306Init(SSD1306_INTERNALVCC);
 
@@ -595,7 +595,7 @@ void ssd1306DrawString(uint16_t x, uint16_t y, char* text, struct FONT_DEF font)
       // Render some text on the screen with different fonts
       ssd1306DrawString(1, 56, "INSERT TEXT HERE", Font_System5x8);
       // Refresh the screen to see the results
-      ssd1306Refresh();    
+      ssd1306Refresh();
       // Wait a bit before writing the next line
       systickDelay(1000);
     }

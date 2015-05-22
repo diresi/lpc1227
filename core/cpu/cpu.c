@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cpu.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -20,13 +20,13 @@
     {
       // Initialise the CPU and setup the PLL
       cpuInit();
-      
+
       while(1)
       {
       }
     }
-    @endcode 
-    
+    @endcode
+
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -62,7 +62,7 @@
 #include "core/gpio/gpio.h"
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Configures the PLL and main system clock
 
     The speed at which the MCU operates is set here using the SCB_PLLCTRL
@@ -91,7 +91,7 @@ void cpuPllSetup (cpuMultiplier_t multiplier)
   SCB_PLLCLKUEN = SCB_PLLCLKUEN_UPDATE;         // Update clock source
   SCB_PLLCLKUEN = SCB_PLLCLKUEN_DISABLE;        // Toggle update register once
   SCB_PLLCLKUEN = SCB_PLLCLKUEN_UPDATE;         // Update clock source again
-  
+
   // Wait until the clock is updated
   while (!(SCB_PLLCLKUEN & SCB_PLLCLKUEN_UPDATE));
 
@@ -99,7 +99,7 @@ void cpuPllSetup (cpuMultiplier_t multiplier)
   switch (multiplier)
   {
     // Fclkout = M * Fclkin = FCCO / (2 * P)
-    // FCCO should be in the range of 156-320MHz 
+    // FCCO should be in the range of 156-320MHz
     // (see Table 44 of the LPC1114 usermanual for examples)
     case CPU_MULTIPLIER_2:
       // Fclkout = 24.0MHz
@@ -129,7 +129,7 @@ void cpuPllSetup (cpuMultiplier_t multiplier)
 
   // Wait for PLL to lock
   while (!(SCB_PLLSTAT & SCB_PLLSTAT_LOCK));
-  
+
   // Setup main clock
   SCB_MAINCLKSEL = SCB_MAINCLKSEL_SOURCE_SYSPLLCLKOUT;
   SCB_MAINCLKUEN = SCB_MAINCLKUEN_UPDATE;       // Update clock source
@@ -147,7 +147,7 @@ void cpuPllSetup (cpuMultiplier_t multiplier)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises the CPU, setting up the PLL, etc.
 */
 /**************************************************************************/
@@ -165,7 +165,7 @@ void cpuInit (void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Get's the CPU Device ID
 */
 /**************************************************************************/
@@ -175,7 +175,7 @@ uint32_t cpuGetDeviceID (void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Resets the device using the AIRCR register
 */
 /**************************************************************************/

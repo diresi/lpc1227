@@ -12,7 +12,7 @@ To include debug information in the compiled firmware, open the make file and se
 # Debug settings
 ##########################################################################
 
-# Set DEBUGBUILD to 'TRUE' for full debugging (larger, slower binaries), 
+# Set DEBUGBUILD to 'TRUE' for full debugging (larger, slower binaries),
 # or to 'FALSE' for release builds (smallest, fastest binaries)
 DEBUGBUILD = FALSE
 

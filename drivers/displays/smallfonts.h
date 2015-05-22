@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     smallfonts.h
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -44,7 +44,7 @@
 
 #include "projectconfig.h"
 
-struct FONT_DEF 
+struct FONT_DEF
 {
     uint8_t u8Width;     	/* Character width for storage         */
     uint8_t u8Height;  	/* Character height for storage        */

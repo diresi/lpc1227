@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     lm75b.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -12,10 +12,10 @@
     in degrees celsius where each unit is equal to 0.125°C.  For example,
     if the temperature reading is 198, it means that the temperature in
     degree celsius is: 198 / 8 = 24.75°C.
-    
+
     @section Example
 
-    @code 
+    @code
     #include "core/cpu/cpu.h"
     #include "drivers/sensors/lm75b/lm75b.h"
 
@@ -32,14 +32,14 @@
       {
         // Get the current temperature (in 0.125°C units)
         lm75bGetTemperature(&temp);
-  
+
         // Multiply value by 125 for fixed-point math (0.125°C per unit)
         temp *= 125;
 
         // Use modulus operator to display decimal value
         printf("Current Temperature: %d.%d C\n", temp / 1000, temp % 1000);
 
-        // Alternatively, you could also use floating point math, though 
+        // Alternatively, you could also use floating point math, though
         // this will result in larger compiled code if you add in floating
         // point support for printf, etc.
         //
@@ -91,7 +91,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 static bool _lm75bInitialised = false;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Writes an 8 bit values over I2C
 */
 /**************************************************************************/
@@ -114,7 +114,7 @@ static lm75bError_e lm75bWrite8 (uint8_t reg, uint32_t value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
@@ -132,7 +132,7 @@ static lm75bError_e lm75bRead16(uint8_t reg, int32_t *value)
   I2CMasterBuffer[0] = LM75B_ADDRESS;             // I2C device address
   I2CMasterBuffer[1] = reg;                       // Command register
   // Append address w/read bit
-  I2CMasterBuffer[2] = LM75B_ADDRESS | LM75B_READBIT;  
+  I2CMasterBuffer[2] = LM75B_ADDRESS | LM75B_READBIT;
   i2cEngine();
 
   // Shift values to create properly formed integer
@@ -148,7 +148,7 @@ static lm75bError_e lm75bRead16(uint8_t reg, int32_t *value)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
@@ -159,7 +159,7 @@ lm75bError_e lm75bInit(void)
   {
     return LM75B_ERROR_I2CINIT;    /* Fatal error */
   }
-  
+
   _lm75bInitialised = true;
 
   // Set device to shutdown mode by default (saves 100uA power)
@@ -167,7 +167,7 @@ lm75bError_e lm75bInit(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads the current temperature from the LM75B
 
     @note   This method will assign a signed 32-bit value (int32) to 'temp',
@@ -198,7 +198,7 @@ lm75bError_e lm75bGetTemperature (int32_t *temp)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Writes the supplied 8-bit value to the LM75B config register
 */
 /**************************************************************************/

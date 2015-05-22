@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pn532_mifare_classic.c
 */
 /**************************************************************************/
@@ -13,13 +13,13 @@
 
         MF1S503x Mifare Classic 1K data sheet:
         http://www.nxp.com/documents/data_sheet/MF1S503x.pdf
-            
+
         MF1S70yyX MIFARE Classic 4K data sheet:
         http://www.nxp.com/documents/data_sheet/MF1S70YYX.pdf
 
     Mifare Classic cards typically have a a 4-byte NUID, though you may
     find cards with 7 byte IDs as well
-        
+
     EEPROM MEMORY
     =============
     Mifare Classic cards have either 1K or 4K of EEPROM memory. Each
@@ -74,12 +74,12 @@
     configure them as "Value Blocks".  Value blocks allow performing electronic
     purse functions (valid commands are: read, write, increment, decrement,
     restore, transfer).
-    
+
     Each Value block contains a single signed 32-bit value, and this value is
     stored 3 times for data integrity and security reasons.  It is stored twice
     non-inverted, and once inverted.  The last 4 bytes are used for a 1-byte
     address, which is stored 4 times (twice non-inverted, and twice inverted).
-    
+
     Data blocks configured as "Value Blocks" have the following structure:
 
         Value Block Bytes
@@ -123,7 +123,7 @@
         access rules defined in the Sector Trailer block for that sector.
         This can be done using pn532_mifareclassic_AuthenticateBlock(),
         passing in the appropriate key value.
-          
+
         Most new cards have a default Key A of 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF,
         but some common values worth trying are:
 
@@ -154,7 +154,7 @@
 #include "core/systick/systick.h"
 
 /**************************************************************************/
-/*! 
+/*!
       Indicates whether the specified block number is the first block
       in the sector (block 0 relative to the current sector)
 */
@@ -169,7 +169,7 @@ bool is_first_block (uint32_t uiBlock)
 }
 
 /**************************************************************************/
-/*! 
+/*!
       Indicates whether the specified block number is the sector trailer
 */
 /**************************************************************************/
@@ -183,7 +183,7 @@ bool is_trailer_block (uint32_t uiBlock)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Tries to detect MIFARE targets in passive mode.  This needs to be done
     before anything useful can be accomplished with a tag since you need
     the tag's unique UID to communicate with it.
@@ -195,7 +195,7 @@ bool is_trailer_block (uint32_t uiBlock)
     Response for a valid ISO14443A 106KBPS (Mifare Classic, etc.)
     should be in the following format.  See UM0701-02 section
     7.3.5 for more information
-    
+
     byte            Description
     -------------   ------------------------------------------
     b0..6           Frame header and preamble
@@ -204,11 +204,11 @@ bool is_trailer_block (uint32_t uiBlock)
     b9..10          SENS_RES
     b11             SEL_RES
     b12             NFCID Length
-    b13..NFCIDLen   NFCID                                      
-    
+    b13..NFCIDLen   NFCID
+
     SENS_RES   SEL_RES     Manufacturer/Card Type    NFCID Len
     --------   -------     -----------------------   ---------
-    00 04      08          NXP Mifare Classic 1K     4 bytes   
+    00 04      08          NXP Mifare Classic 1K     4 bytes
     00 02      18          NXP Mifare Classic 4K     4 bytes
 
     @note   Possible error messages are:
@@ -228,10 +228,10 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
 
   /* Try to initialise a single ISO14443A tag at 106KBPS                  */
   /* Note:  To wait for a card with a known UID, append the four byte     */
-  /*        UID to the end of the command.                                */ 
+  /*        UID to the end of the command.                                */
   byte_t abtCommand[] = { PN532_COMMAND_INLISTPASSIVETARGET, 0x01, PN532_MODULATION_ISO14443A_106KBPS};
   error = pn532Write(abtCommand, sizeof(abtCommand));
-  if (error) 
+  if (error)
     return error;
 
   /* Wait until we get a valid response or a timeout                      */
@@ -240,21 +240,21 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
     systickDelay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
-  if (error) 
+  if (error)
     return error;
 
   /* Check SENSE_RES to make sure this is a Mifare Classic card           */
   /*          Classic 1K       = 00 04                                    */
   /*          Classic 4K       = 00 02                                    */
   /*          Classic Emulated = 00 08                                    */
-  if ((abtResponse[10] == 0x02) || 
-      (abtResponse[10] == 0x04) || 
+  if ((abtResponse[10] == 0x02) ||
+      (abtResponse[10] == 0x04) ||
       (abtResponse[10] == 0x08))
   {
     /* Card appears to be Mifare Classic */
     *szCUIDLen = abtResponse[12];
     uint8_t i;
-    for (i=0; i < *szCUIDLen; i++) 
+    for (i=0; i < *szCUIDLen; i++)
     {
       pbtCUID[i] = abtResponse[13+i];
     }
@@ -281,7 +281,7 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
       PN532_DEBUG("  UID Length : %d%s", abtResponse[12], CFG_PRINTF_NEWLINE);
       PN532_DEBUG("  UID        : ");
       size_t pos;
-      for (pos=0; pos < abtResponse[12]; pos++) 
+      for (pos=0; pos < abtResponse[12]; pos++)
       {
         printf("%02x ", abtResponse[13 + pos]);
       }
@@ -295,7 +295,7 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
 
 
 /**************************************************************************/
-/*! 
+/*!
     Tries to authenticate a block of memory on a MIFARE card using the
     INDATAEXCHANGE command.  See section 7.3.8 of the PN532 User Manual
     for more information on sending MIFARE and other commands.
@@ -334,7 +334,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
   {
     abtCommand[10+i] = pbtCUID[i];                /* 4 byte card ID */
   }
-  
+
   /* Send the command */
   error = pn532Write(abtCommand, 10+szCUIDLen);
   if (error)
@@ -374,7 +374,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Tries to read an entire 16-byte data block at the specified block
     address.
 
@@ -404,7 +404,7 @@ pn532_error_t pn532_mifareclassic_ReadDataBlock (uint8_t uiBlockNumber, byte_t *
   abtCommand[1] = 1;                            /* Card number */
   abtCommand[2] = PN532_MIFARE_CMD_READ;        /* Mifare Read command = 0x30 */
   abtCommand[3] = uiBlockNumber;                /* Block Number (0..63 for 1K, 0..255 for 4K) */
-  
+
   /* Send the commands */
   error = pn532Write(abtCommand, sizeof(abtCommand));
   if (error)

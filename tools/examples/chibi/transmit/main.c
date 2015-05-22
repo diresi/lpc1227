@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -46,9 +46,9 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Broadcast a basic message every 250 milliseconds
-  
+
     projectconfig.h settings:
     --------------------------------------------------
     CFG_CHIBI             -> Enabled
@@ -76,14 +76,14 @@ int main(void)
     while(1)
     {
       // Enable LED
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
       // Create and send the message
       char text[10];
       counter++;
       itoa(counter, text, 10);
       chb_write(0xFFFF, text, strlen(text) + 1);
       // Disable LED
-      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+      gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
       systickDelay(250);
     }
   #endif

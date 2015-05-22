@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -51,9 +51,9 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Broadcast a basic message every 250 milliseconds
-  
+
     projectconfig.h settings:
     --------------------------------------------------
     CFG_CHIBI             -> Enabled
@@ -90,16 +90,16 @@ int main(void)
   while(1)
   {
     // Get the current temperature (in 0.125°C units)
-    lm75bGetTemperature(&temp);    
+    lm75bGetTemperature(&temp);
     // Multiply value by 125 for fixed-point math (0.125°C per unit)
     temp *= 125;
     // Use modulus operator to display decimal value
     sprintf(text, "Current Temp: %d.%d C", (int)(temp / 1000), (int)(temp % 1000));
     // Enable LED
-    gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+    gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
     chb_write(0xFFFF, text, strlen(text) + 1);
     // Disable LED
-    gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+    gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
     // Deep sleep for 5 seconds
     pmuDeepSleep(5);
   }

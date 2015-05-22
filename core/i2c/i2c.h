@@ -10,11 +10,11 @@
  *   2010.07.19  ver 1.10    Rob Jansen - MyVoice CAD/CAM Services
  *                           Updated to reflect new code
  *   2011.02.19  ver 1.20    KTownsend - microBuilder.eu
- *                           - Added slave mode status values to 
+ *                           - Added slave mode status values to
  *                             I2C_IRQHandler
  *
 ******************************************************************************/
-#ifndef __I2C_H 
+#ifndef __I2C_H
 #define __I2C_H
 
 #include "projectconfig.h"
@@ -82,9 +82,9 @@
 
 /* SCLH and SCLL = I2C PCLK High/Low cycles for I2C clock and
   determine the data rate/duty cycle for I2C:
-   
+
    I2CBitFrequency = I2CPCLK / (I2CSCLH + I2CSCLL)
-  
+
    Standard Mode   (100KHz) = CFG_CPU_CCLK / 200000
    Fast Mode       (400KHz) = CFG_CPU_CCLK / 800000
    Fast- Mode Plus (1MHz)   = CFG_CPU_CCLK / 2000000       */

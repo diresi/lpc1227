@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     uart.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -12,7 +12,7 @@
 
     @section Example: Sending text via UART
 
-    @code 
+    @code
     #include "core/cpu/cpu.h"
     #include "core/uart/uart.h"
     ...
@@ -22,7 +22,7 @@
     uartInit(57600);
     ...
     uint8_t uartBuffer[UARTBUFFERSIZE] = { 'T', 'e', 's', 't', '\n' };
-  
+
     // Send contents of uartBuffer
     uartSend((uint8_t *)uartBuffer, UARTBUFFERSIZE);
     @endcode
@@ -46,12 +46,12 @@
       // Read the first available character
       uint8_t c = uartRxBufferRead();
 
-      // read out the data in the buffer and echo it back to the host. 
+      // read out the data in the buffer and echo it back to the host.
       switch (c)
       {
         case '\r':
             printf("\n\r");
-            break;        
+            break;
         default:
             printf("%c", c);
             break;
@@ -183,7 +183,7 @@ void UART_IRQHandler(void)
 
     @section Example
 
-    @code 
+    @code
     // Make sure that UART is initialised
     uart_pcb_t *pcb = uartGetPCB();
     if (!pcb->initialised)
@@ -200,7 +200,7 @@ uart_pcb_t *uartGetPCB()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises UART at the specified baud rate.
 
     @param[in]  baudRate
@@ -245,7 +245,7 @@ void uartInit(uint32_t baudrate)
 
   UART_U0DLM = fDiv / 256;
   UART_U0DLL = fDiv % 256;
-  
+
   /* Set DLAB back to 0 */
   UART_U0LCR = (UART_U0LCR_Word_Length_Select_8Chars |
                 UART_U0LCR_Stop_Bit_Select_1Bits |
@@ -253,11 +253,11 @@ void uartInit(uint32_t baudrate)
                 UART_U0LCR_Parity_Select_OddParity |
                 UART_U0LCR_Break_Control_Disabled |
                 UART_U0LCR_Divisor_Latch_Access_Disabled);
-  
+
   /* Enable and reset TX and RX FIFO. */
-  UART_U0FCR = (UART_U0FCR_FIFO_Enabled | 
-                UART_U0FCR_Rx_FIFO_Reset | 
-                UART_U0FCR_Tx_FIFO_Reset); 
+  UART_U0FCR = (UART_U0FCR_FIFO_Enabled |
+                UART_U0FCR_Rx_FIFO_Reset |
+                UART_U0FCR_Tx_FIFO_Reset);
 
   /* Read to clear the line status. */
   regVal = UART_U0LSR;
@@ -281,7 +281,7 @@ void uartInit(uint32_t baudrate)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends the contents of supplied text buffer over UART.
 
     @param[in]  bufferPtr
@@ -291,7 +291,7 @@ void uartInit(uint32_t baudrate)
 
     @section Example
 
-    @code 
+    @code
     // Set 5-character text buffer
     uint8_t uartBuffer[5] = { 'T', 'e', 's', 't', '\n' };
     // Send contents of uartBuffer
@@ -316,7 +316,7 @@ void uartSend (uint8_t *bufferPtr, uint32_t length)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sends a single byte over UART.
 
     @param[in]  byte
@@ -324,7 +324,7 @@ void uartSend (uint8_t *bufferPtr, uint32_t length)
 
     @section Example
 
-    @code 
+    @code
     // Send 0xFF over UART
     uartSendByte(0xFF);
     // Send 'B' over UART (note single quotes)

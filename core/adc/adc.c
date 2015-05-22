@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     adc.c
     @author   K. Townsend (microBuilder.eu)
     @date     22 March 2010
@@ -22,7 +22,7 @@
       cpuInit();
       adcInit();
 
-      uint32_t results = 0;  
+      uint32_t results = 0;
       while(1)
       {
         // Get A/D conversion results from A/D channel 0
@@ -69,15 +69,15 @@ static bool _adcInitialised = false;
 static uint8_t _adcLastChannel = 0;
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Returns the conversion results on the specified ADC channel.
 
     This function will manually start an A/D conversion on a single
-    channel and return the results.  
+    channel and return the results.
 
     @param[in]  channelNum
-                The A/D channel [0..7] that will be used during the A/D 
-                conversion.  (Note that only A/D channel's 0..3 are 
+                The A/D channel [0..7] that will be used during the A/D
+                conversion.  (Note that only A/D channel's 0..3 are
                 configured by default in adcInit.)
 
     @return     0 if an overrun error occured, otherwise a 10-bit value
@@ -96,7 +96,7 @@ uint32_t adcReadSingle (uint8_t channelNum)
   /* make sure that channel number is 0..7 */
   if ( channelNum >= 8 )
   {
-    // ToDo: Change this to throw an exception back 
+    // ToDo: Change this to throw an exception back
     channelNum = 0;
   }
 
@@ -163,7 +163,7 @@ uint32_t adcReadSingle (uint8_t channelNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Returns the conversion results on the specified ADC channel.
 
     This function will manually start an A/D conversion on a single
@@ -172,8 +172,8 @@ uint32_t adcReadSingle (uint8_t channelNum)
     samples from the ADC and the average value will be returned.
 
     @param[in]  channelNum
-                The A/D channel [0..7] that will be used during the A/D 
-                conversion.  (Note that only A/D channel's 0..3 are 
+                The A/D channel [0..7] that will be used during the A/D
+                conversion.  (Note that only A/D channel's 0..3 are
                 configured by default in adcInit.)
 
     @return     0 if an overrun error occured, otherwise a 10-bit value
@@ -202,7 +202,7 @@ uint32_t adcRead (uint8_t channelNum)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Initialises the A/D converter and configures channels 0..3
                 for 10-bit, SW-controlled A/D conversion.
 
@@ -251,11 +251,11 @@ void adcInit (void)
   /* Note that in SW mode only one channel can be selected at a time (AD0 in this case)
      To select multiple channels, ADC_AD0CR_BURST_HWSCANMODE must be used */
   ADC_AD0CR = (ADC_AD0CR_SEL_AD0 |                     /* SEL=1,select channel 0 on ADC0 */
-              (((CFG_CPU_CCLK / SCB_SYSAHBCLKDIV) / 1000000 - 1 ) << 8) |   /* CLKDIV = Fpclk / 1000000 - 1 */ 
+              (((CFG_CPU_CCLK / SCB_SYSAHBCLKDIV) / 1000000 - 1 ) << 8) |   /* CLKDIV = Fpclk / 1000000 - 1 */
               ADC_AD0CR_BURST_SWMODE |                 /* BURST = 0, no BURST, software controlled */
               ADC_AD0CR_CLKS_10BITS |                  /* CLKS = 0, 11 clocks/10 bits */
               ADC_AD0CR_START_NOSTART |                /* START = 0 A/D conversion stops */
-              ADC_AD0CR_EDGE_RISING);                  /* EDGE = 0 (CAP/MAT signal falling, trigger A/D conversion) */ 
+              ADC_AD0CR_EDGE_RISING);                  /* EDGE = 0 (CAP/MAT signal falling, trigger A/D conversion) */
 
   /* Set initialisation flag */
   _adcInitialised = true;

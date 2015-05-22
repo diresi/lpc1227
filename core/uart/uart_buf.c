@@ -32,7 +32,7 @@
 *******************************************************************/
 
 /**************************************************************************/
-/*! 
+/*!
     @file     uart_buf.c
     @author   Christopher Wang (Freaklabs)
               Modified by: K. Townsend (microBuilder.eu)
@@ -89,14 +89,14 @@ bool uartRxBufferReadArray(byte_t* rx, size_t* len)
 {
   uart_pcb_t *pcb = uartGetPCB();
   *len = 0;
-  
+
   while(pcb->rxfifo.len != 0)
   {
     (*rx) = uartRxBufferRead();
     (*len)++;
     rx++;
   }
-  
+
   return (*len != 0);
 }
 

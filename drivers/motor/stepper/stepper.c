@@ -1,9 +1,9 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     stepper.c
     @author   Based on original code by Tom Igoe
               Modified by K. Townsend (microBuilder.eu)
-              
+
 
     @brief    Simple bi-polar stepper motor controller, based on the
               Arduino stepper library by Tom Igoe.  Includes simple
@@ -13,8 +13,8 @@
 
     @section Example
 
-    @code 
- 
+    @code
+
     #include "sysinit.h"
     #include "core/systick/systick.h"
     #include "drivers/motor/stepper/stepper.h"
@@ -40,7 +40,7 @@
       }
     }
 
-    @endcode    
+    @endcode
 
     @section LICENSE
 
@@ -84,7 +84,7 @@ static uint32_t stepperStepsPerRotation = 0;  // Number of steps in a full 360°
 static uint32_t stepperStepDelay = 0;         // Delay in CPU ticks between individual steps
 
 /**************************************************************************/
-/*! 
+/*!
     Private - Cause the motor to step forward or backward one step
 */
 /**************************************************************************/
@@ -115,12 +115,12 @@ void stepMotor(uint32_t thisStep)
       gpioSetValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 0);
       gpioSetValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 0);
       gpioSetValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 1);
-      break;     
+      break;
   }
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Initialises the GPIO pins and delay timer and sets any
                 default values.
 
@@ -153,11 +153,11 @@ void stepperInit(uint32_t steps)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Gets the current position (in steps) relative to 'Home'.
 
     @return   The difference (in steps) of the motor's current position
-              from the original 'Home' position. Value can be negative or 
+              from the original 'Home' position. Value can be negative or
               positive depending on the direction of previous movements.
 */
 /**************************************************************************/
@@ -167,7 +167,7 @@ int64_t stepperGetPosition()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Gets the motor's current rotation (in steps) relative to
               the spindle's 'Zero' position.
 
@@ -181,9 +181,9 @@ uint32_t stepperGetRotation()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Sets the motor's current position to 'Home', meaning that
-              any future movement will be relative to the current 
+              any future movement will be relative to the current
               position.
 */
 /**************************************************************************/
@@ -193,7 +193,7 @@ void stepperSetHome()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Moves the motor back to the original 'Home' position.
 */
 /**************************************************************************/
@@ -203,7 +203,7 @@ void stepperMoveHome()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Saves the spindle's current angle/position as 0°.  Each
               step the spindle takes will now be relative to the spindle's
               current position.
@@ -215,7 +215,7 @@ void stepperSetZero()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Moves the motor to its original rotation value. For example,
               if a 200-step motor is currently rotated to step 137, it
               will move the motor forward 63 steps to end at step 0 or 0°.
@@ -230,7 +230,7 @@ void stepperMoveZero()
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Sets the motor speed in rpm, meaning the number of times the
               motor will fully rotate in a one minute period.
 
@@ -251,7 +251,7 @@ void stepperSetSpeed(uint32_t rpm)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Moves the motor forward or backward the specified number
                 of steps.  A positive number moves the motor forward,
                 while a negative number moves the motor backwards.

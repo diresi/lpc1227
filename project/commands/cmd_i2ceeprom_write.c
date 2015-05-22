@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_i2ceeprom_write.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -46,7 +46,7 @@
   #include "drivers/eeprom/eeprom.h"
 
 /**************************************************************************/
-/*! 
+/*!
     Writes a single byte at the supplied EEPROM address
 */
 /**************************************************************************/
@@ -58,7 +58,7 @@ void cmd_i2ceeprom_write(uint8_t argc, char **argv)
   // Try to convert supplied address to an integer
   int32_t addr32;
   getNumber (argv[0], &addr32);
-  
+
   // Check for invalid values (getNumber may complain about this as well)
   if (addr32 < 0 || eepromCheckAddress(addr32))
   {
@@ -78,7 +78,7 @@ void cmd_i2ceeprom_write(uint8_t argc, char **argv)
   // Try to convert supplied data to an integer
   int32_t val32;
   getNumber (argv[1], &val32);
-  
+
   // Check for invalid values (getNumber may complain about this as well)
   if (val32 < 0 || val32 > 0xFF)
   {

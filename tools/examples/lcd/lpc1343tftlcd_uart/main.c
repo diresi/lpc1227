@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -43,7 +43,7 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Sends a command to the TFT LCD, blocks until the command has
     finished executing on the LCD side, and returns any response
 */
@@ -72,7 +72,7 @@ byte_t* lcd(const byte_t* command)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     This assumes that the LPC1343 TFTLCD board is hooked up to UART on
     the LPC1114, and that the LCD 'busy' pin is connected to pin 1.4.
 */

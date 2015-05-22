@@ -110,7 +110,7 @@ void * memset(void *pBuffer, int value, size_t num)
 void* memmove(void *s1, const void *s2, size_t n)
 {
   char *s=(char*)s2, *d=(char*)s1;
-  
+
   if(d > s){
     s+=n-1;
     d+=n-1;
@@ -246,7 +246,7 @@ char * strncpy(char *pDestination, const char *pSource, size_t count)
     return pSaveDest;
 }
 
-// Following code is based on the BSD licensed code released by UoC 
+// Following code is based on the BSD licensed code released by UoC
 // Copyright (c) 1988 Regents of the University of California
 
 int strcmp(const char *s1, const char *s2)
@@ -268,11 +268,11 @@ char *strtok_r(char *s, const char *delim, char **last)
   char *spanp;
   int c, sc;
   char *tok;
-  
-  
+
+
   if (s == NULL && (s = *last) == NULL)
     return (NULL);
-  
+
   /*
    * Skip (span) leading delimiters (s += strspn(s, delim), sort of).
    */
@@ -282,13 +282,13 @@ cont:
     if (c == sc)
       goto cont;
   }
-  
+
   if (c == 0) {           /* no non-delimiter characters */
     *last = NULL;
     return (NULL);
   }
   tok = s - 1;
-  
+
   /*
    * Scan token (scan for delimiters: s += strcspn(s, delim), sort of).
    * Note that delim must have one NUL; we stop if we see that, too.

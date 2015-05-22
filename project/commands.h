@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     commands.h
     @author   K. Townsend (microBuilder.eu)
 
@@ -33,7 +33,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef __COMMANDS_H__ 
+#ifndef __COMMANDS_H__
 #define __COMMANDS_H__
 
 #include "projectconfig.h"

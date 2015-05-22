@@ -58,7 +58,7 @@ static
 BYTE CardType;			/* Card type flags */
 
 /**************************************************************************/
-/*! 
+/*!
     Set SSP clock to slow mode (max. 400 KHz)
 */
 /**************************************************************************/
@@ -66,7 +66,7 @@ static void FCLK_SLOW()
 {
     /* Divide by 5 (SSPCLKDIV also enables to SSP CLK) */
     SCB_SSP1CLKDIV = SCB_SSP1CLKDIV_DIV5;
-  
+
     /* (PCLK / (CPSDVSR * [SCR+1])) = (7,200,000 / (2 x [8 + 1])) = 400 KHz */
     uint32_t configReg = ( SSP_SSP1CR0_DSS_8BIT   // Data size = 8-bit
                   | SSP_SSP1CR0_FRF_SPI           // Frame format = SPI
@@ -82,13 +82,13 @@ static void FCLK_SLOW()
 
     // Assign config values to SSP1CR0
     SSP_SSP1CR0 = configReg;
-  
+
     /* Clock prescale register must be even and at least 2 in master mode */
-    SSP_SSP1CPSR = SSP_SSP1CPSR_CPSDVSR_DIV2;  
+    SSP_SSP1CPSR = SSP_SSP1CPSR_CPSDVSR_DIV2;
 }
 
 /**************************************************************************/
-/*! 
+/*!
     Set SSP clock to fast mode
 */
 /**************************************************************************/
@@ -96,12 +96,12 @@ static void FCLK_FAST()
 {
     /* Divide by 1 (SSPCLKDIV also enables to SSP CLK) */
     SCB_SSP1CLKDIV = SCB_SSP1CLKDIV_DIV1;
-  
+
     /* (PCLK / (CPSDVSR * [SCR+1])) = (36,000,000 / (2 x [8 + 1])) = 2.0 MHz */
     uint32_t configReg = ( SSP_SSP1CR0_DSS_8BIT   // Data size = 8-bit
                   | SSP_SSP1CR0_FRF_SPI           // Frame format = SPI
                   | SSP_SSP1CR0_SCR_8);           // Serial clock rate = 8
-  
+
     // Set clock polarity (low between frames)
     // configReg &= ~SSP_SSP1CR0_CPOL_MASK;
     // configReg |= SSP_SSP1CR0_CPOL_LOW;
@@ -109,12 +109,12 @@ static void FCLK_FAST()
     // Set edge transition (leading edge)
     // configReg &= ~SSP_SSP1CR0_CPHA_MASK;
     // configReg |= SSP_SSP1CR0_CPHA_FIRST;
-  
+
     // Assign config values to SSP1CR0
     SSP_SSP1CR0 = configReg;
-  
+
     /* Clock prescale register must be even and at least 2 in master mode */
-    SSP_SSP1CPSR = SSP_SSP1CPSR_CPSDVSR_DIV2;  
+    SSP_SSP1CPSR = SSP_SSP1CPSR_CPSDVSR_DIV2;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -671,20 +671,20 @@ void disk_timerproc (void)
   pv = 0;
   /* Sample card detect pin */
   pv = gpioGetValue(CFG_SDCARD_CDPORT, CFG_SDCARD_CDPIN);
-    
+
   /* Have contacts stabled? */
-  if (n == pv) 
+  if (n == pv)
   {
     s = Stat;
-      
+
     /* write protect NOT supported */
-      
+
     /* check card detect */
     if (!pv)                            /* (Socket empty) */
       s |= (STA_NODISK | STA_NOINIT);
     else				/* (Card inserted) */
       s &= ~STA_NODISK;
-    
+
     Stat = s;
   }
 }

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     ST7565.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -8,8 +8,8 @@
     Driver for 128x64 pixel display based on the ST7565 LCD controller.
 
     This driver is based on the ST7565 Library from Limor Fried
-    (Adafruit Industries) at: http://github.com/adafruit/ST7565-LCD/    
-    
+    (Adafruit Industries) at: http://github.com/adafruit/ST7565-LCD/
+
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -61,27 +61,27 @@ uint8_t _st7565buffer[128*64/8];
 /**************************************************************************/
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Renders the buffer contents
 
     @param[in]  buffer
                 Pointer to the buffer containing the raw pixel data
 */
 /**************************************************************************/
-void writeBuffer(uint8_t *buffer) 
+void writeBuffer(uint8_t *buffer)
 {
   uint8_t c, p;
   int pagemap[] = { 3, 2, 1, 0, 7, 6, 5, 4 };
 
-  for(p = 0; p < 8; p++) 
+  for(p = 0; p < 8; p++)
   {
     CMD(ST7565_CMD_SET_PAGE | pagemap[p]);
     CMD(ST7565_CMD_SET_COLUMN_LOWER | (0x0 & 0xf));
     CMD(ST7565_CMD_SET_COLUMN_UPPER | ((0x0 >> 4) & 0xf));
     CMD(ST7565_CMD_RMW);
     DATA(0xff);
-    
-    for(c = 0; c < 128; c++) 
+
+    for(c = 0; c < 128; c++)
     {
       DATA(buffer[(128*p)+c]);
     }
@@ -89,7 +89,7 @@ void writeBuffer(uint8_t *buffer)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Simulates an SPI write using GPIO
 
     @param[in]  byte
@@ -108,7 +108,7 @@ void sendByte(uint8_t byte)
   gpioSetValue(ST7565_SCLK_PORT, ST7565_SCLK_PIN, 1);
 
   // Write from MSB to LSB
-  for (i=7; i>=0; i--) 
+  for (i=7; i>=0; i--)
   {
     // Set clock pin low
     gpioSetValue(ST7565_SCLK_PORT, ST7565_SCLK_PIN, 0);
@@ -138,7 +138,7 @@ void drawChar(uint16_t x, uint16_t y, uint8_t c, struct FONT_DEF font)
     }
   }
   else
-  {    
+  {
     // Requested character is not available in this font ... send a space instead
     for (col = 0; col < font.u8Width; col++)
     {
@@ -168,7 +168,7 @@ void drawChar(uint16_t x, uint16_t y, uint8_t c, struct FONT_DEF font)
 /**************************************************************************/
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Initialises the ST7565 LCD display
 */
 /**************************************************************************/
@@ -230,7 +230,7 @@ void st7565Init(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Enables or disables the backlight
 */
 /**************************************************************************/
@@ -240,7 +240,7 @@ void st7565Backlight(bool state)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Sets the display brightness
 */
 /**************************************************************************/
@@ -251,17 +251,17 @@ void st7565SetBrightness(uint8_t val)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Clears the screen
 */
 /**************************************************************************/
-void st7565ClearScreen(void) 
+void st7565ClearScreen(void)
 {
   memset(&_st7565buffer, 0x00, 128*64/8);
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Renders the contents of the pixel buffer on the LCD
 */
 /**************************************************************************/
@@ -271,7 +271,7 @@ void st7565Refresh(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Draws a single pixel in image buffer
 
     @param[in]  x
@@ -280,7 +280,7 @@ void st7565Refresh(void)
                 The y position (0..63)
 */
 /**************************************************************************/
-void st7565DrawPixel(uint8_t x, uint8_t y) 
+void st7565DrawPixel(uint8_t x, uint8_t y)
 {
   if ((x >= 128) || (y >= 64))
     return;
@@ -290,7 +290,7 @@ void st7565DrawPixel(uint8_t x, uint8_t y)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Clears a single pixel in image buffer
 
     @param[in]  x
@@ -309,7 +309,7 @@ void st7565ClearPixel(uint8_t x, uint8_t y)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief Gets the value (1 or 0) of the specified pixel from the buffer
 
     @param[in]  x
@@ -341,11 +341,11 @@ uint8_t st7565GetPixel(uint8_t x, uint8_t y)
 
     @section Example
 
-    @code 
+    @code
 
     #include "drivers/displays/bitmap/st7565/st7565.h"
     #include "drivers/displays/smallfonts.h"
-    
+
     // Configure the pins and initialise the LCD screen
     st7565Init();
 
@@ -384,11 +384,11 @@ void st7565DrawString(uint16_t x, uint16_t y, char* text, struct FONT_DEF font)
 
     @section Example
 
-    @code 
+    @code
 
     #include "drivers/displays/bitmap/st7565/st7565.h"
     #include "drivers/displays/smallfonts.h"
-    
+
     // Configure the pins and initialise the LCD screen
     st7565Init();
 
@@ -403,7 +403,7 @@ void st7565DrawString(uint16_t x, uint16_t y, char* text, struct FONT_DEF font)
       // Render some text on the screen with different fonts
       st7565DrawString(1, 56, "INSERT TEXT HERE", Font_System3x6);   // 3x6 is UPPER CASE only
       // Refresh the screen to see the results
-      st7565Refresh();    
+      st7565Refresh();
       // Wait a bit before writing the next line
       systickDelay(1000);
     }

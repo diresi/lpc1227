@@ -12,7 +12,7 @@
  *                           - adding ACK/NACK handling to the state machine
  *                           - adding a return result to the I2CEngine()
  *   2011.02.19  ver 1.20    KTownsend - microBuilder.eu
- *                           - Added slave mode status values to 
+ *                           - Added slave mode status values to
  *                             I2C_IRQHandler
  *
 *****************************************************************************/
@@ -42,9 +42,9 @@ volatile uint32_t _I2cMode;                       // I2CMASTER or I2CSLAVE
 **
 ** parameters:			None
 ** Returned value:		None
-** 
+**
 *****************************************************************************/
-void I2C_IRQHandler(void) 
+void I2C_IRQHandler(void)
 {
 	uint8_t StatValue;
 
@@ -212,7 +212,7 @@ void I2C_IRQHandler(void)
 		I2C_I2CCONCLR = I2CONCLR_SIC;	/* Clear SI flag */
 		break;
 
-        
+
         /* Slave Mode */
 
 //      case 0x60:					/* An own SLA_W has been received. */
@@ -296,20 +296,20 @@ void I2C_IRQHandler(void)
 **
 ** parameters:		None
 ** Returned value:	true or false, return false if timed out
-** 
+**
 *****************************************************************************/
 static uint32_t I2CStart( void )
 {
   uint32_t timeout = 0;
-  
+
   /*--- Issue a start condition ---*/
   I2C_I2CCONSET = I2CONSET_STA;	/* Set Start flag */
-  
+
   while((I2CMasterState != I2CSTATE_PENDING) && (timeout < MAX_TIMEOUT))
   {
     timeout++;
   }
-  
+
   return (timeout < MAX_TIMEOUT);
 }
 
@@ -320,15 +320,15 @@ static uint32_t I2CStart( void )
 **
 ** parameters:		None
 ** Returned value:	true or never return
-** 
+**
 *****************************************************************************/
 static uint32_t I2CStop( void )
 {
   uint32_t timeout = 0;
-  
+
   I2C_I2CCONSET = I2CONSET_STO;      /* Set Stop flag */
   I2C_I2CCONCLR = I2CONCLR_SIC;  /* Clear SI flag */
-  
+
   /*--- Wait for STOP detected ---*/
   while((I2C_I2CCONSET & I2CONSET_STO) && (timeout < MAX_TIMEOUT))
   {
@@ -345,9 +345,9 @@ static uint32_t I2CStop( void )
 ** parameters:		I2c mode is either MASTER or SLAVE
 ** Returned value:	true or false, return false if the I2C
 **			interrupt handler was not installed correctly
-** 
+**
 *****************************************************************************/
-uint32_t i2cInit( uint32_t I2cMode ) 
+uint32_t i2cInit( uint32_t I2cMode )
 {
   _I2cMode = I2cMode;
 
@@ -365,9 +365,9 @@ uint32_t i2cInit( uint32_t I2cMode )
   IOCON_PIO0_5 |= IOCON_PIO0_5_FUNC_I2CSDA;
 
   // Clear flags
-  I2C_I2CCONCLR = I2C_I2CCONCLR_AAC | 
-                  I2C_I2CCONCLR_SIC | 
-                  I2C_I2CCONCLR_STAC | 
+  I2C_I2CCONCLR = I2C_I2CCONCLR_AAC |
+                  I2C_I2CCONCLR_SIC |
+                  I2C_I2CCONCLR_STAC |
                   I2C_I2CCONCLR_I2ENC;
 
   // See p.128 for appropriate values for SCLL and SCLH
@@ -413,9 +413,9 @@ uint32_t i2cInit( uint32_t I2cMode )
 **
 ** parameters:		None
 ** Returned value:	Any of the I2CSTATE_... values. See i2c.h
-** 
+**
 *****************************************************************************/
-uint32_t i2cEngine( void ) 
+uint32_t i2cEngine( void )
 {
   I2CMasterState = I2CSTATE_IDLE;
   RdIndex = 0;

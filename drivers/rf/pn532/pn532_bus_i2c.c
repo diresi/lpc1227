@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     pn532_bus_i2c.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -49,11 +49,11 @@ extern volatile uint8_t   I2CSlaveBuffer[I2C_BUFSIZE];
 extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 
 /* ======================================================================
-   PRIVATE FUNCTIONS                                                      
+   PRIVATE FUNCTIONS
    ====================================================================== */
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Writes an 8 bit value over I2C
 
     @note   Possible error messages are:
@@ -95,10 +95,10 @@ pn532_error_t pn532_bus_i2c_WriteData (const byte_t * pbtData, const size_t szDa
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief    Checks the 'IRQ' pin to know if the PN532 is ready to send
               a response or not
-    
+
     @note     The IRQ bit may stay high intentionally, and this isn't
               always an error condition.  When PN532_COMMAND_INLISTPASSIVETARGET
               is sent, for example, the PN532 will wait until a card
@@ -111,7 +111,7 @@ pn532_error_t pn532_bus_i2c_WriteData (const byte_t * pbtData, const size_t szDa
               timeout occurred
 */
 /**************************************************************************/
-uint8_t pn532_bus_i2c_WaitForReady(void) 
+uint8_t pn532_bus_i2c_WaitForReady(void)
 {
   uint8_t busy = 1;
   // uint8_t busyTimeout = 0;
@@ -133,7 +133,7 @@ uint8_t pn532_bus_i2c_WaitForReady(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Builds a standard PN532 frame using the supplied data
 
     @param  pbtFrame  Pointer to the field that will hold the frame data
@@ -148,7 +148,7 @@ uint8_t pn532_bus_i2c_WaitForReady(void)
 /**************************************************************************/
 pn532_error_t pn532_bus_i2c_BuildFrame(byte_t * pbtFrame, size_t * pszFrame, const byte_t * pbtData, const size_t szData)
 {
-  if (szData > PN532_NORMAL_FRAME__DATA_MAX_LEN) 
+  if (szData > PN532_NORMAL_FRAME__DATA_MAX_LEN)
   {
     // Extended frames currently unsupported
     return PN532_ERROR_EXTENDEDFRAME;
@@ -166,7 +166,7 @@ pn532_error_t pn532_bus_i2c_BuildFrame(byte_t * pbtFrame, size_t * pszFrame, con
   // DCS - Calculate data payload checksum
   byte_t btDCS = (256 - 0xD4);
   size_t szPos;
-  for (szPos = 0; szPos < szData; szPos++) 
+  for (szPos = 0; szPos < szData; szPos++)
   {
     btDCS -= pbtData[szPos];
   }
@@ -181,11 +181,11 @@ pn532_error_t pn532_bus_i2c_BuildFrame(byte_t * pbtFrame, size_t * pszFrame, con
 }
 
 /* ======================================================================
-   PUBLIC FUNCTIONS                                                      
+   PUBLIC FUNCTIONS
    ====================================================================== */
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Initialises I2C and configures the PN532 HW
 */
 /**************************************************************************/
@@ -213,7 +213,7 @@ void pn532_bus_HWInit(void)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Sends the specified command to the PN532, automatically
             creating an appropriate frame for it
 
@@ -233,7 +233,7 @@ pn532_error_t pn532_bus_SendCommand(const byte_t * pbtData, const size_t szData)
 {
   pn532_error_t error = PN532_ERROR_NONE;
   pn532_pcb_t *pn532 = pn532GetPCB();
-    
+
   // Check if we're busy
   if (pn532->state == PN532_STATE_BUSY)
   {
@@ -309,7 +309,7 @@ pn532_error_t pn532_bus_SendCommand(const byte_t * pbtData, const size_t szData)
   {
     abtRxBuf[i] = I2CSlaveBuffer[i+1];
   }
-  if (0 != (memcmp (abtRxBuf, abtAck, 6))) 
+  if (0 != (memcmp (abtRxBuf, abtAck, 6)))
   {
     #ifdef PN532_DEBUGMODE
     PN532_DEBUG ("Invalid ACK: ");
@@ -337,7 +337,7 @@ pn532_error_t pn532_bus_SendCommand(const byte_t * pbtData, const size_t szData)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Reads a response from the PN532
 
     @note   Possible error message are:
@@ -393,7 +393,7 @@ pn532_error_t pn532_bus_ReadResponse(byte_t * pbtResponse, size_t * pszRxLen)
   }
 
   // Check the frame type
-  if ((0x01 == pbtResponse[3]) && (0xff == pbtResponse[4])) 
+  if ((0x01 == pbtResponse[3]) && (0xff == pbtResponse[4]))
   {
     // Error frame
     #ifdef PN532_DEBUGMODE
@@ -403,8 +403,8 @@ pn532_error_t pn532_bus_ReadResponse(byte_t * pbtResponse, size_t * pszRxLen)
     pn532->appError = pbtResponse[5];
     pn532->state = PN532_STATE_READY;
     return PN532_ERROR_APPLEVELERROR;
-  } 
-  else if ((0xff == pbtResponse[3]) && (0xff == pbtResponse[4])) 
+  }
+  else if ((0xff == pbtResponse[3]) && (0xff == pbtResponse[4]))
   {
     // Extended frame
     #ifdef PN532_DEBUGMODE
@@ -412,11 +412,11 @@ pn532_error_t pn532_bus_ReadResponse(byte_t * pbtResponse, size_t * pszRxLen)
     #endif
     pn532->state = PN532_STATE_READY;
     return PN532_ERROR_EXTENDEDFRAME;
-  } 
-  else 
+  }
+  else
   {
     // Normal frame
-    if (256 != (pbtResponse[3] + pbtResponse[4])) 
+    if (256 != (pbtResponse[3] + pbtResponse[4]))
     {
       // TODO: Retry
       #ifdef PN532_DEBUGMODE
@@ -436,7 +436,7 @@ pn532_error_t pn532_bus_ReadResponse(byte_t * pbtResponse, size_t * pszRxLen)
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief      Sends the wakeup sequence to the PN532.
 
     @note   Possible error message are:

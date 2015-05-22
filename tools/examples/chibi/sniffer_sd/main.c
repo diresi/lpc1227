@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -38,7 +38,7 @@
 
 #include "core/gpio/gpio.h"
 
-#if defined CFG_CHIBI && defined CFG_SDCARD 
+#if defined CFG_CHIBI && defined CFG_SDCARD
   #include <string.h>
   #include <stdlib.h>
   #include "drivers/rf/chibi/chb.h"
@@ -48,15 +48,15 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Use Chibi as a wireless sniffer and write all captured frames
     to the SD card in libpcap format
-  
+
     projectconfig.h settings:
     --------------------------------------------------
     CFG_CHIBI, CFG_SDCARD -> Enabled
     CFG_CHIBI_PROMISCUOUS -> 1
-    CFG_CHIBI_BUFFERSIZE  -> 1024   
+    CFG_CHIBI_BUFFERSIZE  -> 1024
 */
 /**************************************************************************/
 int main(void)
@@ -100,28 +100,28 @@ int main(void)
           printf("Unable to create file\r\n");
           break;
       }
-      
+
       // Quit the program
       return -1;
     }
-    
+
     // Wait for incoming frames and log them to disk in libpcap format.
     while(1)
     {
-      // Check for incoming messages 
-      while (pcb->data_rcv) 
-      { 
+      // Check for incoming messages
+      while (pcb->data_rcv)
+      {
         // get the length of the data
         rx_data.len = chb_read(&rx_data);
         // make sure the length is non-zero
         if (rx_data.len)
         {
-          // Enable LED to indicate message reception 
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
+          // Enable LED to indicate message reception
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON);
           // Write frame content to disk
           libpcapWriteFrame(rx_data.data, rx_data.len);
           // Disable LED
-          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
+          gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF);
         }
       }
     }

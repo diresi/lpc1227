@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_sd_dir.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -48,12 +48,12 @@
   #include "core/ssp/ssp.h"
   #include "drivers/fatfs/diskio.h"
   #include "drivers/fatfs/ff.h"
-  
+
   static FILINFO Finfo;
   static FATFS Fatfs[1];
 
 /**************************************************************************/
-/*! 
+/*!
     sd 'dir' command handler
 
     This demonstrates how to initialise the SD card, read the contents
@@ -71,11 +71,11 @@ void cmd_sd_dir(uint8_t argc, char **argv)
   // Initialise SD Card
   DSTATUS stat;
   stat = disk_initialize(0);
-  if (stat & STA_NOINIT) 
+  if (stat & STA_NOINIT)
   {
     printf("SD init failed%s", CFG_PRINTF_NEWLINE);
   }
-  if (stat & STA_NODISK) 
+  if (stat & STA_NODISK)
   {
     printf("NO SD card%s", CFG_PRINTF_NEWLINE);
   }
@@ -86,14 +86,14 @@ void cmd_sd_dir(uint8_t argc, char **argv)
 
     // Try to mount drive
     res = f_mount(0, &Fatfs[0]);
-    if (res != FR_OK) 
+    if (res != FR_OK)
     {
       printf("Failed to mount partition%s" , CFG_PRINTF_NEWLINE);
     }
     if (res == FR_OK)
     {
       res = f_opendir(&dir, path);
-      if (res) 
+      if (res)
       {
           printf("Failed to open '%s' %s", path, CFG_PRINTF_NEWLINE);
           return;
@@ -106,12 +106,12 @@ void cmd_sd_dir(uint8_t argc, char **argv)
 
       // Read directory contents
       int folderBytes = 0;
-      for(;;) 
+      for(;;)
       {
           res = f_readdir(&dir, &Finfo);
           if ((res != FR_OK) || !Finfo.fname[0]) break;
           #if _USE_LFN == 0
-            if (Finfo.fattrib & AM_DIR) 
+            if (Finfo.fattrib & AM_DIR)
               printf(" <DIR> %-25s %s", (char *)&Finfo.fname[0], CFG_PRINTF_NEWLINE);
             else
               printf("       %-25s %12d Bytes %s", (char *)&Finfo.fname[0], (int)(Finfo.fsize), CFG_PRINTF_NEWLINE);
@@ -129,10 +129,10 @@ void cmd_sd_dir(uint8_t argc, char **argv)
       #if _FS_MINIMIZE == 0 && _FS_READONLY == 0
         FATFS *fs = &Fatfs[0];
         DWORD clust;
-      
+
         // Get free clusters
         res = f_getfree("0:", &clust, &fs);
-    
+
         // Display total and free space
         printf("       %-25s %12d KB %s", "Disk Size: ", (int)((DWORD)(fs->max_clust - 2) * fs->csize / 2), CFG_PRINTF_NEWLINE);
         printf("       %-25s %12d KB %s", "Space Available: ", (int)(clust * fs->csize / 2), CFG_PRINTF_NEWLINE);

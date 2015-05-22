@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     ssd1306.h
     @author   K. Townsend (microBuilder.eu)
     @date     18 January 2012
@@ -85,7 +85,7 @@
 
     SSD1306_128_32  128x32 pixel display
 
-    You also need to set the LCDWIDTH and LCDHEIGHT defines to an 
+    You also need to set the LCDWIDTH and LCDHEIGHT defines to an
     appropriate size
 
     -----------------------------------------------------------------------*/
@@ -112,7 +112,7 @@
 // Pin Definitions
 // ---------------
 // The following are only relevant for SPI mode!
-// For I2C, connect Reset to the LPC1114 reset pin, and HW DC for 1 or 0 
+// For I2C, connect Reset to the LPC1114 reset pin, and HW DC for 1 or 0
 // to set last I2C address but to 1 or 0.  This means the OLED can not
 // be reset in SW seperate from the MCU, but allows the OLED to be used
 // with only the two I2C pins

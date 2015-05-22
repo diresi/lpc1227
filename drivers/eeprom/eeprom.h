@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     eeprom.h
     @author   K. Townsend (microBuilder.eu)
 
@@ -33,7 +33,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef __EEPROM_H__ 
+#ifndef __EEPROM_H__
 #define __EEPROM_H__
 
 #include "projectconfig.h"

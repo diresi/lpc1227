@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     cmd_tbl.h
     @author   K. Townsend (microBuilder.eu)
 
@@ -34,7 +34,7 @@
 */
 /**************************************************************************/
 
-#ifndef __CMD_TBL_H__ 
+#ifndef __CMD_TBL_H__
 #define __CMD_TBL_H__
 
 #define CMD_COUNT (sizeof(cmd_tbl)/sizeof(cmd_t))
@@ -74,7 +74,7 @@ void cmd_deepsleep(uint8_t argc, char **argv);
 #define CMD_NOPARAMS "This command has no parameters"
 
 /**************************************************************************/
-/*! 
+/*!
     Command list for the command-line interpreter and the name of the
     corresponding method that handles the command.
 
@@ -82,7 +82,7 @@ void cmd_deepsleep(uint8_t argc, char **argv);
     cause a NULL entry to be appended to the end of the table.
 */
 /**************************************************************************/
-cmd_t cmd_tbl[] = 
+cmd_t cmd_tbl[] =
 {
   // command name, min args, max args, hidden, function name, command description, syntax
   { "?",    0,  0,  0, cmd_help              , "Help"                           , CMD_NOPARAMS },
