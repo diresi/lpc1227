@@ -44,6 +44,7 @@
 #include "core/cpu/cpu.h"
 #include "core/pmu/pmu.h"
 #include "core/adc/adc.h"
+#include "core/wdt/wdt.h"
 
 #ifdef CFG_PRINTF_UART
   #include "core/uart/uart.h"
@@ -106,6 +107,7 @@
 /**************************************************************************/
 void systemInit()
 {
+  wdtInit();
   cpuInit();
   systickInit((CFG_CPU_CCLK / 1000) * CFG_SYSTICK_DELAY_IN_MS);
   gpioInit();

@@ -39,7 +39,10 @@ define reset
     monitor reset
 end
 
+define halt
+    monitor halt
+end
+
 layout split
 target remote localhost:3333
-monitor halt
-x/16x 0x0
+halt
