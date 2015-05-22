@@ -1,1 +1,0 @@
-Shows a basic example of sending commands to the LPC1343 TFT LCD using UART.
