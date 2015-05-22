@@ -457,12 +457,12 @@
     NOTE: PRINTF Support =    ~350 bytes Flash (-Os)
     -----------------------------------------------------------------------*/
     #ifdef CFG_BRD_LPC1114_REFDESIGN
-      #define CFG_PRINTF_UART
+      //#define CFG_PRINTF_UART
       #define CFG_PRINTF_NEWLINE          "\r\n"
     #endif
 
     #ifdef CFG_BRD_LPC1114_802154WIRELESS
-      #define CFG_PRINTF_UART
+      //#define CFG_PRINTF_UART
       #define CFG_PRINTF_NEWLINE          "\r\n"
     #endif
 /*=========================================================================*/
@@ -485,13 +485,13 @@
                               selected.
     -----------------------------------------------------------------------*/
     #ifdef CFG_BRD_LPC1114_REFDESIGN
-      #define CFG_INTERFACE
+      //#define CFG_INTERFACE
       #define CFG_INTERFACE_MAXMSGSIZE    (256)
       #define CFG_INTERFACE_PROMPT        "LPC1114 >> "
     #endif
 
     #ifdef CFG_BRD_LPC1114_802154WIRELESS
-      #define CFG_INTERFACE
+      //#define CFG_INTERFACE
       #define CFG_INTERFACE_MAXMSGSIZE    (256)
       #define CFG_INTERFACE_PROMPT        "LPC1114 >> "
     #endif

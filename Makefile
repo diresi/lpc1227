@@ -15,6 +15,8 @@ SRAM_USB = 0
 VPATH = 
 OBJS = main.o
 
+CONTRIB  = contrib
+
 ##########################################################################
 # Debug settings
 ##########################################################################
@@ -63,9 +65,9 @@ OBJS += lm75b.o
 #VPATH += drivers/displays/bitmap/ssd1306
 #OBJS += smallfonts.o ST7565.o ssd1306.o
 
-# ChaN FatFS and SD card support
-VPATH += drivers/fatfs
-OBJS += ff.o mmc.o
+## ChaN FatFS and SD card support
+#VPATH += drivers/fatfs
+#OBJS += ff.o mmc.o
 
 ## Motors
 #VPATH += drivers/motor/stepper
@@ -108,6 +110,7 @@ LD = $(CROSS_COMPILE)gcc
 SIZE = $(CROSS_COMPILE)size
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
+GDB = $(CROSS_COMPILE)gdb
 OUTFILE = firmware
 
 ##########################################################################
@@ -148,7 +151,7 @@ LDFLAGS = -nostartfiles -mcpu=$(CPU_TYPE) -mthumb -Wl,--gc-sections
 LDLIBS  = -lm
 OCFLAGS = --strip-unneeded
 
-all: firmware
+all: ${OUTFILE}
 
 %.o : %.c
 	$(CC) $(CFLAGS) -o $@ $<
@@ -156,7 +159,7 @@ all: firmware
 %.o : %.s
 	$(AS) $(ASFLAGS) -o $@ $<
 
-firmware: $(OBJS) $(SYS_OBJS)
+${OUTFILE}: $(OBJS) $(SYS_OBJS)
 	-@echo "MEMORY" > $(LD_TEMP)
 	-@echo "{" >> $(LD_TEMP)
 	-@echo "  flash(rx): ORIGIN = 0x00000000, LENGTH = $(FLASH)" >> $(LD_TEMP)
@@ -173,7 +176,18 @@ firmware: $(OBJS) $(SYS_OBJS)
 clean:
 	rm -f $(OBJS) $(LD_TEMP) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex
 
-info: firmware
-	arm-none-eabi-readelf -Ws firmware.elf > firmware.sym
-	#arm-none-eabi-nm -g firmware.elf > firmware.nm
-	#arm-none-eabi-objdump -h firmware.elf
+info: ${OUTFILE}
+	arm-none-eabi-readelf -Ws ${OUTFILE}.elf > ${OUTFILE}.sym
+	#arm-none-eabi-nm -g ${OUTFILE}.elf > ${OUTFILE}.nm
+	#arm-none-eabi-objdump -h ${OUTFILE}.elf
+
+ocd:
+	openocd -f ${CONTRIB}/openocd.cfg
+
+telnet:
+	telnet localhost 4444
+
+gdb:
+	${GDB} \
+		--eval-command "source ${CONTRIB}/gdbinit" \
+		${OUTFILE}.elf

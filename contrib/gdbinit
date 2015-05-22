@@ -1,0 +1,45 @@
+define read_SYSMEMREMAP
+    x/1x 0x40048000
+end
+
+define write_SYSMEMREMAP
+    set {int}0x40048000 = $arg0
+    read_SYSMEMREMAP
+end
+
+define memmap
+    read_SYSMEMREMAP
+end
+
+define memmap_bootloader
+    write_SYSMEMREMAP 0
+end
+
+define memmap_sram
+    write_SYSMEMREMAP 1
+end
+
+define memmap_flash
+    write_SYSMEMREMAP 2
+end
+
+define flash_erase
+    monitor flash erase_sector 0 0 31
+end
+
+define flash_check
+    monitor flash erase_check 0
+end
+
+define flash_load
+    monitor flash write_image erase firmware.bin
+end
+
+define reset
+    monitor reset
+end
+
+layout split
+target remote localhost:3333
+monitor halt
+x/16x 0x0

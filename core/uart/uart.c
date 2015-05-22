@@ -228,7 +228,7 @@ void uartInit(uint32_t baudrate)
   IOCON_PIO1_7 |= IOCON_PIO1_7_FUNC_UART_TXD;
 
   /* Enable UART clock */
-  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_UART);
+  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_UART0);
   SCB_UARTCLKDIV = SCB_UARTCLKDIV_DIV1;     /* divided by 1 */
 
   /* 8 bits, no Parity, 1 Stop bit */

@@ -170,7 +170,7 @@ void gpioDisableInternalResistors(void)
 void gpioInit (void)
 {
   /* Enable AHB clock to the GPIO domain. */
-  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_GPIO);
+  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_GPIO0 | SCB_SYSAHBCLKCTRL_GPIO1 | SCB_SYSAHBCLKCTRL_GPIO2);
 
   /* Set up NVIC when I/O pins are configured as external interrupts. */
   NVIC_EnableIRQ(EINT0_IRQn);
@@ -214,9 +214,6 @@ void gpioSetDir (uint32_t portNum, uint32_t bitPos, gpioDirection_t dir)
     case 2:
       gpiodir = &GPIO_GPIO2DIR;
       break;
-    case 3:
-      gpiodir = &GPIO_GPIO3DIR;
-      break;
   }
 
   // Toggle dir
@@ -244,16 +241,13 @@ uint32_t gpioGetValue (uint32_t portNum, uint32_t bitPos)
   switch (portNum)
   {
     case 0:
-      value = (GPIO_GPIO0DATA & (1 << bitPos)) ? 1 : 0;
+      value = (GPIO_GPIO0PIN & (1 << bitPos)) ? 1 : 0;
       break;
     case 1:
-      value = (GPIO_GPIO1DATA & (1 << bitPos)) ? 1 : 0;
+      value = (GPIO_GPIO1PIN & (1 << bitPos)) ? 1 : 0;
       break;
     case 2:
-      value = (GPIO_GPIO2DATA & (1 << bitPos)) ? 1 : 0;
-      break;
-    case 3:
-      value = (GPIO_GPIO3DATA & (1 << bitPos)) ? 1 : 0;
+      value = (GPIO_GPIO2PIN & (1 << bitPos)) ? 1 : 0;
       break;
     default:
       break;
@@ -279,9 +273,27 @@ uint32_t gpioGetValue (uint32_t portNum, uint32_t bitPos)
 inline void gpioSetValue (const uint32_t portNum, const uint32_t bitPos, const uint32_t bitVal)
 {
   if (!_gpioInitialised) gpioInit();
+  REG32 *gpioout = &GPIO_GPIO0OUT;
+  
+  switch (portNum)
+  {
+    case 0:
+      gpioout  = &GPIO_GPIO0OUT;
+      break;
 
-  // Take advantage of the fact the GPIO registers are bit-banded
-  (*(pREG32 ((GPIO_GPIO0_BASE + (portNum << 16)) + ((1 << bitPos) << 2)))) = bitVal ? 0xFFF : 0;
+    case 1:
+      gpioout  = &GPIO_GPIO1OUT;
+      break;
+
+    case 2:
+      gpioout  = &GPIO_GPIO2OUT;
+      break;
+
+    default:
+      break;
+  }
+
+  *gpioout = (bitVal ? 1 : 0) << bitPos;
 }
 
 /**************************************************************************/
@@ -347,11 +359,6 @@ void gpioSetInterrupt (uint32_t portNum, uint32_t bitPos, gpioInterruptSense_t s
       gpioibe = &GPIO_GPIO2IBE;
       gpioiev = &GPIO_GPIO2IEV;
       break;
-    case 3:
-      gpiois  = &GPIO_GPIO3IS;
-      gpioibe = &GPIO_GPIO3IBE;
-      gpioiev = &GPIO_GPIO3IEV;
-      break;
   }
 
   if (sense == gpioInterruptSense_Edge)
@@ -394,9 +401,6 @@ void gpioIntEnable (uint32_t portNum, uint32_t bitPos)
     case 2:
       GPIO_GPIO2IE |= (0x1<<bitPos);
       break;
-    case 3:
-      GPIO_GPIO3IE |= (0x1<<bitPos);
-      break;
     default:
       break;
   }
@@ -427,9 +431,6 @@ void gpioIntDisable (uint32_t portNum, uint32_t bitPos)
       break;
     case 2:
       GPIO_GPIO2IE &= ~(0x1<<bitPos);	    
-      break;
-    case 3:
-      GPIO_GPIO3IE &= ~(0x1<<bitPos);	    
       break;
     default:
       break;
@@ -475,12 +476,6 @@ uint32_t gpioIntStatus (uint32_t portNum, uint32_t bitPos)
         regVal = 1;
       }		
       break;
-    case 3:
-      if (GPIO_GPIO3MIS & (0x1<<bitPos))
-      {
-        regVal = 1;
-      }
-      break;
     default:
       break;
   }
@@ -511,9 +506,6 @@ void gpioIntClear (uint32_t portNum, uint32_t bitPos)
     break;
     case 2:
       GPIO_GPIO2IC |= (0x1<<bitPos);	    
-    break;
-    case 3:
-      GPIO_GPIO3IC |= (0x1<<bitPos);	    
     break;
     default:
       break;

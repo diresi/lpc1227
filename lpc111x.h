@@ -301,8 +301,8 @@
 #define SCB_SYSAHBCLKCTRL_FLASHARRAY_MASK         ((unsigned int) 0x00000010)
 #define SCB_SYSAHBCLKCTRL_I2C                     ((unsigned int) 0x00000020) // Enables clock for I2C
 #define SCB_SYSAHBCLKCTRL_I2C_MASK                ((unsigned int) 0x00000020)
-#define SCB_SYSAHBCLKCTRL_GPIO                    ((unsigned int) 0x00000040) // Enables clock for GPIO
-#define SCB_SYSAHBCLKCTRL_GPIO_MASK               ((unsigned int) 0x00000040)
+#define SCB_SYSAHBCLKCTRL_CRC                     ((unsigned int) 0x00000040) // Enables clock for CRC
+#define SCB_SYSAHBCLKCTRL_CRC_MASK                ((unsigned int) 0x00000040)
 #define SCB_SYSAHBCLKCTRL_CT16B0                  ((unsigned int) 0x00000080) // Enables clock for 16-bit counter/timer 0
 #define SCB_SYSAHBCLKCTRL_CT16B0_MASK             ((unsigned int) 0x00000080)
 #define SCB_SYSAHBCLKCTRL_CT16B1                  ((unsigned int) 0x00000100) // Enables clock for 16-bit counter/timer 1
@@ -313,19 +313,37 @@
 #define SCB_SYSAHBCLKCTRL_CT32B1_MASK             ((unsigned int) 0x00000400)
 #define SCB_SYSAHBCLKCTRL_SSP0                    ((unsigned int) 0x00000800) // Enables clock for SSP0
 #define SCB_SYSAHBCLKCTRL_SSP0_MASK               ((unsigned int) 0x00000800)
-#define SCB_SYSAHBCLKCTRL_UART                    ((unsigned int) 0x00001000) // Enables clock for UART.  UART pins must be configured
-#define SCB_SYSAHBCLKCTRL_UART_MASK               ((unsigned int) 0x00001000) // in the IOCON block before the UART clock can be enabled.
-#define SCB_SYSAHBCLKCTRL_ADC                     ((unsigned int) 0x00002000) // Enables clock for ADC
-#define SCB_SYSAHBCLKCTRL_ADC_MASK                ((unsigned int) 0x00002000)
+#define SCB_SYSAHBCLKCTRL_UART0                   ((unsigned int) 0x00001000) // Enables clock for UART.  UART pins must be configured
+#define SCB_SYSAHBCLKCTRL_UART0_MASK              ((unsigned int) 0x00001000) // in the IOCON block before the UART clock can be enabled.
+#define SCB_SYSAHBCLKCTRL_UART1                   ((unsigned int) 0x00002000)
+#define SCB_SYSAHBCLKCTRL_UART1_MASK              ((unsigned int) 0x00002000)
+#define SCB_SYSAHBCLKCTRL_ADC                     ((unsigned int) 0x00004000) // Enables clock for ADC
+#define SCB_SYSAHBCLKCTRL_ADC_MASK                ((unsigned int) 0x00004000)
 #define SCB_SYSAHBCLKCTRL_WDT                     ((unsigned int) 0x00008000) // Enables clock for watchdog timer
 #define SCB_SYSAHBCLKCTRL_WDT_MASK                ((unsigned int) 0x00008000)
 #define SCB_SYSAHBCLKCTRL_IOCON                   ((unsigned int) 0x00010000) // Enables clock for IO configuration block
 #define SCB_SYSAHBCLKCTRL_IOCON_MASK              ((unsigned int) 0x00010000)
-#define SCB_SYSAHBCLKCTRL_CAN                     ((unsigned int) 0x00020000) // Enables clock for CAN
-#define SCB_SYSAHBCLKCTRL_CAN_MASK                ((unsigned int) 0x00020000)
-#define SCB_SYSAHBCLKCTRL_SSP1                    ((unsigned int) 0x00040000) // Enables clock for SSP1
-#define SCB_SYSAHBCLKCTRL_SSP1_MASK               ((unsigned int) 0x00040000)
-#define SCB_SYSAHBCLKCTRL_ALL_MASK                ((unsigned int) 0x0007FFFF)
+#define SCB_SYSAHBCLKCTRL_DMA                     ((unsigned int) 0x00020000) // Enables clock for micro DMA
+#define SCB_SYSAHBCLKCTRL_DMA_MASK                ((unsigned int) 0x00020000)
+//                                                ((unsigned int) 0x00040000) // reserved
+#define SCB_SYSAHBCLKCTRL_RTC                     ((unsigned int) 0x00080000) // Enables clock for RTC
+#define SCB_SYSAHBCLKCTRL_RTC_MASK                ((unsigned int) 0x00080000) // Select the RTC clock source first!
+#define SCB_SYSAHBCLKCTRL_CMP                     ((unsigned int) 0x00100000) // Enables clock for comparator
+#define SCB_SYSAHBCLKCTRL_CMP_MASK                ((unsigned int) 0x00100000)
+//                                                ((unsigned int) 0x00200000) // reserved
+//                                                ((unsigned int) 0x00400000) // reserved
+//                                                ((unsigned int) 0x00800000) // reserved
+//                                                ((unsigned int) 0x01000000) // reserved
+//                                                ((unsigned int) 0x02000000) // reserved
+//                                                ((unsigned int) 0x04000000) // reserved
+//                                                ((unsigned int) 0x08000000) // reserved
+//                                                ((unsigned int) 0x10000000) // reserved
+#define SCB_SYSAHBCLKCTRL_GPIO2                   ((unsigned int) 0x20000000) // Enables clock for GPIO port 2
+#define SCB_SYSAHBCLKCTRL_GPIO2_MASK              ((unsigned int) 0x20000000)
+#define SCB_SYSAHBCLKCTRL_GPIO1                   ((unsigned int) 0x40000000) // Enables clock for GPIO port 1
+#define SCB_SYSAHBCLKCTRL_GPIO1_MASK              ((unsigned int) 0x40000000)
+#define SCB_SYSAHBCLKCTRL_GPIO0                   ((unsigned int) 0x80000000) // Enables clock for GPIO port 0
+#define SCB_SYSAHBCLKCTRL_GPIO0_MASK              ((unsigned int) 0x80000000)
 
 /*  SSP0CLKDIV (SSP0 clock divider register)
     This register configures the SSP0 peripheral clock SSP0_PCLK. The SSP0_PCLK can be
@@ -1624,7 +1642,6 @@ typedef enum IRQn
   WAKEUP10_IRQn                 = 10,       
   WAKEUP11_IRQn                 = 11,       
   WAKEUP12_IRQn                 = 12,       
-  SSP1_IRQn                     = 14,       /*!< SSP1 Interrupt                                   */
   I2C_IRQn                      = 15,       /*!< I2C Interrupt                                    */
   TIMER_16_0_IRQn               = 16,       /*!< 16-bit Timer0 Interrupt                          */
   TIMER_16_1_IRQn               = 17,       /*!< 16-bit Timer1 Interrupt                          */
@@ -1658,47 +1675,51 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define GPIO_GPIO0_BASE                           (0x50000000)
 #define GPIO_GPIO1_BASE                           (0x50010000)
 #define GPIO_GPIO2_BASE                           (0x50020000)
-#define GPIO_GPIO3_BASE                           (0x50030000)
 
-#define GPIO_GPIO0DATA                            (*(pREG32 (0x50003FFC)))    // Port data register
-#define GPIO_GPIO0DIR                             (*(pREG32 (0x50008000)))    // Data direction register
-#define GPIO_GPIO0IS                              (*(pREG32 (0x50008004)))    // Interrupt sense register
-#define GPIO_GPIO0IBE                             (*(pREG32 (0x50008008)))    // Interrupt both edges register
-#define GPIO_GPIO0IEV                             (*(pREG32 (0x5000800C)))    // Interrupt event register
-#define GPIO_GPIO0IE                              (*(pREG32 (0x50008010)))    // Interrupt mask register
-#define GPIO_GPIO0RIS                             (*(pREG32 (0x50008014)))    // Raw interrupt status register
-#define GPIO_GPIO0MIS                             (*(pREG32 (0x50008018)))    // Masked interrupt status register
-#define GPIO_GPIO0IC                              (*(pREG32 (0x5000801C)))    // Interrupt clear register
+#define GPIO_GPIO0MASK                            (*(pREG32 (GPIO_GPIO0_BASE + 0x00)))    // Port mask
+#define GPIO_GPIO0PIN                             (*(pREG32 (GPIO_GPIO0_BASE + 0x04)))    // Input value register
+#define GPIO_GPIO0OUT                             (*(pREG32 (GPIO_GPIO0_BASE + 0x08)))    // Output value register
+#define GPIO_GPIO0SET                             (*(pREG32 (GPIO_GPIO0_BASE + 0x0C)))    // Output set register
+#define GPIO_GPIO0CLR                             (*(pREG32 (GPIO_GPIO0_BASE + 0x10)))    // Output clear register
+#define GPIO_GPIO0NOT                             (*(pREG32 (GPIO_GPIO0_BASE + 0x14)))    // Output invert register
+#define GPIO_GPIO0DIR                             (*(pREG32 (GPIO_GPIO0_BASE + 0x20)))    // Pin direction register
+#define GPIO_GPIO0IS                              (*(pREG32 (GPIO_GPIO0_BASE + 0x24)))    // Interrupt sense register
+#define GPIO_GPIO0IBE                             (*(pREG32 (GPIO_GPIO0_BASE + 0x28)))    // Interrupt both edges register
+#define GPIO_GPIO0IEV                             (*(pREG32 (GPIO_GPIO0_BASE + 0x2C)))    // Interrupt event register
+#define GPIO_GPIO0IE                              (*(pREG32 (GPIO_GPIO0_BASE + 0x30)))    // Interrupt enable register
+#define GPIO_GPIO0RIS                             (*(pREG32 (GPIO_GPIO0_BASE + 0x34)))    // Raw interrupt status register
+#define GPIO_GPIO0MIS                             (*(pREG32 (GPIO_GPIO0_BASE + 0x38)))    // Masked interrupt status register
+#define GPIO_GPIO0IC                              (*(pREG32 (GPIO_GPIO0_BASE + 0x3C)))    // Interrupt clear register
 
-#define GPIO_GPIO1DATA                            (*(pREG32 (0x50013FFC)))    // Port data register
-#define GPIO_GPIO1DIR                             (*(pREG32 (0x50018000)))    // Data direction register
-#define GPIO_GPIO1IS                              (*(pREG32 (0x50018004)))    // Interrupt sense register
-#define GPIO_GPIO1IBE                             (*(pREG32 (0x50018008)))    // Interrupt both edges register
-#define GPIO_GPIO1IEV                             (*(pREG32 (0x5001800C)))    // Interrupt event register
-#define GPIO_GPIO1IE                              (*(pREG32 (0x50018010)))    // Interrupt mask register
-#define GPIO_GPIO1RIS                             (*(pREG32 (0x50018014)))    // Raw interrupt status register
-#define GPIO_GPIO1MIS                             (*(pREG32 (0x50018018)))    // Masked interrupt status register
-#define GPIO_GPIO1IC                              (*(pREG32 (0x5001801C)))    // Interrupt clear register
+#define GPIO_GPIO1MASK                            (*(pREG32 (GPIO_GPIO1_BASE + 0x00)))    // Port mask
+#define GPIO_GPIO1PIN                             (*(pREG32 (GPIO_GPIO1_BASE + 0x04)))    // Input value register
+#define GPIO_GPIO1OUT                             (*(pREG32 (GPIO_GPIO1_BASE + 0x08)))    // Output value register
+#define GPIO_GPIO1SET                             (*(pREG32 (GPIO_GPIO1_BASE + 0x0C)))    // Output set register
+#define GPIO_GPIO1CLR                             (*(pREG32 (GPIO_GPIO1_BASE + 0x10)))    // Output clear register
+#define GPIO_GPIO1NOT                             (*(pREG32 (GPIO_GPIO1_BASE + 0x14)))    // Output invert register
+#define GPIO_GPIO1DIR                             (*(pREG32 (GPIO_GPIO1_BASE + 0x20)))    // Pin direction register
+#define GPIO_GPIO1IS                              (*(pREG32 (GPIO_GPIO1_BASE + 0x24)))    // Interrupt sense register
+#define GPIO_GPIO1IBE                             (*(pREG32 (GPIO_GPIO1_BASE + 0x28)))    // Interrupt both edges register
+#define GPIO_GPIO1IEV                             (*(pREG32 (GPIO_GPIO1_BASE + 0x2C)))    // Interrupt event register
+#define GPIO_GPIO1IE                              (*(pREG32 (GPIO_GPIO1_BASE + 0x30)))    // Interrupt enable register
+#define GPIO_GPIO1RIS                             (*(pREG32 (GPIO_GPIO1_BASE + 0x34)))    // Raw interrupt status register
+#define GPIO_GPIO1MIS                             (*(pREG32 (GPIO_GPIO1_BASE + 0x38)))    // Masked interrupt status register
+#define GPIO_GPIO1IC                              (*(pREG32 (GPIO_GPIO1_BASE + 0x3C)))    // Interrupt clear register
 
-#define GPIO_GPIO2DATA                            (*(pREG32 (0x50023FFC)))    // Port data register
-#define GPIO_GPIO2DIR                             (*(pREG32 (0x50028000)))    // Data direction register
-#define GPIO_GPIO2IS                              (*(pREG32 (0x50028004)))    // Interrupt sense register
-#define GPIO_GPIO2IBE                             (*(pREG32 (0x50028008)))    // Interrupt both edges register
-#define GPIO_GPIO2IEV                             (*(pREG32 (0x5002800C)))    // Interrupt event register
-#define GPIO_GPIO2IE                              (*(pREG32 (0x50028010)))    // Interrupt mask register
-#define GPIO_GPIO2RIS                             (*(pREG32 (0x50028014)))    // Raw interrupt status register
-#define GPIO_GPIO2MIS                             (*(pREG32 (0x50028018)))    // Masked interrupt status register
-#define GPIO_GPIO2IC                              (*(pREG32 (0x5002801C)))    // Interrupt clear register
-
-#define GPIO_GPIO3DATA                            (*(pREG32 (0x50033FFC)))    // Port data register
-#define GPIO_GPIO3DIR                             (*(pREG32 (0x50038000)))    // Data direction register
-#define GPIO_GPIO3IS                              (*(pREG32 (0x50038004)))    // Interrupt sense register
-#define GPIO_GPIO3IBE                             (*(pREG32 (0x50038008)))    // Interrupt both edges register
-#define GPIO_GPIO3IEV                             (*(pREG32 (0x5003800C)))    // Interrupt event register
-#define GPIO_GPIO3IE                              (*(pREG32 (0x50038010)))    // Interrupt mask register
-#define GPIO_GPIO3RIS                             (*(pREG32 (0x50038014)))    // Raw interrupt status register
-#define GPIO_GPIO3MIS                             (*(pREG32 (0x50038018)))    // Masked interrupt status register
-#define GPIO_GPIO3IC                              (*(pREG32 (0x5003801C)))    // Interrupt clear register
+#define GPIO_GPIO2MASK                            (*(pREG32 (GPIO_GPIO2_BASE + 0x00)))    // Port mask
+#define GPIO_GPIO2PIN                             (*(pREG32 (GPIO_GPIO2_BASE + 0x04)))    // Input value register
+#define GPIO_GPIO2OUT                             (*(pREG32 (GPIO_GPIO2_BASE + 0x08)))    // Output value register
+#define GPIO_GPIO2SET                             (*(pREG32 (GPIO_GPIO2_BASE + 0x0C)))    // Output set register
+#define GPIO_GPIO2CLR                             (*(pREG32 (GPIO_GPIO2_BASE + 0x10)))    // Output clear register
+#define GPIO_GPIO2NOT                             (*(pREG32 (GPIO_GPIO2_BASE + 0x14)))    // Output invert register
+#define GPIO_GPIO2DIR                             (*(pREG32 (GPIO_GPIO2_BASE + 0x20)))    // Pin direction register
+#define GPIO_GPIO2IS                              (*(pREG32 (GPIO_GPIO2_BASE + 0x24)))    // Interrupt sense register
+#define GPIO_GPIO2IBE                             (*(pREG32 (GPIO_GPIO2_BASE + 0x28)))    // Interrupt both edges register
+#define GPIO_GPIO2IEV                             (*(pREG32 (GPIO_GPIO2_BASE + 0x2C)))    // Interrupt event register
+#define GPIO_GPIO2IE                              (*(pREG32 (GPIO_GPIO2_BASE + 0x30)))    // Interrupt enable register
+#define GPIO_GPIO2RIS                             (*(pREG32 (GPIO_GPIO2_BASE + 0x34)))    // Raw interrupt status register
+#define GPIO_GPIO2MIS                             (*(pREG32 (GPIO_GPIO2_BASE + 0x38)))    // Masked interrupt status register
+#define GPIO_GPIO2IC                              (*(pREG32 (GPIO_GPIO2_BASE + 0x3C)))    // Interrupt clear register
 
 #define GPIO_IO_P0                                ((unsigned int) 0x00000001)
 #define GPIO_IO_P1                                ((unsigned int) 0x00000002)
@@ -1712,7 +1733,27 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define GPIO_IO_P9                                ((unsigned int) 0x00000200)
 #define GPIO_IO_P10                               ((unsigned int) 0x00000400)
 #define GPIO_IO_P11                               ((unsigned int) 0x00000800)
-#define GPIO_IO_ALL                               ((unsigned int) 0x00000FFF)
+#define GPIO_IO_P12                               ((unsigned int) 0x00001000)
+#define GPIO_IO_P13                               ((unsigned int) 0x00002000)
+#define GPIO_IO_P14                               ((unsigned int) 0x00004000)
+#define GPIO_IO_P15                               ((unsigned int) 0x00008000)
+#define GPIO_IO_P16                               ((unsigned int) 0x00010000)
+#define GPIO_IO_P17                               ((unsigned int) 0x00020000)
+#define GPIO_IO_P18                               ((unsigned int) 0x00040000)
+#define GPIO_IO_P19                               ((unsigned int) 0x00080000)
+#define GPIO_IO_P20                               ((unsigned int) 0x00100000)
+#define GPIO_IO_P21                               ((unsigned int) 0x00200000)
+#define GPIO_IO_P22                               ((unsigned int) 0x00400000)
+#define GPIO_IO_P23                               ((unsigned int) 0x00800000)
+#define GPIO_IO_P24                               ((unsigned int) 0x01000000)
+#define GPIO_IO_P25                               ((unsigned int) 0x02000000)
+#define GPIO_IO_P26                               ((unsigned int) 0x04000000)
+#define GPIO_IO_P27                               ((unsigned int) 0x08000000)
+#define GPIO_IO_P28                               ((unsigned int) 0x10000000)
+#define GPIO_IO_P29                               ((unsigned int) 0x20000000)
+#define GPIO_IO_P30                               ((unsigned int) 0x40000000)
+#define GPIO_IO_P31                               ((unsigned int) 0x80000000)
+#define GPIO_IO_ALL                               ((unsigned int) 0xFFFFFFFF)
 
 /*##############################################################################
 ## UART
@@ -2051,7 +2092,7 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define I2C_I2CMASK3_MASK_MASK                    ((unsigned int) 0x000000FE)
 
 /*##############################################################################
-## SSP0/1 - Synchronous Serial Ports
+## SSP - Synchronous Serial Port
 ##############################################################################*/
 
 #define SSP_SSP0_BASE_ADDRESS                     (0x40040000)
@@ -2221,172 +2262,6 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define SSP_SSP0ICR_RTIC_MASK                     ((unsigned int) 0x00000002) // Clear Rx FIFO not empty/no read flag
 #define SSP_SSP0ICR_RTIC_CLEAR                    ((unsigned int) 0x00000002)
 
-#define SSP_SSP1_BASE_ADDRESS                     (0x40058000)
-
-/*  SSP1CR0 (SSP1 Control Register 0)
-    This register controls the basic operation of the SSP controller. */
-
-#define SSP_SSP1CR0                               (*(pREG32 (0x40058000)))    // Control register 0
-#define SSP_SSP1CR0_DSS_MASK                      ((unsigned int) 0x0000000F) // Data size select
-#define SSP_SSP1CR0_DSS_4BIT                      ((unsigned int) 0x00000003)
-#define SSP_SSP1CR0_DSS_5BIT                      ((unsigned int) 0x00000004)
-#define SSP_SSP1CR0_DSS_6BIT                      ((unsigned int) 0x00000005)
-#define SSP_SSP1CR0_DSS_7BIT                      ((unsigned int) 0x00000006)
-#define SSP_SSP1CR0_DSS_8BIT                      ((unsigned int) 0x00000007)
-#define SSP_SSP1CR0_DSS_9BIT                      ((unsigned int) 0x00000008)
-#define SSP_SSP1CR0_DSS_10BIT                     ((unsigned int) 0x00000009)
-#define SSP_SSP1CR0_DSS_11BIT                     ((unsigned int) 0x0000000A)
-#define SSP_SSP1CR0_DSS_12BIT                     ((unsigned int) 0x0000000B)
-#define SSP_SSP1CR0_DSS_13BIT                     ((unsigned int) 0x0000000C)
-#define SSP_SSP1CR0_DSS_14BIT                     ((unsigned int) 0x0000000D)
-#define SSP_SSP1CR0_DSS_15BIT                     ((unsigned int) 0x0000000E)
-#define SSP_SSP1CR0_DSS_16BIT                     ((unsigned int) 0x0000000F)
-#define SSP_SSP1CR0_FRF_MASK                      ((unsigned int) 0x00000030) // Frame format
-#define SSP_SSP1CR0_FRF_SPI                       ((unsigned int) 0x00000000)
-#define SSP_SSP1CR0_FRF_TI                        ((unsigned int) 0x00000010)
-#define SSP_SSP1CR0_FRF_MWIRE                     ((unsigned int) 0x00000020)
-#define SSP_SSP1CR0_CPOL_MASK                     ((unsigned int) 0x00000040) // Clock out polarity
-#define SSP_SSP1CR0_CPOL_LOW                      ((unsigned int) 0x00000000)
-#define SSP_SSP1CR0_CPOL_HIGH                     ((unsigned int) 0x00000040)
-#define SSP_SSP1CR0_CPHA_MASK                     ((unsigned int) 0x00000080) // Clock out phase
-#define SSP_SSP1CR0_CPHA_FIRST                    ((unsigned int) 0x00000000)
-#define SSP_SSP1CR0_CPHA_SECOND                   ((unsigned int) 0x00000080)
-
-/*  Serial Clock Rate. The number of prescaler-output clocks per
-    bit on the bus, minus one. Given that CPSDVSR is the
-    prescale divider, and the APB clock PCLK clocks the
-    prescaler, the bit frequency is PCLK / (CPSDVSR × [SCR+1]). */
-
-#define SSP_SSP1CR0_SCR_MASK                      ((unsigned int) 0x0000FF00) // Serial clock rate
-#define SSP_SSP1CR0_SCR_1                         ((unsigned int) 0x00000100)
-#define SSP_SSP1CR0_SCR_2                         ((unsigned int) 0x00000200)
-#define SSP_SSP1CR0_SCR_3                         ((unsigned int) 0x00000300)
-#define SSP_SSP1CR0_SCR_4                         ((unsigned int) 0x00000400)
-#define SSP_SSP1CR0_SCR_5                         ((unsigned int) 0x00000500)
-#define SSP_SSP1CR0_SCR_6                         ((unsigned int) 0x00000600)
-#define SSP_SSP1CR0_SCR_7                         ((unsigned int) 0x00000700)
-#define SSP_SSP1CR0_SCR_8                         ((unsigned int) 0x00000800)
-#define SSP_SSP1CR0_SCR_9                         ((unsigned int) 0x00000900)
-#define SSP_SSP1CR0_SCR_10                        ((unsigned int) 0x00000A00)
-#define SSP_SSP1CR0_SCR_11                        ((unsigned int) 0x00000B00)
-#define SSP_SSP1CR0_SCR_12                        ((unsigned int) 0x00000C00)
-#define SSP_SSP1CR0_SCR_13                        ((unsigned int) 0x00000D00)
-#define SSP_SSP1CR0_SCR_14                        ((unsigned int) 0x00000E00)
-#define SSP_SSP1CR0_SCR_15                        ((unsigned int) 0x00000F00)
-#define SSP_SSP1CR0_SCR_16                        ((unsigned int) 0x00001000)
-
-/*  SSP1CR1 (SSP1 Control Register 1)
-    This register controls certain aspects of the operation of the SSP controller.  */
-
-#define SSP_SSP1CR1                               (*(pREG32 (0x40058004)))    // Control register 1
-#define SSP_SSP1CR1_LBM_MASK                      ((unsigned int) 0x00000001) // Loop back mode
-#define SSP_SSP1CR1_LBM_NORMAL                    ((unsigned int) 0x00000000)
-#define SSP_SSP1CR1_LBM_INVERTED                  ((unsigned int) 0x00000001) // MISO/MOSI are reversed
-#define SSP_SSP1CR1_SSE_MASK                      ((unsigned int) 0x00000002) // SSP enable
-#define SSP_SSP1CR1_SSE_DISABLED                  ((unsigned int) 0x00000000)
-#define SSP_SSP1CR1_SSE_ENABLED                   ((unsigned int) 0x00000002)
-#define SSP_SSP1CR1_MS_MASK                       ((unsigned int) 0x00000004) // Master/Slave Mode
-#define SSP_SSP1CR1_MS_MASTER                     ((unsigned int) 0x00000000)
-#define SSP_SSP1CR1_MS_SLAVE                      ((unsigned int) 0x00000004)
-#define SSP_SSP1CR1_SOD_MASK                      ((unsigned int) 0x00000008) // Slave output disable
-
-/*  SSP1DR (SSP1 Data Register)
-    Software can write data to be transmitted to this register, and read data that has been
-    received. */
-
-#define SSP_SSP1DR                                (*(pREG32 (0x40058008)))    // Data register
-#define SSP_SSP1DR_MASK                           ((unsigned int) 0x0000FFFF) // Data
-
-/*  SSP1SR (SSP1 Status Register)
-    This read-only register reflects the current status of the SSP controller.  */
-
-#define SSP_SSP1SR                                (*(pREG32 (0x4005800C)))    // Status register
-#define SSP_SSP1SR_TFE_MASK                       ((unsigned int) 0x00000001) // Transmit FIFO empty
-#define SSP_SSP1SR_TFE_EMPTY                      ((unsigned int) 0x00000001)
-#define SSP_SSP1SR_TFE_NOTEMPTY                   ((unsigned int) 0x00000000)
-#define SSP_SSP1SR_TNF_MASK                       ((unsigned int) 0x00000002) // Transmit FIFO not full
-#define SSP_SSP1SR_TNF_NOTFULL                    ((unsigned int) 0x00000002)
-#define SSP_SSP1SR_TNF_FULL                       ((unsigned int) 0x00000000)
-#define SSP_SSP1SR_RNE_MASK                       ((unsigned int) 0x00000004) // Receive FIFO not empty
-#define SSP_SSP1SR_RNE_NOTEMPTY                   ((unsigned int) 0x00000004)
-#define SSP_SSP1SR_RNE_EMPTY                      ((unsigned int) 0x00000000)
-#define SSP_SSP1SR_RFF_MASK                       ((unsigned int) 0x00000008) // Receive FIFO full
-#define SSP_SSP1SR_RFF_FULL                       ((unsigned int) 0x00000008)
-#define SSP_SSP1SR_RFF_NOTFULL                    ((unsigned int) 0x00000000)
-#define SSP_SSP1SR_BSY_MASK                       ((unsigned int) 0x00000010) // Busy Flag
-#define SSP_SSP1SR_BSY_IDLE                       ((unsigned int) 0x00000000)
-#define SSP_SSP1SR_BSY_BUSY                       ((unsigned int) 0x00000010)
-
-/*  SSP1CPSR (SSP1 Clock Prescale Register)
-    This register controls the factor by which the Prescaler divides the SSP peripheral clock
-    SSP_PCLK to yield the prescaler clock that is, in turn, divided by the SCR factor in
-    SSP1CR0, to determine the bit clock.  */
-
-#define SSP_SSP1CPSR                              (*(pREG32 (0x40058010)))    // Clock prescale register
-#define SSP_SSP1CPSR_CPSDVSR_MASK                 ((unsigned int) 0x000000FF)
-#define SSP_SSP1CPSR_CPSDVSR_DIV2                 ((unsigned int) 0x00000002)
-#define SSP_SSP1CPSR_CPSDVSR_DIV4                 ((unsigned int) 0x00000004)
-
-/*  SSP1IMSC (SSP1 Interrupt Mask Set/Clear Register)
-    This register controls whether each of the four possible interrupt conditions in the SSP
-    controller are enabled. Note that ARM uses the word masked in the opposite sense from
-    classic computer terminology, in which masked meant disabled. ARM uses the word
-    masked to mean enabled. To avoid confusion we will not use the word masked. */
-
-#define SSP_SSP1IMSC                              (*(pREG32 (0x40058014)))    // Interrupt mask set/clear register
-#define SSP_SSP1IMSC_RORIM_MASK                   ((unsigned int) 0x00000001) // Receive overrun interrupt
-#define SSP_SSP1IMSC_RORIM_ENBL                   ((unsigned int) 0x00000001)
-#define SSP_SSP1IMSC_RORIM_DSBL                   ((unsigned int) 0x00000000)
-#define SSP_SSP1IMSC_RTIM_MASK                    ((unsigned int) 0x00000002) // Receive timeout interrupt
-#define SSP_SSP1IMSC_RTIM_ENBL                    ((unsigned int) 0x00000002)
-#define SSP_SSP1IMSC_RTIM_DSBL                    ((unsigned int) 0x00000000)
-#define SSP_SSP1IMSC_RXIM_MASK                    ((unsigned int) 0x00000004) // Rx FIFO >= 1/2 full interrupt
-#define SSP_SSP1IMSC_RXIM_ENBL                    ((unsigned int) 0x00000004)
-#define SSP_SSP1IMSC_RXIM_DSBL                    ((unsigned int) 0x00000000)
-#define SSP_SSP1IMSC_TXIM_MASK                    ((unsigned int) 0x00000008) // Tx FIFO >= 1/2 empty interrupt
-#define SSP_SSP1IMSC_TXIM_ENBL                    ((unsigned int) 0x00000008)
-#define SSP_SSP1IMSC_TXIM_DSBL                    ((unsigned int) 0x00000000)
-
-/*  SSP1RIS (SSP1 Raw Interrupt Status Register)
-    This read-only register contains a 1 for each interrupt condition that is asserted,
-    regardless of whether or not the interrupt is enabled in the SSP1IMSC.  */
-
-#define SSP_SSP1RIS                               (*(pREG32 (0x40058018)))    // Raw interrupt status register
-#define SSP_SSP1RIS_RORRIS_MASK                   ((unsigned int) 0x00000001) // Frame received while Rx FIFO full
-#define SSP_SSP1RIS_RORRIS_RCVD                   ((unsigned int) 0x00000001)
-#define SSP_SSP1RIS_RTRIS_MASK                    ((unsigned int) 0x00000002) // Rx FIFO not empty no read within timeout
-#define SSP_SSP1RIS_RTRIS_NOTEMPTY                ((unsigned int) 0x00000002)
-#define SSP_SSP1RIS_RXRIS_MASK                    ((unsigned int) 0x00000004) // Rx FIFO >= half full
-#define SSP_SSP1RIS_RXRIS_HALFFULL                ((unsigned int) 0x00000004)
-#define SSP_SSP1RIS_TXRIS_MASK                    ((unsigned int) 0x00000008) // Tx FIF0 >= half-empty
-#define SSP_SSP1RIS_TXRIS_HALFEMPTY               ((unsigned int) 0x00000008)
-
-/*  SSP1MIS (SSP1 Masked Interrupt Status Register)
-    This read-only register contains a 1 for each interrupt condition that is asserted and
-    enabled in the SSP1IMSC. When an SSP interrupt occurs, the interrupt service routine
-    should read this register to determine the cause(s) of the interrupt. */
-
-#define SSP_SSP1MIS                               (*(pREG32 (0x4005801C)))    // Masked interrupt status register
-#define SSP_SSP1MIS_RORMIS_MASK                   ((unsigned int) 0x00000001) // Frame received while Rx FIFO full
-#define SSP_SSP1MIS_RORMIS_FRMRCVD                ((unsigned int) 0x00000001)
-#define SSP_SSP1MIS_RTMIS_MASK                    ((unsigned int) 0x00000002) // Rx FIFO not empty no read withing timeout
-#define SSP_SSP1MIS_RTMIS_NOTEMPTY                ((unsigned int) 0x00000002)
-#define SSP_SSP1MIS_RXMIS_MASK                    ((unsigned int) 0x00000004) // Rx FIFO >= half full
-#define SSP_SSP1MIS_RXMIS_HALFFULL                ((unsigned int) 0x00000004)
-#define SSP_SSP1MIS_TXMIS_MASK                    ((unsigned int) 0x00000008) // Tx FIFO >= half-empty
-#define SSP_SSP1MIS_TXMIS_HALFEMPTY               ((unsigned int) 0x00000008)
-
-/*  SSP1ICR (SSP1 Interrupt Clear Register)
-    Software can write one or more one(s) to this write-only register, to clear the
-    corresponding interrupt condition(s) in the SSP controller. Note that the other two interrupt
-    conditions can be cleared by writing or reading the appropriate FIFO, or disabled by
-    clearing the corresponding bit in SSP1IMSC. */
-
-#define SSP_SSP1ICR                               (*(pREG32 (0x40058020)))    // SSPICR interrupt clear register
-#define SSP_SSP1ICR_RORIC_MASK                    ((unsigned int) 0x00000001) // Clears RORIC interrupt flag
-#define SSP_SSP1ICR_RORIC_CLEAR                   ((unsigned int) 0x00000001)
-#define SSP_SSP1ICR_RTIC_MASK                     ((unsigned int) 0x00000002) // Clear Rx FIFO not empty/no read flag
-#define SSP_SSP1ICR_RTIC_CLEAR                    ((unsigned int) 0x00000002)
 
 /*##############################################################################
 ## 16-Bit Timers (CT16B0/1)

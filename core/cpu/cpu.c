@@ -159,7 +159,6 @@ void cpuInit (void)
   GPIO_GPIO0DIR &= ~(GPIO_IO_ALL);
   GPIO_GPIO1DIR &= ~(GPIO_IO_ALL);
   GPIO_GPIO2DIR &= ~(GPIO_IO_ALL);
-  GPIO_GPIO3DIR &= ~(GPIO_IO_ALL);
 
   // Configure PLL and main system clock
   cpuPllSetup(CPU_MULTIPLIER_3);
