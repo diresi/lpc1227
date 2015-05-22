@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     lpc111x.h
     @author   K. Townsend (microBuilder.eu)
     @version  1.1
@@ -120,21 +120,21 @@
 #define SCB_PLLCTRL_MSEL_30                       ((unsigned int) 0x0000001D)
 #define SCB_PLLCTRL_MSEL_31                       ((unsigned int) 0x0000001E)
 #define SCB_PLLCTRL_MSEL_32                       ((unsigned int) 0x0000001F)
-#define SCB_PLLCTRL_MSEL_MASK                     ((unsigned int) 0x0000001F)    
-#define SCB_PLLCTRL_PSEL_2                        ((unsigned int) 0x00000000)       
-#define SCB_PLLCTRL_PSEL_4                        ((unsigned int) 0x00000020)       
-#define SCB_PLLCTRL_PSEL_8                        ((unsigned int) 0x00000040)       
+#define SCB_PLLCTRL_MSEL_MASK                     ((unsigned int) 0x0000001F)
+#define SCB_PLLCTRL_PSEL_2                        ((unsigned int) 0x00000000)
+#define SCB_PLLCTRL_PSEL_4                        ((unsigned int) 0x00000020)
+#define SCB_PLLCTRL_PSEL_8                        ((unsigned int) 0x00000040)
 #define SCB_PLLCTRL_PSEL_16                       ((unsigned int) 0x00000060)
 #define SCB_PLLCTRL_PSEL_BIT                      (5)
-#define SCB_PLLCTRL_PSEL_MASK                     ((unsigned int) 0x00000060)    
-#define SCB_PLLCTRL_MASK                          ((unsigned int) 0x0000007F)    
+#define SCB_PLLCTRL_PSEL_MASK                     ((unsigned int) 0x00000060)
+#define SCB_PLLCTRL_MASK                          ((unsigned int) 0x0000007F)
 
 /*  SYSPLLSTAT (System PLL status register)
     This register is a Read-only register and supplies the PLL lock status */
 
 #define SCB_PLLSTAT                               (*(pREG32 (0x4004800C)))    // System PLL status
 #define SCB_PLLSTAT_LOCK                          ((unsigned int) 0x00000001) // 0 = PLL not locked, 1 = PLL locked
-#define SCB_PLLSTAT_LOCK_MASK                     ((unsigned int) 0x00000001)    
+#define SCB_PLLSTAT_LOCK_MASK                     ((unsigned int) 0x00000001)
 
 /*  SYSOSCCTRL (System oscillator control register)
     This register configures the frequency range for the system oscillator. */
@@ -278,8 +278,8 @@
 #define SCB_SYSAHBCLKDIV                          (*(pREG32 (0x40048078)))    // System AHB clock divider
 #define SCB_SYSAHBCLKDIV_DISABLE                  ((unsigned int) 0x00000000) // 0 will shut the system clock down completely
 #define SCB_SYSAHBCLKDIV_DIV1                     ((unsigned int) 0x00000001) // 1, 2 or 4 are the most common values
-#define SCB_SYSAHBCLKDIV_DIV2                     ((unsigned int) 0x00000002)    
-#define SCB_SYSAHBCLKDIV_DIV4                     ((unsigned int) 0x00000004)    
+#define SCB_SYSAHBCLKDIV_DIV2                     ((unsigned int) 0x00000002)
+#define SCB_SYSAHBCLKDIV_DIV4                     ((unsigned int) 0x00000004)
 #define SCB_SYSAHBCLKDIV_MASK                     ((unsigned int) 0x000000FF) // AHB clock divider can be from 0 to 255
 
 /*  AHBCLKCTRL (System AHB clock control register)
@@ -396,7 +396,7 @@
 #define SCB_WDTCLKSEL_SOURCE_INTERNALOSC          ((unsigned int) 0x00000000) // Use the internal oscillator
 #define SCB_WDTCLKSEL_SOURCE_INPUTCLOCK           ((unsigned int) 0x00000001) // Use the main clock
 #define SCB_WDTCLKSEL_SOURCE_WATCHDOGOSC          ((unsigned int) 0x00000002) // Use the watchdog oscillator
-#define SCB_WDTCLKSEL_MASK                        ((unsigned int) 0x00000003)    
+#define SCB_WDTCLKSEL_MASK                        ((unsigned int) 0x00000003)
 
 /*  WDTCLKUEN (WDT clock source update enable register)
     This register updates the clock source of the watchdog timer with the new input clock after
@@ -716,7 +716,7 @@
     will be automatically loaded into the PDRUNCFG register when the Sleep mode is
     entered. */
 
-/*  Note: The latest version of the UM (10 March 2011) indicates that only four 
+/*  Note: The latest version of the UM (10 March 2011) indicates that only four
     values can be assigned to the PDSLEEPCFG register.  This differs from early
     versions of the UM which contained seperate values, but values have been
     added for the four 'valid' values included in the latest UM. */
@@ -773,7 +773,7 @@
 
 #define SCB_PDRUNCFG                              (*(pREG32 (0x40048238)))    // Power-down configuration register
 #define SCB_PDRUNCFG_IRCOUT                       ((unsigned int) 0x00000001) // IRC oscillator output power-down
-#define SCB_PDRUNCFG_IRCOUT_MASK                  ((unsigned int) 0x00000001)    
+#define SCB_PDRUNCFG_IRCOUT_MASK                  ((unsigned int) 0x00000001)
 #define SCB_PDRUNCFG_IRC                          ((unsigned int) 0x00000002) // IRC oscillator power-down
 #define SCB_PDRUNCFG_IRC_MASK                     ((unsigned int) 0x00000002)
 #define SCB_PDRUNCFG_FLASH                        ((unsigned int) 0x00000004) // Flash power-down
@@ -797,7 +797,7 @@
 #define SCB_DEVICEID_LPC1111_101                  ((unsigned int) 0x041E502B)
 #define SCB_DEVICEID_LPC1111_102                  ((unsigned int) 0x2516902B)
 #define SCB_DEVICEID_LPC1111_201                  ((unsigned int) 0x0416502B)
-#define SCB_DEVICEID_LPC1111_202                  ((unsigned int) 0x2516D02B) 
+#define SCB_DEVICEID_LPC1111_202                  ((unsigned int) 0x2516D02B)
 #define SCB_DEVICEID_LPC1112_101                  ((unsigned int) 0x042D502B)
 #define SCB_DEVICEID_LPC1112_102                  ((unsigned int) 0x2524D02B)
 #define SCB_DEVICEID_LPC1112_201                  ((unsigned int) 0x0425502B)
@@ -902,7 +902,7 @@
     power is still applied to the VDD(3V3) pin but the chip has entered Deep power-down mode.
     Only a cold boot, when all power has been completely removed from the chip, will reset
     the general purpose registers.
-      
+
     Remark: If the external voltage applied on pin VDD(3V3) drops below 2.2V, the
     hysteresis of the WAKEUP input pin has to be disabled in order for the chip to wake up
     from Deep power-down mode.  */
@@ -1600,19 +1600,19 @@
 typedef struct
 {
   volatile uint32_t ISER[8];                      /*!< Offset: 0x000  Interrupt Set Enable Register           */
-	 uint32_t RESERVED0[24];                                   
+	 uint32_t RESERVED0[24];
   volatile uint32_t ICER[8];                      /*!< Offset: 0x080  Interrupt Clear Enable Register         */
-	  uint32_t RSERVED1[24];                                    
+	  uint32_t RSERVED1[24];
   volatile uint32_t ISPR[8];                      /*!< Offset: 0x100  Interrupt Set Pending Register          */
-	 uint32_t RESERVED2[24];                                   
+	 uint32_t RESERVED2[24];
   volatile uint32_t ICPR[8];                      /*!< Offset: 0x180  Interrupt Clear Pending Register        */
-	 uint32_t RESERVED3[24];                                   
+	 uint32_t RESERVED3[24];
   volatile uint32_t IABR[8];                      /*!< Offset: 0x200  Interrupt Active bit Register           */
-	 uint32_t RESERVED4[56];                                   
+	 uint32_t RESERVED4[56];
   volatile uint8_t  IP[240];                      /*!< Offset: 0x300  Interrupt Priority Register (8Bit wide) */
-	uint32_t RESERVED5[644];                                  
+	uint32_t RESERVED5[644];
   volatile  uint32_t STIR;                        /*!< Offset: 0xE00  Software Trigger Interrupt Register     */
-}  NVIC_Type;                                               
+}  NVIC_Type;
 
 #define NVIC                                      ((NVIC_Type *) NVIC_BASE_ADDRESS)
 
@@ -1633,15 +1633,15 @@ typedef enum IRQn
   WAKEUP1_IRQn                  = 1,        /*!< There are 13 pins in total for LPC11xx           */
   WAKEUP2_IRQn                  = 2,
   WAKEUP3_IRQn                  = 3,
-  WAKEUP4_IRQn                  = 4,   
-  WAKEUP5_IRQn                  = 5,        
-  WAKEUP6_IRQn                  = 6,        
-  WAKEUP7_IRQn                  = 7,        
-  WAKEUP8_IRQn                  = 8,        
-  WAKEUP9_IRQn                  = 9,        
-  WAKEUP10_IRQn                 = 10,       
-  WAKEUP11_IRQn                 = 11,       
-  WAKEUP12_IRQn                 = 12,       
+  WAKEUP4_IRQn                  = 4,
+  WAKEUP5_IRQn                  = 5,
+  WAKEUP6_IRQn                  = 6,
+  WAKEUP7_IRQn                  = 7,
+  WAKEUP8_IRQn                  = 8,
+  WAKEUP9_IRQn                  = 9,
+  WAKEUP10_IRQn                 = 10,
+  WAKEUP11_IRQn                 = 11,
+  WAKEUP12_IRQn                 = 12,
   I2C_IRQn                      = 15,       /*!< I2C Interrupt                                    */
   TIMER_16_0_IRQn               = 16,       /*!< 16-bit Timer0 Interrupt                          */
   TIMER_16_1_IRQn               = 17,       /*!< 16-bit Timer1 Interrupt                          */
@@ -1650,7 +1650,7 @@ typedef enum IRQn
   SSP0_IRQn                     = 20,       /*!< SSP0 Interrupt                                   */
   UART_IRQn                     = 21,       /*!< UART Interrupt                                   */
   ADC_IRQn                      = 24,       /*!< A/D Converter Interrupt                          */
-  WDT_IRQn                      = 25,       /*!< Watchdog timer Interrupt                         */  
+  WDT_IRQn                      = 25,       /*!< Watchdog timer Interrupt                         */
   BOD_IRQn                      = 26,       /*!< Brown Out Detect(BOD) Interrupt                  */
   EINT3_IRQn                    = 28,       /*!< External Interrupt 3 Interrupt                   */
   EINT2_IRQn                    = 29,       /*!< External Interrupt 2 Interrupt                   */
@@ -1819,10 +1819,10 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define UART_U0FCR_Tx_FIFO_Reset_MASK             ((unsigned int) 0x00000004)
 #define UART_U0FCR_Tx_FIFO_Reset                  ((unsigned int) 0x00000004) // Clear Tx FIFO
 #define UART_U0FCR_Rx_Trigger_Level_Select_MASK   ((unsigned int) 0x000000C0) // Chars written before before interrupt
-#define UART_U0FCR_Rx_Trigger_Level_Select_1Char  ((unsigned int) 0x00000000) 
-#define UART_U0FCR_Rx_Trigger_Level_Select_4Char  ((unsigned int) 0x00000040) 
-#define UART_U0FCR_Rx_Trigger_Level_Select_8Char  ((unsigned int) 0x00000080) 
-#define UART_U0FCR_Rx_Trigger_Level_Select_12Char ((unsigned int) 0x000000C0) 
+#define UART_U0FCR_Rx_Trigger_Level_Select_1Char  ((unsigned int) 0x00000000)
+#define UART_U0FCR_Rx_Trigger_Level_Select_4Char  ((unsigned int) 0x00000040)
+#define UART_U0FCR_Rx_Trigger_Level_Select_8Char  ((unsigned int) 0x00000080)
+#define UART_U0FCR_Rx_Trigger_Level_Select_12Char ((unsigned int) 0x000000C0)
 
 /*  Modem control */
 #define UART_U0MCR                                (*(pREG32 (0x40008010)))
@@ -1919,7 +1919,7 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define UART_U0ACR_AutoRestart_NoRestart          ((unsigned int) 0x00000000)
 #define UART_U0ACR_AutoRestart_Restart            ((unsigned int) 0x00000004) // Restart in case of time-out
 #define UART_U0ACR_ABEOIntClr_MASK                ((unsigned int) 0x00000100) // End of auto-baud interrupt clear bit
-#define UART_U0ACR_ABEOIntClr                     ((unsigned int) 0x00000100) 
+#define UART_U0ACR_ABEOIntClr                     ((unsigned int) 0x00000100)
 #define UART_U0ACR_ABTOIntClr_MASK                ((unsigned int) 0x00000200) // Auto-baud timeout interrupt clear bit
 #define UART_U0ACR_ABTOIntClr                     ((unsigned int) 0x00000200)
 
@@ -1942,7 +1942,7 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define UART_U0RS485CTRL_RXDIS                    ((unsigned int) 0x00000002)
 #define UART_U0RS485CTRL_AADEN_MASK               ((unsigned int) 0x00000004) // Auto-address detect
 #define UART_U0RS485CTRL_AADEN                    ((unsigned int) 0x00000004)
-#define UART_U0RS485CTRL_SEL_MASK                 ((unsigned int) 0x00000008) 
+#define UART_U0RS485CTRL_SEL_MASK                 ((unsigned int) 0x00000008)
 #define UART_U0RS485CTRL_SEL_RTS                  ((unsigned int) 0x00000000) // Use RTS for direction control
 #define UART_U0RS485CTRL_SEL_DTS                  ((unsigned int) 0x00000008) // Use DTS for direction control
 #define UART_U0RS485CTRL_DCTRL_MASK               ((unsigned int) 0x00000010) // Enable/Disable auto-direction control
@@ -2397,21 +2397,21 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define TMR_TMR16B0CTCR_CTMODE_COUNTERRISING      ((unsigned int) 0x00000001) // Counter: TC increments on rising edge of input
 #define TMR_TMR16B0CTCR_CTMODE_COUNTERFALLING     ((unsigned int) 0x00000002) // Counter: TC increments on falling edge of input
 #define TMR_TMR16B0CTCR_CTMODE_COUNTERBOTH        ((unsigned int) 0x00000003) // Counter: TC increments on both edges of input
-#define TMR_TMR16B0CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)   
+#define TMR_TMR16B0CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)
 #define TMR_TMR16B0CTCR_CINPUTSELECT              ((unsigned int) 0x00000000) // CINPUTSELECT must be set to 00
 
 /*  PWM control register */
 #define TMR_TMR16B0PWMC                           (*(pREG32 (0x4000C074)))
-#define TMR_TMR16B0PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)   
+#define TMR_TMR16B0PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)
 #define TMR_TMR16B0PWMC_PWM0_ENABLED              ((unsigned int) 0x00000001) // PWM mode is enabled for CT16Bn_MAT0
 #define TMR_TMR16B0PWMC_PWM0_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B0PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)   
+#define TMR_TMR16B0PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)
 #define TMR_TMR16B0PWMC_PWM1_ENABLED              ((unsigned int) 0x00000002) // PWM mode is enabled for CT16Bn_MAT1
 #define TMR_TMR16B0PWMC_PWM1_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B0PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)   
+#define TMR_TMR16B0PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)
 #define TMR_TMR16B0PWMC_PWM2_ENABLED              ((unsigned int) 0x00000004) // PWM mode is enabled for CT16Bn_MAT2
 #define TMR_TMR16B0PWMC_PWM2_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B0PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)   
+#define TMR_TMR16B0PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)
 #define TMR_TMR16B0PWMC_PWM3_ENABLED              ((unsigned int) 0x00000008)
 #define TMR_TMR16B0PWMC_PWM3_DISABLED             ((unsigned int) 0x00000000)
 
@@ -2545,21 +2545,21 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define TMR_TMR16B1CTCR_CTMODE_COUNTERRISING      ((unsigned int) 0x00000001) // Counter: TC increments on rising edge of input
 #define TMR_TMR16B1CTCR_CTMODE_COUNTERFALLING     ((unsigned int) 0x00000002) // Counter: TC increments on falling edge of input
 #define TMR_TMR16B1CTCR_CTMODE_COUNTERBOTH        ((unsigned int) 0x00000003) // Counter: TC increments on both edges of input
-#define TMR_TMR16B1CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)   
+#define TMR_TMR16B1CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)
 #define TMR_TMR16B1CTCR_CINPUTSELECT              ((unsigned int) 0x00000000) // CINPUTSELECT must be set to 00
 
 /*  PWM control register */
 #define TMR_TMR16B1PWMC                           (*(pREG32 (0x40010074)))
-#define TMR_TMR16B1PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)   
+#define TMR_TMR16B1PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)
 #define TMR_TMR16B1PWMC_PWM0_ENABLED              ((unsigned int) 0x00000001) // PWM mode is enabled for CT16Bn_MAT0
 #define TMR_TMR16B1PWMC_PWM0_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B1PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)   
+#define TMR_TMR16B1PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)
 #define TMR_TMR16B1PWMC_PWM1_ENABLED              ((unsigned int) 0x00000002) // PWM mode is enabled for CT16Bn_MAT1
 #define TMR_TMR16B1PWMC_PWM1_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B1PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)   
+#define TMR_TMR16B1PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)
 #define TMR_TMR16B1PWMC_PWM2_ENABLED              ((unsigned int) 0x00000004) // PWM mode is enabled for CT16Bn_MAT2
 #define TMR_TMR16B1PWMC_PWM2_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR16B1PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)   
+#define TMR_TMR16B1PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)
 #define TMR_TMR16B1PWMC_PWM3_ENABLED              ((unsigned int) 0x00000008)
 #define TMR_TMR16B1PWMC_PWM3_DISABLED             ((unsigned int) 0x00000000)
 
@@ -2697,21 +2697,21 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define TMR_TMR32B0CTCR_CTMODE_COUNTERRISING      ((unsigned int) 0x00000001) // Counter: TC increments on rising edge of input
 #define TMR_TMR32B0CTCR_CTMODE_COUNTERFALLING     ((unsigned int) 0x00000002) // Counter: TC increments on falling edge of input
 #define TMR_TMR32B0CTCR_CTMODE_COUNTERBOTH        ((unsigned int) 0x00000003) // Counter: TC increments on both edges of input
-#define TMR_TMR32B0CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)   
+#define TMR_TMR32B0CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)
 #define TMR_TMR32B0CTCR_CINPUTSELECT              ((unsigned int) 0x00000000) // CINPUTSELECT must be set to 00
 
 /*  PWM control register */
 #define TMR_TMR32B0PWMC                           (*(pREG32 (0x40014074)))
-#define TMR_TMR32B0PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)   
+#define TMR_TMR32B0PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)
 #define TMR_TMR32B0PWMC_PWM0_ENABLED              ((unsigned int) 0x00000001) // PWM mode is enabled for CT32Bn_MAT0
 #define TMR_TMR32B0PWMC_PWM0_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B0PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)   
+#define TMR_TMR32B0PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)
 #define TMR_TMR32B0PWMC_PWM1_ENABLED              ((unsigned int) 0x00000002) // PWM mode is enabled for CT32Bn_MAT1
 #define TMR_TMR32B0PWMC_PWM1_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B0PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)   
+#define TMR_TMR32B0PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)
 #define TMR_TMR32B0PWMC_PWM2_ENABLED              ((unsigned int) 0x00000004) // PWM mode is enabled for CT32Bn_MAT2
 #define TMR_TMR32B0PWMC_PWM2_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B0PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)   
+#define TMR_TMR32B0PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)
 #define TMR_TMR32B0PWMC_PWM3_ENABLED              ((unsigned int) 0x00000008)
 #define TMR_TMR32B0PWMC_PWM3_DISABLED             ((unsigned int) 0x00000000)
 
@@ -2845,21 +2845,21 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 #define TMR_TMR32B1CTCR_CTMODE_COUNTERRISING      ((unsigned int) 0x00000001) // Counter: TC increments on rising edge of input
 #define TMR_TMR32B1CTCR_CTMODE_COUNTERFALLING     ((unsigned int) 0x00000002) // Counter: TC increments on falling edge of input
 #define TMR_TMR32B1CTCR_CTMODE_COUNTERBOTH        ((unsigned int) 0x00000003) // Counter: TC increments on both edges of input
-#define TMR_TMR32B1CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)   
+#define TMR_TMR32B1CTCR_CINPUTSELECT_MASK         ((unsigned int) 0x0000000C)
 #define TMR_TMR32B1CTCR_CINPUTSELECT              ((unsigned int) 0x00000000) // CINPUTSELECT must be set to 00
 
 /*  PWM control register */
 #define TMR_TMR32B1PWMC                           (*(pREG32 (0x40018074)))
-#define TMR_TMR32B1PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)   
+#define TMR_TMR32B1PWMC_PWM0_MASK                 ((unsigned int) 0x00000001)
 #define TMR_TMR32B1PWMC_PWM0_ENABLED              ((unsigned int) 0x00000001) // PWM mode is enabled for CT32Bn_MAT0
 #define TMR_TMR32B1PWMC_PWM0_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B1PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)   
+#define TMR_TMR32B1PWMC_PWM1_MASK                 ((unsigned int) 0x00000002)
 #define TMR_TMR32B1PWMC_PWM1_ENABLED              ((unsigned int) 0x00000002) // PWM mode is enabled for CT32Bn_MAT1
 #define TMR_TMR32B1PWMC_PWM1_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B1PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)   
+#define TMR_TMR32B1PWMC_PWM2_MASK                 ((unsigned int) 0x00000004)
 #define TMR_TMR32B1PWMC_PWM2_ENABLED              ((unsigned int) 0x00000004) // PWM mode is enabled for CT32Bn_MAT2
 #define TMR_TMR32B1PWMC_PWM2_DISABLED             ((unsigned int) 0x00000000)
-#define TMR_TMR32B1PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)   
+#define TMR_TMR32B1PWMC_PWM3_MASK                 ((unsigned int) 0x00000008)
 #define TMR_TMR32B1PWMC_PWM3_ENABLED              ((unsigned int) 0x00000008)
 #define TMR_TMR32B1PWMC_PWM3_DISABLED             ((unsigned int) 0x00000000)
 
@@ -3094,25 +3094,25 @@ static inline void NVIC_DisableIRQ(IRQn_t IRQn)
 ##############################################################################*/
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Causes a system reset
 
     Resets the system using the AIRCR register, and waits in a loop until reset
     occurs (since there may be a delay since the write to the register and the
 */
 /**************************************************************************/
-static inline void __reset()      
+static inline void __reset()
 {
-  __disable_irq(); 
-  SCB_AIRCR = SCB_AIRCR_VECTKEY_VALUE | SCB_AIRCR_SYSRESETREQ; 
-  while(1); 
+  __disable_irq();
+  SCB_AIRCR = SCB_AIRCR_VECTKEY_VALUE | SCB_AIRCR_SYSRESETREQ;
+  while(1);
 }
 
 static inline uint32_t __get_PSP(void)
 {
   uint32_t result=0;
 
-  __asm volatile ("MRS %0, psp\n\t" 
+  __asm volatile ("MRS %0, psp\n\t"
                   "MOV r0, %0 \n\t"
                   "BX  lr     \n\t"  : "=r" (result) );
   return(result);
@@ -3128,7 +3128,7 @@ static inline uint32_t __get_MSP(void)
 {
   uint32_t result=0;
 
-  __asm volatile ("MRS %0, msp\n\t" 
+  __asm volatile ("MRS %0, msp\n\t"
                   "MOV r0, %0 \n\t"
                   "BX  lr     \n\t"  : "=r" (result) );
   return(result);

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     main.c
     @author   K. Townsend (microBuilder.eu)
 
@@ -44,7 +44,7 @@
 #endif
 
 /**************************************************************************/
-/*! 
+/*!
     Main program entry point.  After reset, normal code execution will
     begin here.
 */
@@ -73,8 +73,8 @@ int main(void)
     }
 
     // Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h
-    #ifdef CFG_INTERFACE 
-      cmdPoll(); 
+    #ifdef CFG_INTERFACE
+      cmdPoll();
     #endif
   }
 
