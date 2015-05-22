@@ -109,5 +109,8 @@ void      	gpioIntDisable (uint32_t portNum, uint32_t bitPos);
 uint32_t  	gpioIntStatus (uint32_t portNum, uint32_t bitPos);
 void      	gpioIntClear (uint32_t portNum, uint32_t bitPos);
 void      	gpioSetPullup (volatile uint32_t *ioconRegister, gpioPullupMode_t mode);
+void    	gpioSet(const uint32_t portNum, const uint32_t bitPos);
+void    	gpioClear(const uint32_t portNum, const uint32_t bitPos);
+void    	gpioToggle(const uint32_t portNum, const uint32_t bitPos);
 
 #endif

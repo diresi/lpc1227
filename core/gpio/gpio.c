@@ -272,28 +272,10 @@ uint32_t gpioGetValue (uint32_t portNum, uint32_t bitPos)
 /**************************************************************************/
 inline void gpioSetValue (const uint32_t portNum, const uint32_t bitPos, const uint32_t bitVal)
 {
-  if (!_gpioInitialised) gpioInit();
-  REG32 *gpioout = &GPIO_GPIO0OUT;
-
-  switch (portNum)
-  {
-    case 0:
-      gpioout  = &GPIO_GPIO0OUT;
-      break;
-
-    case 1:
-      gpioout  = &GPIO_GPIO1OUT;
-      break;
-
-    case 2:
-      gpioout  = &GPIO_GPIO2OUT;
-      break;
-
-    default:
-      break;
-  }
-
-  *gpioout = (bitVal ? 1 : 0) << bitPos;
+  if (bitVal)
+    gpioSet(portNum, bitPos);
+  else
+    gpioClear(portNum, bitPos);
 }
 
 /**************************************************************************/
@@ -554,3 +536,81 @@ void gpioSetPullup (volatile uint32_t *ioconReg, gpioPullupMode_t mode)
 
   // ToDo: Re-enable interrupts?
 };
+
+inline void gpioSet(const uint32_t portNum, const uint32_t bitPos)
+{
+  if (!_gpioInitialised) gpioInit();
+  REG32 *sfr = &GPIO_GPIO0SET;
+
+  switch (portNum)
+  {
+    case 0:
+      sfr  = &GPIO_GPIO0SET;
+      break;
+
+    case 1:
+      sfr  = &GPIO_GPIO1SET;
+      break;
+
+    case 2:
+      sfr  = &GPIO_GPIO2SET;
+      break;
+
+    default:
+      break;
+  }
+
+  *sfr = 1 << bitPos;
+}
+
+inline void gpioClear(const uint32_t portNum, const uint32_t bitPos)
+{
+  if (!_gpioInitialised) gpioInit();
+  REG32 *sfr = &GPIO_GPIO0CLR;
+
+  switch (portNum)
+  {
+    case 0:
+      sfr  = &GPIO_GPIO0CLR;
+      break;
+
+    case 1:
+      sfr  = &GPIO_GPIO1CLR;
+      break;
+
+    case 2:
+      sfr  = &GPIO_GPIO2CLR;
+      break;
+
+    default:
+      break;
+  }
+
+  *sfr = 1 << bitPos;
+}
+
+inline void gpioToggle(const uint32_t portNum, const uint32_t bitPos)
+{
+  if (!_gpioInitialised) gpioInit();
+  REG32 *sfr = &GPIO_GPIO0NOT;
+
+  switch (portNum)
+  {
+    case 0:
+      sfr  = &GPIO_GPIO0NOT;
+      break;
+
+    case 1:
+      sfr  = &GPIO_GPIO1NOT;
+      break;
+
+    case 2:
+      sfr  = &GPIO_GPIO2NOT;
+      break;
+
+    default:
+      break;
+  }
+
+  *sfr = 1 << bitPos;
+}

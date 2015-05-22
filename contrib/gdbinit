@@ -1,9 +1,18 @@
+define read
+    x/1x $arg0
+end
+
+define write
+    set {int}$arg0 = $arg1
+    read $arg0
+end
+
 define read_SYSMEMREMAP
-    x/1x 0x40048000
+    read 0x40048000
 end
 
 define write_SYSMEMREMAP
-    set {int}0x40048000 = $arg0
+    write 0x40048000 = $arg0
     read_SYSMEMREMAP
 end
 
@@ -41,6 +50,13 @@ end
 
 define halt
     monitor halt
+end
+
+define reload
+    halt
+    file firmware.elf
+    flash_load
+    reset
 end
 
 layout split

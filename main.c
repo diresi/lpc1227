@@ -51,16 +51,23 @@
 /**************************************************************************/
 int main(void)
 {
-  // GPIO register definitions in lpc111x.h do _not_ match LPC1227
-  // *(GPIO1DIR = 0x50010020) = 0x10; // set PIO1_5 as output
-  // *(GPIO1SET = 0x5001000c) = 0x10; // clear LED
-  // *(GPIO1CLR = 0x50010010) = 0x10; // set LED
-
   // Configure cpu and mandatory peripherals
   systemInit();
 
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
+
+  // buzz a little bit :)
+  GPIO_GPIO1DIR |= GPIO_IO_P6;
+  GPIO_GPIO1MASK &= ~GPIO_IO_P6;
+  uint32_t x = 0;
+  while (x++ < 1000)
+  {
+    systickDelay(1);
+    gpioToggle(1, 6);
+  }
+  GPIO_GPIO1MASK |= GPIO_IO_P6;
+  GPIO_GPIO1DIR &= ~GPIO_IO_P6;
 
   while (1)
   {
@@ -69,7 +76,8 @@ int main(void)
     if (currentSecond != lastSecond)
     {
       lastSecond = currentSecond;
-      gpioSetValue(CFG_LED_PORT, CFG_LED_PIN, lastSecond % 2);
+      gpioToggle(CFG_LED_PORT, CFG_LED_PIN-1);
+      gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
     }
 
     // Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h
