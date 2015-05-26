@@ -92,9 +92,9 @@ gpioDirection_t;
 typedef enum gpioPullupMode_e
 {
   gpioPullupMode_Inactive = IOCON_COMMON_MODE_INACTIVE,
-  gpioPullupMode_PullDown = IOCON_COMMON_MODE_PULLDOWN,
+  //gpioPullupMode_PullDown = IOCON_COMMON_MODE_PULLDOWN,
   gpioPullupMode_PullUp =   IOCON_COMMON_MODE_PULLUP,
-  gpioPullupMode_Repeater = IOCON_COMMON_MODE_REPEATER
+  //gpioPullupMode_Repeater = IOCON_COMMON_MODE_REPEATER
 }
 gpioPullupMode_t;
 

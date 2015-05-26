@@ -46,19 +46,9 @@
 #include "core/ssp/ssp.h"
 
 // Nokia 3310 display via SPI
-#define LCD3310_MOSI_DIR    GPIO_GPIO0DIR
-#define LCD3310_MOSI_MASK   GPIO_IO_P17
-#define LCD_MOSI        GPIO_IO_P17
-#define LCD3310_SCK_DIR     GPIO_GPIO0DIR
-#define LCD3310_SCK_MASK    GPIO_IO_P14
-#define LCD_SCK         GPIO_IO_P14
-
 #define LCD_RES GPIO_IO_P13
 #define LCD_CS  GPIO_IO_P14
 #define LCD_DC  GPIO_IO_P15
-
-#define LCD_PIN_HIGH(bit)   GPIO_GPIO0SET = bit;
-#define LCD_PIN_LOW(bit)    GPIO_GPIO0CLR = bit;
 
 #define SEND_CMD                   0
 #define SEND_CHR                   1
@@ -179,31 +169,21 @@ void Delay(volatile unsigned long a) { a = 10*a; while (a!=0) a--; }
 
 void LCDSend(unsigned char data, unsigned char cd) {
 
-    GPIO_GPIO2CLR = LCD_CS;
+  GPIO_GPIO2CLR = LCD_CS;
 
-	if(cd == SEND_CHR) {
-      GPIO_GPIO2SET = LCD_DC;
-  	}
-  	else {
-      GPIO_GPIO2CLR = LCD_DC;
-  	}
+  if(cd == SEND_CHR) {
+    GPIO_GPIO2SET = LCD_DC;
+  }
+  else {
+    GPIO_GPIO2CLR = LCD_DC;
+  }
 
-    int i;
-	for(i = 0; i < 8; i++) {
-		if(data & 0x80) {
-			LCD_PIN_HIGH(LCD_MOSI);
-		} else {
-			LCD_PIN_LOW(LCD_MOSI);
-		}
-		Delay(1);
-		LCD_PIN_LOW(LCD_SCK);
-		Delay(1);
-		LCD_PIN_HIGH(LCD_SCK);
+  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
+  SSP_SSP0DR = data;
+  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
 
-		data <<= 1;
-	}
 
-    GPIO_GPIO2SET = LCD_CS;
+  GPIO_GPIO2SET = LCD_CS;
 }
 
 void LCDClear(void) {
@@ -240,16 +220,13 @@ void lcd_reset()
 
 void lcd_init()
 {
-  // P2_13 as output
+  sspInit(0, sspClockPolarity_High, sspClockPhase_RisingEdge);
+  // P2_13, 14 and 15 as output, not required, but initialization is nice
+  IOCON_PIO2_13 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_PULLUP;
+  IOCON_PIO2_14 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_PULLUP;
+  IOCON_PIO2_15 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_PULLUP;
   GPIO_GPIO2DIR |= (LCD_RES | LCD_CS | LCD_DC);
-
-  LCD3310_MOSI_DIR |= LCD3310_MOSI_MASK;
-  LCD3310_SCK_DIR |= LCD3310_SCK_MASK;
-
-  LCD_PIN_HIGH(LCD_SCK);
-  LCD_PIN_HIGH(LCD_MOSI);
-
-  GPIO_GPIO2SET = LCD_CS;
+  GPIO_GPIO2SET |= (LCD_RES | LCD_CS | LCD_DC);
 
   lcd_reset();
 
@@ -285,23 +262,22 @@ void LCDContrast(unsigned char contrast) {
 
 void LCDChrXY (unsigned char x, unsigned char y, unsigned char ch )
 {
-    unsigned int    index   = 0;
-    unsigned int    offset  = 0;
-    unsigned int    i       = 0;
+  unsigned int    index   = 0;
+  unsigned int    offset  = 0;
+  unsigned int    i       = 0;
 
-    // check for out off range
-    if ( x > LCD_X_RES ) return;
-    if ( y > LCD_Y_RES ) return;
+  // check for out off range
+  if ( x > LCD_X_RES ) return;
+  if ( y > LCD_Y_RES ) return;
 
-	index=(unsigned int)x*5+(unsigned int)y*84;
+  index=(unsigned int)x*5+(unsigned int)y*84;
 
-    for ( i = 0; i < 5; i++ )
-    {
-	  offset = FontLookup[ch - 32][i];
-	  LcdMemory[index] = offset;
-      index++;
-    }
-
+  for ( i = 0; i < 5; i++ )
+  {
+    offset = FontLookup[ch - 32][i];
+    LcdMemory[index] = offset;
+    index++;
+  }
 }
 void LCDChrXYInverse (unsigned char x, unsigned char y, unsigned char ch )
 {
@@ -342,6 +318,20 @@ void LCDStr(unsigned char row, const unsigned char *dataPtr, unsigned char inv )
   LCDUpdate();
 
 }
+
+
+void lcd_test()
+{
+  lcd_init();
+  LCDContrast(0x70);
+  LCDStr(0, (unsigned char *)"**** RISSNER ****", 0);
+  LCDStr(1, (unsigned char *)"++++ rissner ++++", 0);
+  LCDStr(2, (unsigned char *)"//// RISSNER ////", 0);
+  LCDStr(3, (unsigned char *)"**** rissner ****", 1);
+  LCDStr(4, (unsigned char *)"++++ RISSNER ++++", 1);
+  LCDStr(5, (unsigned char *)"//// rissner ////", 1);
+}
+
 /**************************************************************************/
 /*!
     Main program entry point.  After reset, normal code execution will
@@ -352,16 +342,6 @@ int main(void)
 {
   // Configure cpu and mandatory peripherals
   systemInit();
-  lcd_init();
-  LCDContrast(0x70);
-  LCDStr(0, (unsigned char *)"**** OLIMEX ****", 0);
-  LCDStr(1, (unsigned char *)"++++ OLIMEX ++++", 0);
-  LCDStr(2, (unsigned char *)"//// OLIMEX ////", 0);
-  LCDStr(3, (unsigned char *)"**** OLIMEX ****", 1);
-  LCDStr(4, (unsigned char *)"++++ OLIMEX ++++", 1);
-  LCDStr(5, (unsigned char *)"//// OLIMEX ////", 1);
-
-
 
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
@@ -378,6 +358,7 @@ int main(void)
   GPIO_GPIO1MASK |= GPIO_IO_P6;
   GPIO_GPIO1DIR &= ~GPIO_IO_P6;
 
+  lcd_test();
   while (1)
   {
     // Toggle LED once per second
@@ -387,6 +368,8 @@ int main(void)
       lastSecond = currentSecond;
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN-1);
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
+
+      /*lcd_test();*/
     }
 
     // Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h

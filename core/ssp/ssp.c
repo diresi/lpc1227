@@ -150,24 +150,19 @@ void sspInit (uint8_t portNum, sspClockPolarity_t polarity, sspClockPhase_t phas
     /* Divide by 2 (SSPCLKDIV also enables to SSP CLK) */
     SCB_SSP0CLKDIV = SCB_SSP0CLKDIV_DIV2;
 
-    /* Set P0.8 to SSP MISO */
-    IOCON_PIO0_8 &= ~IOCON_PIO0_8_FUNC_MASK;
-    IOCON_PIO0_8 |= IOCON_PIO0_8_FUNC_MISO0;
+    /* Set P0.16 to SSP MISO */
+    IOCON_PIO0_16 = IOCON_PIO0_16_FUNC_SSPMISO | IOCON_COMMON_MODE_PULLUP;
 
-    /* Set P0.9 to SSP MOSI */
-    IOCON_PIO0_9 &= ~IOCON_PIO0_9_FUNC_MASK;
-    IOCON_PIO0_9 |= IOCON_PIO0_9_FUNC_MOSI0;
+    /* Set P0.17 to SSP MOSI */
+    IOCON_PIO0_17 = IOCON_PIO0_17_FUNC_SSPMOSI | IOCON_COMMON_MODE_PULLUP;
 
-    /* Set 0.6 to SSP SCK (2.11 and 0.10 can also be used) */
-    IOCON_SCKLOC = IOCON_SCKLOC_SCKPIN_PIO0_6;
-    IOCON_PIO0_6 = IOCON_PIO0_6_FUNC_SCK;
+    /* Set 0.14 to SSP SCK */
+    IOCON_PIO0_14 = IOCON_PIO0_14_FUNC_SSPSCK | IOCON_COMMON_MODE_PULLUP;
 
-    /* Set P0.2/SSEL to GPIO output and high */
-    IOCON_PIO0_2 &= ~IOCON_PIO0_2_FUNC_MASK;
-    IOCON_PIO0_2 |= IOCON_PIO0_2_FUNC_GPIO;
-    gpioSetDir(SSP0_CSPORT, SSP0_CSPIN, 1);
-    gpioSetValue(SSP0_CSPORT, SSP0_CSPIN, 1);
-    gpioSetPullup(&IOCON_PIO0_2, gpioPullupMode_Inactive);  // Board has external pull-up
+    /* Set P0.15/SSEL to GPIO output and high */
+    IOCON_PIO0_15 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_INACTIVE;
+    GPIO_GPIO0DIR |= GPIO_IO_P15;
+    GPIO_GPIO0SET = GPIO_IO_P15;
 
     /* (PCLK / (CPSDVSR × [SCR+1])) = (36000000 / (2 x [8 + 1])) = 2.00 MHz */
     uint32_t configReg = ( SSP_SSP0CR0_DSS_8BIT    // Data size = 8-bit

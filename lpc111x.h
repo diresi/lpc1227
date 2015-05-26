@@ -921,14 +921,35 @@
 #define IOCON_BASE_ADDRESS                        (0x40044000)
 
 #define IOCON_COMMON_FUNC_MASK                    ((unsigned int) 0x00000007)
-#define IOCON_COMMON_MODE_MASK                    ((unsigned int) 0x00000018)
+#define IOCON_COMMON_FUNC_GPIO                    ((unsigned int) 0x00000000)
+#define IOCON_COMMON_MODE_MASK                    ((unsigned int) 0x00000010)
 #define IOCON_COMMON_MODE_INACTIVE                ((unsigned int) 0x00000000)
-#define IOCON_COMMON_MODE_PULLDOWN                ((unsigned int) 0x00000008)
 #define IOCON_COMMON_MODE_PULLUP                  ((unsigned int) 0x00000010)
-#define IOCON_COMMON_MODE_REPEATER                ((unsigned int) 0x00000018)
-#define IOCON_COMMON_HYS_MASK                     ((unsigned int) 0x00000020)
-#define IOCON_COMMON_HYS_DISABLE                  ((unsigned int) 0x00000000)
-#define IOCON_COMMON_HYS_ENABLE                   ((unsigned int) 0x00000020)
+
+#define IOCON_PIO0_10                              (*(pREG32 (0x40044090)))
+#define IOCON_PIO0_10_FUNC_I2CSCL                  ((unsigned int) 0x00000002)
+
+#define IOCON_PIO0_11                              (*(pREG32 (0x40044094)))
+#define IOCON_PIO0_11_FUNC_I2CSDA                  ((unsigned int) 0x00000002)
+
+#define IOCON_PIO0_14                              (*(pREG32 (0x400440A0)))
+#define IOCON_PIO0_14_FUNC_SSPSCK                  ((unsigned int) 0x00000002)
+
+#define IOCON_PIO0_15                              (*(pREG32 (0x400440A4)))
+#define IOCON_PIO0_15_FUNC_SSPSSEL                 ((unsigned int) 0x00000002)
+
+#define IOCON_PIO0_16                              (*(pREG32 (0x400440A8)))
+#define IOCON_PIO0_16_FUNC_SSPMISO                 ((unsigned int) 0x00000002)
+
+#define IOCON_PIO0_17                              (*(pREG32 (0x400440AC)))
+#define IOCON_PIO0_17_FUNC_SSPMOSI                 ((unsigned int) 0x00000002)
+
+#define IOCON_PIO2_13                              (*(pREG32 (0x40044030)))
+#define IOCON_PIO2_13_FUNC_TXD1                    ((unsigned int) 0x00000003)
+
+#define IOCON_PIO2_14                              (*(pREG32 (0x40044034)))
+
+#define IOCON_PIO2_15                              (*(pREG32 (0x40044038)))
 
 #define IOCON_nRESET_PIO0_0                       (*(pREG32 (0x4004400C)))
 #define IOCON_nRESET_PIO0_0_FUNC_MASK             ((unsigned int) 0x00000007)

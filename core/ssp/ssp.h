@@ -46,7 +46,7 @@
 #define SSP_MAX_TIMEOUT         0xFF
 
 #define SSP0_CSPORT             0
-#define SSP0_CSPIN              2
+#define SSP0_CSPIN              15
 
 #define SSP1_CSPORT             2
 #define SSP1_CSPIN              0
