@@ -3,6 +3,7 @@
 *.bin
 *.elf
 *.hex
+tags
 lpc1xxx/memory.ld
 firmware.sym
 firmware.nm

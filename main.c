@@ -38,6 +38,7 @@
 
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
+#include <string.h>
 
 #ifdef CFG_INTERFACE
   #include "core/cmd/cmd.h"
@@ -187,14 +188,7 @@ void LCDSend(unsigned char data, unsigned char cd) {
 }
 
 void LCDClear(void) {
-
-  int i;
-
-  // loop all cashe array
-  for (i=0; i<LCD_CACHE_SIZE; i++)
-  {
-     LcdMemory[i] = 0x00;
-  }
+  memset(LcdMemory, 0, LCD_CACHE_SIZE);
 }
 
 void LCDUpdate ( void )
@@ -359,8 +353,14 @@ int main(void)
   GPIO_GPIO1DIR &= ~GPIO_IO_P6;
 
   lcd_test();
+
+  int cnt = 0;
+  char buf[16];
+  memset(buf, 0, 16);
   while (1)
   {
+    cnt++;
+
     // Toggle LED once per second
     currentSecond = systickGetSecondsActive();
     if (currentSecond != lastSecond)
@@ -370,12 +370,15 @@ int main(void)
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
 
       /*lcd_test();*/
+      sprintf(buf, "c: %d -", cnt);
+      LCDStr(0, buf, 1);
+      cnt = 0;
     }
 
-    // Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h
-    #ifdef CFG_INTERFACE
-      cmdPoll();
-    #endif
+    /*// Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h*/
+    /*#ifdef CFG_INTERFACE*/
+    /*  cmdPoll();*/
+    /*#endif*/
   }
 
   return 0;
