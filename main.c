@@ -46,7 +46,13 @@
 
 #include "core/ssp/ssp.h"
 
-// Nokia 3310 display via SPI
+// olimex LPC_P1227 buttons
+#define BTN_WKUP  GPIO_IO_P3    // GPIO_GPIO1
+#define BTN_USER1 GPIO_IO_P12   // GPIO_GPIO2
+#define BTN_USER2 GPIO_IO_P11   // GPIO_GPIO2
+#define BTN_USER3 GPIO_IO_P10   // GPIO_GPIO2
+
+// Nokia 3310 display via SPI  // GPIO_GPIO2
 #define LCD_RES GPIO_IO_P13
 #define LCD_CS  GPIO_IO_P14
 #define LCD_DC  GPIO_IO_P15
@@ -327,6 +333,24 @@ void lcd_test()
 }
 
 /**************************************************************************/
+void btnInit(void)
+{
+    GPIO_GPIO1DIR &= ~BTN_WKUP;
+    GPIO_GPIO2DIR &= ~(BTN_USER1 | BTN_USER2 | BTN_USER3);
+}
+
+uint8_t btnState(void)
+{
+    uint8_t state = 0;
+    state |= (GPIO_GPIO1PIN & BTN_WKUP)  ? 0 : 0x1;
+    state |= (GPIO_GPIO2PIN & BTN_USER1) ? 0 : 0x2;
+    state |= (GPIO_GPIO2PIN & BTN_USER2) ? 0 : 0x4;
+    state |= (GPIO_GPIO2PIN & BTN_USER3) ? 0 : 0x8;
+    return state;
+}
+/**************************************************************************/
+
+/**************************************************************************/
 /*!
     Main program entry point.  After reset, normal code execution will
     begin here.
@@ -336,6 +360,7 @@ int main(void)
 {
   // Configure cpu and mandatory peripherals
   systemInit();
+  btnInit();
 
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
@@ -355,7 +380,7 @@ int main(void)
   lcd_test();
 
   int cnt = 0;
-  char buf[16];
+  unsigned char buf[16];
   memset(buf, 0, 16);
   while (1)
   {
@@ -370,9 +395,13 @@ int main(void)
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
 
       /*lcd_test();*/
-      sprintf(buf, "c: %d -", cnt);
-      LCDStr(0, buf, 1);
+      sprintf((char *)buf, "c: %d -", cnt);
+      LCDStr(0, buf, 0);
       cnt = 0;
+
+
+      sprintf((char *)buf, "b: %02x -", btnState());
+      LCDStr(1, buf, 0);
     }
 
     /*// Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h*/
