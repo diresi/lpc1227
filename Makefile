@@ -191,3 +191,9 @@ gdb:
 	${GDB} \
 		--eval-command "source ${CONTRIB}/gdbinit" \
 		${OUTFILE}.elf
+
+reload:
+	${GDB} -q -batch \
+		--eval-command "source ${CONTRIB}/gdbinit" \
+		--eval-command "reload" \
+		${OUTFILE}.elf

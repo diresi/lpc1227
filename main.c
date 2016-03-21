@@ -52,7 +52,73 @@
 #define BTN_USER2 GPIO_IO_P11   // GPIO_GPIO2
 #define BTN_USER3 GPIO_IO_P10   // GPIO_GPIO2
 
-// Nokia 3310 display via SPI  // GPIO_GPIO2
+// MS5803
+#define MS_CS GPIO_IO_P19
+
+uint8_t ms_send(uint8_t data)
+{
+  GPIO_GPIO0CLR = MS_CS;
+
+  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
+  SSP_SSP0DR = data;
+  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
+
+  GPIO_GPIO0SET = MS_CS;
+  return SSP_SSP0DR;
+}
+
+void ms_reset(void)
+{
+  ms_send(0x1e);
+}
+
+uint16_t ms_consts[8];
+void ms_read_prom(void)
+{
+  for (int i=0; i<8; ++i)
+  {
+    ms_consts[i] = 0x0000;
+    ms_send(0xa0 | 2*i); // read const #i
+    ms_consts[i] = ms_send(0) << 8;
+    ms_consts[i] |= ms_send(0);
+  }
+  //verify_crc4(ms_consts);
+}
+
+void ms_init(void)
+{
+  GPIO_GPIO0DIR |= MS_CS;
+  ms_reset();
+  Delay(100000);
+  ms_read_prom();
+}
+
+uint32_t ms_adc_cmd(uint8_t cmd) 
+{
+  // osr: 0 = 256, 1 = 512, 2 = 1024, 3 = 2048, 4 = 4096
+  int osr = 4;
+  ms_send(cmd | 2 * osr);
+  Delay(1000000); // osr 4096 => 10ms timeout
+
+  uint32_t val = 0;
+  ms_send(0); // read dummy byte (msb)
+  val |= ms_send(0) << 16;
+  val |= ms_send(0) <<  8;
+  val |= ms_send(0) <<  0;
+  return val;
+}
+
+uint32_t ms_pressure()
+{
+  return ms_adc_cmd(0x40);
+}
+
+uint32_t ms_temperature()
+{
+  return ms_adc_cmd(0x50);
+}
+
+// Nokia 3310 display via SPI  // GPIO_GPIO2 13, 14, 15
 #define LCD_RES GPIO_IO_P13
 #define LCD_CS  GPIO_IO_P14
 #define LCD_DC  GPIO_IO_P15
@@ -382,6 +448,9 @@ int main(void)
   int cnt = 0;
   unsigned char buf[16];
   memset(buf, 0, 16);
+
+  ms_init();
+
   while (1)
   {
     cnt++;
@@ -399,9 +468,14 @@ int main(void)
       LCDStr(0, buf, 0);
       cnt = 0;
 
-
+      // btn state
       sprintf((char *)buf, "b: %02x -", btnState());
       LCDStr(1, buf, 0);
+
+      sprintf((char *)buf, "t: %d -", ms_temperature());
+      LCDStr(2, buf, 0);
+      sprintf((char *)buf, "p: %d -", ms_pressure());
+      LCDStr(3, buf, 0);
     }
 
     /*// Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h*/
