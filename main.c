@@ -46,6 +46,8 @@
 
 #include "core/ssp/ssp.h"
 
+void Delay(volatile unsigned long);
+
 // olimex LPC_P1227 buttons
 #define BTN_WKUP  GPIO_IO_P3    // GPIO_GPIO1
 #define BTN_USER1 GPIO_IO_P12   // GPIO_GPIO2
@@ -55,32 +57,30 @@
 // MS5803
 #define MS_CS GPIO_IO_P19
 
-uint8_t ms_send(uint8_t data)
-{
-  GPIO_GPIO0CLR = MS_CS;
-
-  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
-  SSP_SSP0DR = data;
-  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
-
-  GPIO_GPIO0SET = MS_CS;
-  return SSP_SSP0DR;
-}
-
 void ms_reset(void)
 {
-  ms_send(0x1e);
+  //ms_send(0x1e);
+  uint8_t buf[] = {0x1e};
+  GPIO_GPIO0CLR = MS_CS;
+  sspSend(0, buf, 1);
+  Delay(800); // wait ~2.8ms
+  GPIO_GPIO0SET = MS_CS;
 }
 
 uint16_t ms_consts[8];
 void ms_read_prom(void)
 {
+  uint8_t buf[1];
+
   for (int i=0; i<8; ++i)
   {
     ms_consts[i] = 0x0000;
-    ms_send(0xa0 | 2*i); // read const #i
-    ms_consts[i] = ms_send(0) << 8;
-    ms_consts[i] |= ms_send(0);
+    buf[0] = 0xa0 | 2*i;
+
+    GPIO_GPIO0CLR = MS_CS;
+    sspSend(0, buf, 1);
+    sspReceive(0, (uint8_t *)&ms_consts[i], 2);
+    GPIO_GPIO0SET = MS_CS;
   }
   //verify_crc4(ms_consts);
 }
@@ -89,7 +89,6 @@ void ms_init(void)
 {
   GPIO_GPIO0DIR |= MS_CS;
   ms_reset();
-  Delay(100000);
   ms_read_prom();
 }
 
@@ -97,14 +96,31 @@ uint32_t ms_adc_cmd(uint8_t cmd)
 {
   // osr: 0 = 256, 1 = 512, 2 = 1024, 3 = 2048, 4 = 4096
   int osr = 4;
-  ms_send(cmd | 2 * osr);
-  Delay(1000000); // osr 4096 => 10ms timeout
+
+  uint8_t buf[3] = {0};
+
+  buf[0] = cmd | 2*osr;
+  GPIO_GPIO0CLR = MS_CS;
+  sspSend(0, buf, 1);
+
+  // osr 4096 => 10.0ms timeout
+  // osr  256 =>  0.6ms timeout
+  Delay(4000); // wait ~1.2ms
+  GPIO_GPIO0SET = MS_CS;
+
+  Delay(200); // wait ~0.6ms
+  GPIO_GPIO0CLR = MS_CS;
 
   uint32_t val = 0;
-  ms_send(0); // read dummy byte (msb)
-  val |= ms_send(0) << 16;
-  val |= ms_send(0) <<  8;
-  val |= ms_send(0) <<  0;
+
+  buf[0] = 0;
+  sspSend(0, buf, 1);
+  sspReceive(0, buf, 3);
+  GPIO_GPIO0SET = MS_CS;
+
+  val |= buf[0] << 16;
+  val |= buf[1] <<  8;
+  val |= buf[2] <<  0;
   return val;
 }
 
@@ -251,11 +267,7 @@ void LCDSend(unsigned char data, unsigned char cd) {
     GPIO_GPIO2CLR = LCD_DC;
   }
 
-  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
-  SSP_SSP0DR = data;
-  while(SSP_SSP0SR & SSP_SSP0SR_BSY_BUSY);
-
-
+  sspSend(0, &data, 1);
   GPIO_GPIO2SET = LCD_CS;
 }
 
@@ -435,7 +447,7 @@ int main(void)
   GPIO_GPIO1DIR |= GPIO_IO_P6;
   GPIO_GPIO1MASK &= ~GPIO_IO_P6;
   uint32_t x = 0;
-  while (x++ < 1000)
+  while (x++ < 10)
   {
     systickDelay(1);
     gpioToggle(1, 6);
@@ -472,16 +484,11 @@ int main(void)
       sprintf((char *)buf, "b: %02x -", btnState());
       LCDStr(1, buf, 0);
 
-      sprintf((char *)buf, "t: %d -", ms_temperature());
+      sprintf((char *)buf, "t: %d -", (int) ms_temperature());
       LCDStr(2, buf, 0);
-      sprintf((char *)buf, "p: %d -", ms_pressure());
+      sprintf((char *)buf, "p: %d -", (int) ms_pressure());
       LCDStr(3, buf, 0);
     }
-
-    /*// Poll for CLI input if CFG_INTERFACE is enabled in projectconfig.h*/
-    /*#ifdef CFG_INTERFACE*/
-    /*  cmdPoll();*/
-    /*#endif*/
   }
 
   return 0;

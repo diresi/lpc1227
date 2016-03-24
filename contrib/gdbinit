@@ -20,6 +20,10 @@ define memmap
     read_SYSMEMREMAP
 end
 
+define sspSR
+    read 0x4004000C
+end
+
 define memmap_bootloader
     write_SYSMEMREMAP 0
 end
