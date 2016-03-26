@@ -47,6 +47,8 @@
 #include "core/ssp/ssp.h"
 
 void Delay(volatile unsigned long);
+void assert_crc4(uint16_t *buf, uint16_t len);
+void panic(void);
 
 // olimex LPC_P1227 buttons
 #define BTN_WKUP  GPIO_IO_P3    // GPIO_GPIO1
@@ -82,7 +84,7 @@ void ms_read_prom(void)
     sspReceive(0, (uint8_t *)&ms_consts[i], 2);
     GPIO_GPIO0SET = MS_CS;
   }
-  //verify_crc4(ms_consts);
+  assert_crc4(ms_consts, sizeof(ms_consts));
 }
 
 void ms_init(void)
@@ -428,6 +430,45 @@ uint8_t btnState(void)
 }
 /**************************************************************************/
 
+void panic(void)
+{
+    unsigned char *panic = "panic";
+    LCDStr(0, panic, 1);
+    /*while (1);*/
+}
+
+uint16_t crc4_update_remainder(uint16_t n_rem, uint8_t b)
+{
+    n_rem ^= b;
+    for (uint8_t i=0; i<8; ++i) {
+        if (n_rem & 0x8000)
+            n_rem = (n_rem << 1) ^ 0x3000;
+        else
+            n_rem <<= 1;
+    }
+    return n_rem;
+}
+
+uint8_t verify_crc4(uint16_t *buf, uint16_t len)
+{
+    uint16_t n_rem = 0x0000;
+    for (uint16_t i=0; i<len; ++i) {
+        n_rem = crc4_update_remainder(n_rem, 0xFF & (buf[i] >> 8));
+        n_rem = crc4_update_remainder(n_rem, 0xFF & buf[i]);
+    }
+    n_rem = 0x000F & (n_rem >> 12);
+    char xxx[10];
+    sprintf((char *)xxx, "c: %02x -", (int) n_rem);
+    LCDStr(3, xxx, 1);
+    return n_rem & 0xFF;
+}
+
+void assert_crc4(uint16_t *buf, uint16_t len)
+{
+    if (verify_crc4(buf, len))
+        panic();
+}
+
 /**************************************************************************/
 /*!
     Main program entry point.  After reset, normal code execution will
@@ -488,6 +529,7 @@ int main(void)
       LCDStr(2, buf, 0);
       sprintf((char *)buf, "p: %d -", (int) ms_pressure());
       LCDStr(3, buf, 0);
+  assert_crc4(ms_consts, sizeof(ms_consts));
     }
   }
 
