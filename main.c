@@ -65,26 +65,30 @@ void ms_reset(void)
   uint8_t buf[] = {0x1e};
   GPIO_GPIO0CLR = MS_CS;
   sspSend(0, buf, 1);
-  Delay(800); // wait ~2.8ms
+  Delay(10000); // wait ~2.8ms
   GPIO_GPIO0SET = MS_CS;
 }
 
 uint16_t ms_consts[8];
 void ms_read_prom(void)
 {
-  uint8_t buf[1];
+  uint8_t buf[2];
 
   for (int i=0; i<8; ++i)
   {
-    ms_consts[i] = 0x0000;
     buf[0] = 0xa0 | 2*i;
 
     GPIO_GPIO0CLR = MS_CS;
+    Delay(10000);
     sspSend(0, buf, 1);
-    sspReceive(0, (uint8_t *)&ms_consts[i], 2);
+
+    sspReceive(0, buf, 2);
+    ms_consts[i] = (buf[0] << 8) | buf[1];
     GPIO_GPIO0SET = MS_CS;
+
+    Delay(20000);
   }
-  assert_crc4(ms_consts, sizeof(ms_consts));
+  assert_crc4(ms_consts, sizeof(ms_consts)/sizeof(ms_consts[0]));
 }
 
 void ms_init(void)
@@ -432,8 +436,8 @@ uint8_t btnState(void)
 
 void panic(void)
 {
-    unsigned char *panic = "panic";
-    LCDStr(0, panic, 1);
+    char panic[] = "panic";
+    LCDStr(0, (unsigned char *)panic, 1);
     /*while (1);*/
 }
 
@@ -457,16 +461,22 @@ uint8_t verify_crc4(uint16_t *buf, uint16_t len)
         n_rem = crc4_update_remainder(n_rem, 0xFF & buf[i]);
     }
     n_rem = 0x000F & (n_rem >> 12);
-    char xxx[10];
-    sprintf((char *)xxx, "c: %02x -", (int) n_rem);
-    LCDStr(3, xxx, 1);
-    return n_rem & 0xFF;
+    return n_rem;
 }
 
 void assert_crc4(uint16_t *buf, uint16_t len)
 {
-    if (verify_crc4(buf, len))
+    uint8_t crc = verify_crc4(buf, len);
+    if (crc != (buf[len-1] & 0x000F)) {
+        char buf[16];
+        sprintf(buf, "%i 0x%02x  --", len, crc);
+        LCDStr(5, (unsigned char*)buf, 0);
         panic();
+    }
+    else {
+    char ok[] = "ok";
+    LCDStr(0, (unsigned char *)ok, 1);
+    }
 }
 
 /**************************************************************************/
@@ -475,6 +485,32 @@ void assert_crc4(uint16_t *buf, uint16_t len)
     begin here.
 */
 /**************************************************************************/
+void ms_update_screen()
+{
+  unsigned char buf[16];
+  uint32_t d1 = ms_temperature();
+  uint32_t d2 = ms_pressure();
+
+  uint32_t dT = d2 - (ms_consts[5] << 8);
+  uint32_t t = 2000 + ((dT * ms_consts[6]) >> 23);
+
+  // 1st order temperature compensation
+  uint32_t off = (ms_consts[2] << 16) + ((ms_consts[4] * dT) >> 7);
+  uint32_t sens = (ms_consts[1] << 15) + ((ms_consts[3] * dT) >> 8);
+
+  // FIXME: 2nd order compensation
+
+  uint32_t p = ((d1 * (sens / (1 << 21))) - off) / (1 << 15);
+
+  double dt = ((double) t) / 100.;
+  sprintf((char *)buf, "T: %d.%d", (int)dt, (int)(100* (dt - ((int)dt))));
+  LCDStr(2, buf, 0);
+
+
+  double dp = ((double) p) / 10.;
+  sprintf((char *)buf, "P: %d.%d", (int)dp, (int)(100* (dp - ((int)dp))));
+  LCDStr(3, buf, 0);
+}
 int main(void)
 {
   // Configure cpu and mandatory peripherals
@@ -497,6 +533,8 @@ int main(void)
   GPIO_GPIO1DIR &= ~GPIO_IO_P6;
 
   lcd_test();
+  Delay(100000);
+  LCDClear();
 
   int cnt = 0;
   unsigned char buf[16];
@@ -516,20 +554,25 @@ int main(void)
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN-1);
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
 
-      /*lcd_test();*/
-      sprintf((char *)buf, "c: %d -", cnt);
+      LCDClear();
+
+      sprintf((char *)buf, "C: %d", cnt);
       LCDStr(0, buf, 0);
       cnt = 0;
 
       // btn state
-      sprintf((char *)buf, "b: %02x -", btnState());
+      sprintf((char *)buf, "B: %02x", btnState());
       LCDStr(1, buf, 0);
 
-      sprintf((char *)buf, "t: %d -", (int) ms_temperature());
-      LCDStr(2, buf, 0);
-      sprintf((char *)buf, "p: %d -", (int) ms_pressure());
-      LCDStr(3, buf, 0);
-  assert_crc4(ms_consts, sizeof(ms_consts));
+      ms_update_screen();
+
+      /*
+      ms_read_prom();
+      for (int i = 0; i < 8; i+=2) {
+        sprintf((char *)buf, "0x%04x 0x%04x    ", ms_consts[i], ms_consts[i+1]);
+        LCDStr(1+i/2, buf, 0);
+      }
+      */
     }
   }
 
