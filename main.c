@@ -149,30 +149,83 @@ void ms_display_prom()
   }
 }
 
+void snprintff(char *buf, int size, double f)
+{
+  int32_t fi = f;
+  uint8_t digits = ((f-fi) * 100);
+  snprintf(buf, size, "%d.%d", fi, digits);
+}
+
+int64_t sqr(int32_t x)
+{
+  return x * x;
+}
+
 void ms_update_screen()
 {
   unsigned char buf[20];
-  uint32_t d1 = ms_temperature();
-  uint32_t d2 = ms_pressure();
 
-  uint32_t dT = d2 - (ms_consts[5] << 8);
-  uint32_t t = 2000 + ((dT * ms_consts[6]) >> 23);
+  uint32_t d1 = ms_pressure();
+  uint32_t d2 = ms_temperature();
 
-  // 1st order temperature compensation
-  uint32_t off = (ms_consts[2] << 16) + ((ms_consts[4] * dT) >> 7);
-  uint32_t sens = (ms_consts[1] << 15) + ((ms_consts[3] * dT) >> 8);
+#ifdef MS5803_FAKE_VALUES
+  // fake settings from user manual
+  // should yield (after 1st order compensation):
+  //   T =  2015 (20.15 °C)
+  //   P = 10005 (1000.5 mbar)
+  ms_consts[1] = 46546;
+  ms_consts[2] = 42845;
+  ms_consts[3] = 29751;
+  ms_consts[4] = 29457;
+  ms_consts[5] = 32745;
+  ms_consts[6] = 29059;
+  d1 = 4311550;
+  d2 = 8387300;
+#endif // MS5803_FAKE_VALUES
 
-  // FIXME: 2nd order compensation
+  int32_t dT = d2 - (ms_consts[5] << 8);
+  int32_t T = 2000 + ((dT * ms_consts[6]) >> 23);
 
-  uint32_t p = ((d1 * (sens / (1 << 21))) - off) / (1 << 15);
+  // 1st order pressure compensation, pay attention to size of intermediate values
+  int64_t off  = ((int64_t)ms_consts[2] << 16) + ((ms_consts[4] * dT) / (1 << 7));
+  int64_t sens = ((int64_t)ms_consts[1] << 15) + ((ms_consts[3] * dT) / (1 << 8));
 
-  double dt = ((double) t) / 100.;
-  snprintf((char *)buf, 20, "T: %d.%d", (int)dt, (int)(100* (dt - ((int)dt))));
+  snprintf(buf, 20, "raw T: %d", T);
+  LCDStr(5, buf, 0);
+
+  // 2nd order compensation, could be skipped ...
+  if (1) {
+    int32_t t2;
+    int64_t off2, sens2;
+    if (T < 2000) { // T < 20°C -> low temperature
+      t2    = ((int64_t)3 * sqr(dT)) >> 33;
+      off2  = ((int64_t)3 * sqr(T - 2000)) >> 1;
+      sens2 = ((int64_t)5 * sqr(T - 2000)) >> 3;
+
+      if (T < 1500) { // T < 15°C -> very low temperature
+        off2  = off2  + (int64_t)7 * sqr(T + 1500);
+        sens2 = sens2 + (int64_t)4 * sqr(T + 1500);
+      }
+    }
+    else { // T >= 20°C -> high temperature
+      t2   = ((int64_t)7 * sqr(dT)) >> 37;
+      off2 = ((int64_t)1 * sqr(T - 2000)) >> 4;
+      sens2 = 0;
+    }
+    T = T - t2;
+    off = off - off2;
+    sens = sens - sens2;
+  }
+
+  // Note: needs double conversion to reduce division error
+  int32_t P = (((double) d1 * sens) / (1 << 21) - off) / (1 << 15);
+
+  snprintf((char *)buf, 20, "T: ");
+  snprintff((char *)buf+3, 20-3, T / 100.);
   LCDStr(2, buf, 0);
 
-
-  double dp = ((double) p) / 10.;
-  snprintf((char *)buf, 20, "P: %d.%d", (int)dp, (int)(100* (dp - ((int)dp))));
+  snprintf((char *)buf, 20, "P: ");
+  snprintff((char *)buf+3, 20-3, P / 10.);
   LCDStr(3, buf, 0);
 }
 
@@ -339,6 +392,18 @@ void lcd_reset()
   Delay(1000);
 }
 
+void LCDContrast(unsigned char contrast) {
+
+    //  LCD Extended Commands.
+    LCDSend( 0x21, SEND_CMD );
+
+    // Set LCD Vop (Contrast).
+    LCDSend( 0x80 | contrast, SEND_CMD );
+
+    //  LCD Standard Commands, horizontal addressing mode.
+    LCDSend( 0x20, SEND_CMD );
+}
+
 void lcd_init()
 {
   // P2_13, 14 and 15 as output, not required, but initialization is nice
@@ -364,20 +429,9 @@ void lcd_init()
 
 
    // Clear and Update
+  LCDContrast(0x70);
   LCDClear();
   LCDUpdate();
-}
-
-void LCDContrast(unsigned char contrast) {
-
-    //  LCD Extended Commands.
-    LCDSend( 0x21, SEND_CMD );
-
-    // Set LCD Vop (Contrast).
-    LCDSend( 0x80 | contrast, SEND_CMD );
-
-    //  LCD Standard Commands, horizontal addressing mode.
-    LCDSend( 0x20, SEND_CMD );
 }
 
 void LCDChrXY (unsigned char x, unsigned char y, unsigned char ch )
@@ -442,7 +496,6 @@ void LCDStr(unsigned char row, const unsigned char *dataPtr, unsigned char inv )
 
 void lcd_test()
 {
-  LCDContrast(0x70);
   LCDStr(0, (unsigned char *)"**** RISSNER ****", 0);
   LCDStr(1, (unsigned char *)"++++ rissner ++++", 0);
   LCDStr(2, (unsigned char *)"//// RISSNER ////", 0);
@@ -545,13 +598,13 @@ int main(void)
   lcd_init();
   ms_init();
 
-  lcd_test();
-  Delay(1000000);
-  LCDClear();
+  //lcd_test();
+  //Delay(1000000);
+  //LCDClear();
 
-  ms_display_prom();
-  Delay(1000000);
-  LCDClear();
+  //ms_display_prom();
+  //Delay(1000000);
+  //LCDClear();
 
   int cnt = 0;
   unsigned char buf[20];
@@ -563,13 +616,13 @@ int main(void)
 
     // Toggle LED once per second
     currentSecond = systickGetSecondsActive();
-    if (currentSecond != lastSecond)
+    if (1 || currentSecond != lastSecond)
     {
       lastSecond = currentSecond;
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN-1);
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
 
-      LCDClear();
+      //LCDClear();
 
       snprintf((char *)buf, 20, "C: %d", cnt);
       LCDStr(0, buf, 0);
