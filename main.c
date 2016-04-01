@@ -49,6 +49,7 @@
 void Delay(volatile unsigned long);
 void assert_crc4(uint16_t *buf, uint16_t len);
 void panic(void);
+void LCDStr(unsigned char row, const unsigned char *dataPtr, unsigned char inv );
 
 // olimex LPC_P1227 buttons
 #define BTN_WKUP  GPIO_IO_P3    // GPIO_GPIO1
@@ -56,6 +57,7 @@ void panic(void);
 #define BTN_USER2 GPIO_IO_P11   // GPIO_GPIO2
 #define BTN_USER3 GPIO_IO_P10   // GPIO_GPIO2
 
+////////////////////////////////////////////////////////////////////////////////
 // MS5803
 #define MS_CS GPIO_IO_P19
 
@@ -79,14 +81,11 @@ void ms_read_prom(void)
     buf[0] = 0xa0 | 2*i;
 
     GPIO_GPIO0CLR = MS_CS;
-    Delay(10000);
     sspSend(0, buf, 1);
 
     sspReceive(0, buf, 2);
     ms_consts[i] = (buf[0] << 8) | buf[1];
     GPIO_GPIO0SET = MS_CS;
-
-    Delay(20000);
   }
   assert_crc4(ms_consts, sizeof(ms_consts)/sizeof(ms_consts[0]));
 }
@@ -140,6 +139,44 @@ uint32_t ms_temperature()
   return ms_adc_cmd(0x50);
 }
 
+void ms_display_prom()
+{
+  unsigned char buf[18] = {0};
+
+  for (int i = 0; i < 8; i+=2) {
+    snprintf((char *)buf, sizeof(buf)/sizeof(buf[0]), "0x%04x 0x%04x    ", ms_consts[i], ms_consts[i+1]);
+    LCDStr(1+i/2, buf, 0);
+  }
+}
+
+void ms_update_screen()
+{
+  unsigned char buf[20];
+  uint32_t d1 = ms_temperature();
+  uint32_t d2 = ms_pressure();
+
+  uint32_t dT = d2 - (ms_consts[5] << 8);
+  uint32_t t = 2000 + ((dT * ms_consts[6]) >> 23);
+
+  // 1st order temperature compensation
+  uint32_t off = (ms_consts[2] << 16) + ((ms_consts[4] * dT) >> 7);
+  uint32_t sens = (ms_consts[1] << 15) + ((ms_consts[3] * dT) >> 8);
+
+  // FIXME: 2nd order compensation
+
+  uint32_t p = ((d1 * (sens / (1 << 21))) - off) / (1 << 15);
+
+  double dt = ((double) t) / 100.;
+  snprintf((char *)buf, 20, "T: %d.%d", (int)dt, (int)(100* (dt - ((int)dt))));
+  LCDStr(2, buf, 0);
+
+
+  double dp = ((double) p) / 10.;
+  snprintf((char *)buf, 20, "P: %d.%d", (int)dp, (int)(100* (dp - ((int)dp))));
+  LCDStr(3, buf, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Nokia 3310 display via SPI  // GPIO_GPIO2 13, 14, 15
 #define LCD_RES GPIO_IO_P13
 #define LCD_CS  GPIO_IO_P14
@@ -288,9 +325,9 @@ void LCDUpdate ( void )
   for(y=0; y<48 / 8; y++) {
     LCDSend(0x80, SEND_CMD );
     LCDSend(0x40 | y, SEND_CMD );
-	for(x=0; x < 84; x++) {
-		LCDSend( LcdMemory[y * 84 + x], SEND_CHR );
-	}
+    for(x=0; x < 84; x++) {
+      LCDSend( LcdMemory[y * 84 + x], SEND_CHR );
+    }
   }
 }
 
@@ -304,7 +341,6 @@ void lcd_reset()
 
 void lcd_init()
 {
-  sspInit(0, sspClockPolarity_High, sspClockPhase_RisingEdge);
   // P2_13, 14 and 15 as output, not required, but initialization is nice
   IOCON_PIO2_13 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_PULLUP;
   IOCON_PIO2_14 = IOCON_COMMON_FUNC_GPIO | IOCON_COMMON_MODE_PULLUP;
@@ -406,7 +442,6 @@ void LCDStr(unsigned char row, const unsigned char *dataPtr, unsigned char inv )
 
 void lcd_test()
 {
-  lcd_init();
   LCDContrast(0x70);
   LCDStr(0, (unsigned char *)"**** RISSNER ****", 0);
   LCDStr(1, (unsigned char *)"++++ rissner ++++", 0);
@@ -438,7 +473,7 @@ void panic(void)
 {
     char panic[] = "panic";
     LCDStr(0, (unsigned char *)panic, 1);
-    /*while (1);*/
+    while (1);
 }
 
 uint16_t crc4_update_remainder(uint16_t n_rem, uint8_t b)
@@ -469,13 +504,9 @@ void assert_crc4(uint16_t *buf, uint16_t len)
     uint8_t crc = verify_crc4(buf, len);
     if (crc != (buf[len-1] & 0x000F)) {
         char buf[16];
-        sprintf(buf, "%i 0x%02x  --", len, crc);
+        snprintf(buf, 16, "%i 0x%02x  --", len, crc);
         LCDStr(5, (unsigned char*)buf, 0);
         panic();
-    }
-    else {
-    char ok[] = "ok";
-    LCDStr(0, (unsigned char *)ok, 1);
     }
 }
 
@@ -485,32 +516,7 @@ void assert_crc4(uint16_t *buf, uint16_t len)
     begin here.
 */
 /**************************************************************************/
-void ms_update_screen()
-{
-  unsigned char buf[16];
-  uint32_t d1 = ms_temperature();
-  uint32_t d2 = ms_pressure();
 
-  uint32_t dT = d2 - (ms_consts[5] << 8);
-  uint32_t t = 2000 + ((dT * ms_consts[6]) >> 23);
-
-  // 1st order temperature compensation
-  uint32_t off = (ms_consts[2] << 16) + ((ms_consts[4] * dT) >> 7);
-  uint32_t sens = (ms_consts[1] << 15) + ((ms_consts[3] * dT) >> 8);
-
-  // FIXME: 2nd order compensation
-
-  uint32_t p = ((d1 * (sens / (1 << 21))) - off) / (1 << 15);
-
-  double dt = ((double) t) / 100.;
-  sprintf((char *)buf, "T: %d.%d", (int)dt, (int)(100* (dt - ((int)dt))));
-  LCDStr(2, buf, 0);
-
-
-  double dp = ((double) p) / 10.;
-  sprintf((char *)buf, "P: %d.%d", (int)dp, (int)(100* (dp - ((int)dp))));
-  LCDStr(3, buf, 0);
-}
 int main(void)
 {
   // Configure cpu and mandatory peripherals
@@ -532,15 +538,24 @@ int main(void)
   GPIO_GPIO1MASK |= GPIO_IO_P6;
   GPIO_GPIO1DIR &= ~GPIO_IO_P6;
 
+  // MS5803 needs (sspClockPolarity_Low | sspClockPhase_RisingEdge) or
+  // (sspClockPolarity_High | sspClockPhase_FallingEdge)
+  // LCD can work with both those settings, too.
+  sspInit(0, sspClockPolarity_High, sspClockPhase_FallingEdge);
+  lcd_init();
+  ms_init();
+
   lcd_test();
-  Delay(100000);
+  Delay(1000000);
+  LCDClear();
+
+  ms_display_prom();
+  Delay(1000000);
   LCDClear();
 
   int cnt = 0;
-  unsigned char buf[16];
-  memset(buf, 0, 16);
-
-  ms_init();
+  unsigned char buf[20];
+  memset(buf, 0, 20);
 
   while (1)
   {
@@ -556,23 +571,15 @@ int main(void)
 
       LCDClear();
 
-      sprintf((char *)buf, "C: %d", cnt);
+      snprintf((char *)buf, 20, "C: %d", cnt);
       LCDStr(0, buf, 0);
       cnt = 0;
 
       // btn state
-      sprintf((char *)buf, "B: %02x", btnState());
+      snprintf((char *)buf, 20, "B: %02x", btnState());
       LCDStr(1, buf, 0);
 
       ms_update_screen();
-
-      /*
-      ms_read_prom();
-      for (int i = 0; i < 8; i+=2) {
-        sprintf((char *)buf, "0x%04x 0x%04x    ", ms_consts[i], ms_consts[i+1]);
-        LCDStr(1+i/2, buf, 0);
-      }
-      */
     }
   }
 
