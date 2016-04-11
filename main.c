@@ -183,15 +183,31 @@ void ms_update_screen()
   d2 = 8387300;
 #endif // MS5803_FAKE_VALUES
 
-  int32_t dT = d2 - (ms_consts[5] << 8);
-  int32_t T = 2000 + ((dT * ms_consts[6]) >> 23);
+  int64_t dT = d2 - (ms_consts[5] << 8);
+  int64_t T = 2000 + ((dT * ms_consts[6]) >> 23);
+
+  //snprintf(buf, 20, "D2: %08x", d2);
+  //LCDStr(0, buf, 0);
+  //snprintf(buf, 20, "dT: %d", dT);
+  //LCDStr(1, buf, 0);
+  //snprintf(buf, 20, "T: %d", T);
+  //LCDStr(5, buf, 0);
+
+  //int64_t TT = dT * ms_consts[6];
+  //snprintf(buf, 20, "TT1: %08x", TT);
+  //LCDStr(2, buf, 0);
+  //TT = (dT * ms_consts[6]) >> 23;
+  //snprintf(buf, 20, "TT2: %08x", TT);
+  //LCDStr(3, buf, 0);
+  //TT = 2000+((dT * ms_consts[6]) >> 23);
+  //snprintf(buf, 20, "TT3: %08x", TT);
+  //LCDStr(4, buf, 0);
+  //return;
+
 
   // 1st order pressure compensation, pay attention to size of intermediate values
   int64_t off  = ((int64_t)ms_consts[2] << 16) + ((ms_consts[4] * dT) / (1 << 7));
   int64_t sens = ((int64_t)ms_consts[1] << 15) + ((ms_consts[3] * dT) / (1 << 8));
-
-  snprintf(buf, 20, "raw T: %d", T);
-  LCDStr(5, buf, 0);
 
   // 2nd order compensation, could be skipped ...
   if (1) {
@@ -622,8 +638,6 @@ int main(void)
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN-1);
       gpioToggle(CFG_LED_PORT, CFG_LED_PIN);
 
-      //LCDClear();
-
       snprintf((char *)buf, 20, "C: %d", cnt);
       LCDStr(0, buf, 0);
       cnt = 0;
@@ -633,6 +647,7 @@ int main(void)
       LCDStr(1, buf, 0);
 
       ms_update_screen();
+      //while (!btnState());
     }
   }
 
